@@ -9,6 +9,7 @@
         const gallerySection = document.getElementById('art-gallery-section');
         const header = document.querySelector('.site-header');
         const videoBackground = document.querySelector('.video-background-container');
+        const logoText = document.querySelector('.logo-text');
         
         if (!gallerySection || !header || !videoBackground) return;
 
@@ -48,9 +49,12 @@
             lastOpacity = opacity;
         }
         
-        // Update header opacity
+        // Update header and logo opacity
         if (Math.abs(headerOpacity - lastHeaderOpacity) > 0.01) {
             header.style.opacity = headerOpacity.toString();
+            if (logoText) {
+                logoText.style.opacity = headerOpacity.toString();
+            }
             lastHeaderOpacity = headerOpacity;
             
             // Add/remove fade-out class for CSS transitions
