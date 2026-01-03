@@ -5,13 +5,21 @@
     // You can add items here: images (url), Instagram embeds (instagram URL or embedCode), or YouTube embeds (youtube URL)
     const galleryItems = [
         // Example items - replace with your actual content
+        { type: 'image', url: '/assets/images/hannah.jpg' },
+        { type: 'image', url: '/assets/images/lily.jpg' },
+        { type: 'image', url: '/assets/images/hn.jpg' },
+        { type: 'image', url: '/assets/images/hn2.jpg' },
         { type: 'image', url: '/assets/images/GrumpyBunny.jpg' },
         { type: 'image', url: '/assets/images/BunnyInField.jpg' },
         { type: 'image', url: '/assets/images/BunnyFlowerHatInField2.jpg' },
-        
-        { type: 'image', url: '/assets/images/DSCF4330e~2.jpg' },
-        { type: 'image', url: '/assets/images/PXL_20240104_180942765~4.jpg' },
+        { type: 'image', url: '/assets/images/PXL_20240104_180942765~3.jpg' },
         { type: 'image', url: '/assets/images/bunny!.jpg' },
+        { type: 'image', url: '/assets/images/DSCF4330e~2.jpg' },
+        { type: 'image', url: '/assets/images/CrabWithSkateBoard.jpg' },
+        { type: 'image', url: '/assets/images/LittleRodent.jpg' },
+        { type: 'image', url: '/assets/images/ZoeyEatingFood!.jpg' },
+        { type: 'image', url: '/assets/images/Octopus2.jpg' },
+        { type: 'image', url: '/assets/images/swimmer.jpg' },
         // { type: 'youtube', url: 'https://www.youtube.com/watch?v=EXAMPLE' },
     ];
 
