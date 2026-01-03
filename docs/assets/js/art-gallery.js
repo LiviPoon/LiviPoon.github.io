@@ -20,6 +20,9 @@
         { type: 'image', url: '/assets/images/ZoeyEatingFood!.jpg' },
         { type: 'image', url: '/assets/images/Octopus2.jpg' },
         { type: 'image', url: '/assets/images/swimmer.jpg' },
+        { type: 'image', url: '/assets/images/DSCF5167.jpg' },
+        { type: 'image', url: '/assets/images/DSCF5155.jpg' },
+        { type: 'image', url: '/assets/images/DSCF5238.jpg' },
         // { type: 'youtube', url: 'https://www.youtube.com/watch?v=EXAMPLE' },
     ];
 

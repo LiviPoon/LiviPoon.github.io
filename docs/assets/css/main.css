@@ -302,6 +302,24 @@ body.page-loaded {
     letter-spacing: -0.02em;
 }
 
+.slogan-link-button {
+    display: inline-block;
+    font-family: 'Playfair Display', Georgia, 'Times New Roman', serif;
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #e0e0e0;
+    text-decoration: none;
+    margin-top: 1rem;
+    transition: color 0.3s ease, transform 0.3s ease;
+    opacity: 0.5;
+}
+
+.slogan-link-button:hover {
+    color: #e0e0e0;
+    opacity: 1;
+    transform: translateX(4px);
+}
+
 .slogan-line:first-child {
     margin-bottom: 1.5rem;
 }
@@ -345,8 +363,17 @@ body.page-loaded {
 
 .description-content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
     gap: 4rem;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 4rem;
+}
+
+.description-content2 {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 4rem;
+    margin-left: 12rem;
+    margin-right: 12rem;
     margin-top: 4rem;
 }
 
@@ -369,6 +396,27 @@ body.page-loaded {
     justify-content: center;
 }
 
+.intro-image-placeholder-home {
+    width: 275px;
+    height: 350px;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    float: right;
+    margin: 0 0 1rem 1.5rem;
+}
+
+.intro-image-placeholder-home img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+
 .intro-image-placeholder img {
     width: 100%;
     height: 100%;
@@ -387,7 +435,6 @@ body.page-loaded {
 .intro-heading-container {
     display: flex;
     align-items: flex-start;
-    gap: 1.5rem;
     margin-bottom: 1rem;
 }
 
@@ -396,16 +443,16 @@ body.page-loaded {
     flex-direction: column;
     gap: 0.5rem;
     flex: 1;
-    padding-top: 4rem;
+    padding-top: 3rem;
 }
 
 .detail-section-content-home {
-    padding-top: 5.9rem;
+    padding-top: 1rem;
 }
 
 .intro-profile-photo {
-    width: 200px;
-    height: 200px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     overflow: hidden;
     flex-shrink: 0;
@@ -433,9 +480,15 @@ body.page-loaded {
     font-weight: 400;
     color: #b0b0b0;
     line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+.intro-text:last-of-type {
+    margin-bottom: -1rem;
 }
 
 .description-details {
+    padding-top: 2.5rem;
     display: flex;
     flex-direction: column;
 }
@@ -446,7 +499,7 @@ body.page-loaded {
 
 .section-heading {
     font-family: 'Inter', sans-serif;
-    font-size: 0.75rem;
+    font-size: 0.9rem;
     font-weight: 600;
     color: #e0e0e0;
     letter-spacing: 0.15em;
@@ -493,6 +546,7 @@ body.page-loaded {
 
 .career-item {
     margin-bottom: 2rem;
+    margin-top: 2rem;
 }
 
 .career-title {
@@ -536,6 +590,16 @@ body.page-loaded {
     max-width: 1200px;
     width: 100%;
     margin: 0 auto;
+}
+
+.page-title a {
+    color: inherit;
+    text-decoration: none;
+    transition: opacity 0.3s ease;
+}
+
+.page-title a:hover {
+    opacity: 0.7;
 }
 
 .page-title {
@@ -627,9 +691,9 @@ body.page-loaded {
     font-family: 'Inter', sans-serif;
     font-size: 0.9rem;
     font-weight: 400;
-    color: #888;
+    margin-bottom: 2.5rem;
+    color: #e0e0e0;
     text-decoration: none;
-    margin-top: 1rem;
     display: inline-block;
     transition: color 0.3s ease, transform 0.3s ease;
 }
