@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Blog</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="page-loading">
+    <div id="ethereal-shadow" class="ethereal-shadow-container"></div>
+    
+    <header class="site-header">
+        <div class="header-container">
+            <a href="/" class="logo-text">livi poon</a>
+            <div class="menu-wrapper">
+                <div class="menu-text">menu.</div>
+                <div class="menu-dropdown">
+                    <a href="/research" class="menu-item">research</a>
+                    <a href="/art" class="menu-item">art</a>
+                    <a href="/blog" class="menu-item">blog</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="blog-index-content">
+        <div class="blog-index-container">
+            <div class="blog-index" id="blog-index">
+                <!-- Blog posts will be dynamically generated here -->
+            </div>
+        </div>
+    </main>
+
+    <script src="/assets/js/ethereal-shadow.js"></script>
+    <script src="/assets/js/scroll-handler.js"></script>
+    <script src="/assets/js/text-shimmer.js"></script>
+    <script src="/assets/js/page-transition.js"></script>
+    <script src="/assets/js/blog-index.js"></script>
+    <script>
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.body.classList.remove('page-loading');
+                document.body.classList.add('page-loaded');
+            }, 50);
+        });
+    </script>
+</body>
+</html>
+
