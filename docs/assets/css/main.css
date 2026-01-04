@@ -565,7 +565,6 @@ body.page-loaded {
 }
 
 .description-details {
-    padding-top: 2.5rem;
     display: flex;
     flex-direction: column;
 }
@@ -774,6 +773,7 @@ body.page-loaded {
     font-size: 0.9rem;
     font-weight: 400;
     margin-bottom: 2.5rem;
+    margin-top: 2.5rem;
     color: #e0e0e0;
     text-decoration: none;
     display: inline-block;
