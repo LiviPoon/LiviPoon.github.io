@@ -327,11 +327,15 @@ body.page-loaded {
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .site-header {
-        padding: 1.5rem 2rem;
+        padding: 1.5rem 1.5rem;
+    }
+    
+    .logo-text {
+        font-size: 0.95rem;
     }
     
     .menu-text {
-        font-size: 1rem;
+        font-size: 0.95rem;
     }
     
     .slogan-line {
@@ -340,6 +344,46 @@ body.page-loaded {
     
     .slogan-line:first-child {
         margin-bottom: 1rem;
+    }
+    
+    .home-content {
+        padding: 1.5rem;
+    }
+    
+    .menu-dropdown {
+        min-width: 140px;
+    }
+}
+
+/* Mobile menu - make dropdown work on touch */
+@media (max-width: 768px) {
+    .menu-wrapper {
+        position: relative;
+    }
+    
+    .menu-dropdown {
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: 0.5rem;
+        background-color: transparent;
+        padding: 0.5rem 0;
+        min-width: 140px;
+    }
+    
+    .menu-item {
+        padding: 0.75rem 1.5rem;
+        text-align: left;
+    }
+    
+    /* Make menu clickable on mobile */
+    .menu-wrapper:active .menu-dropdown,
+    .menu-wrapper:focus-within .menu-dropdown,
+    .menu-dropdown.menu-open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+        pointer-events: auto;
     }
 }
 
@@ -354,6 +398,12 @@ body.page-loaded {
         rgba(26, 26, 26, 0.3) 20%,
         rgba(26, 26, 26, 0.7) 50%,
         rgba(26, 26, 26, 1) 100%);
+}
+
+@media (max-width: 768px) {
+    .description-section {
+        padding: 6rem 1.5rem 3rem;
+    }
 }
 
 .description-container {
@@ -375,6 +425,15 @@ body.page-loaded {
     margin-left: 12rem;
     margin-right: 12rem;
     margin-top: 4rem;
+}
+
+@media (max-width: 968px) {
+    .description-content2 {
+        margin-left: 0;
+        margin-right: 0;
+        gap: 2rem;
+        margin-top: 2rem;
+    }
 }
 
 .description-intro {
@@ -407,6 +466,18 @@ body.page-loaded {
     justify-content: center;
     float: right;
     margin: 0 0 1rem 1.5rem;
+}
+
+@media (max-width: 768px) {
+    .intro-image-placeholder-home {
+        width: 100%;
+        max-width: 275px;
+        height: auto;
+        aspect-ratio: 275 / 350;
+        float: none;
+        margin: 1rem auto;
+        display: block;
+    }
 }
 
 .intro-image-placeholder-home img {
@@ -444,6 +515,12 @@ body.page-loaded {
     gap: 0.5rem;
     flex: 1;
     padding-top: 3rem;
+}
+
+@media (max-width: 768px) {
+    .intro-text-content {
+        padding-top: 1.5rem;
+    }
 }
 
 .detail-section-content-home {
@@ -488,7 +565,6 @@ body.page-loaded {
 }
 
 .description-details {
-    padding-top: 2.5rem;
     display: flex;
     flex-direction: column;
 }
@@ -573,6 +649,11 @@ body.page-loaded {
     
     .description-intro {
         position: static;
+        order: 2; /* Images appear second on mobile */
+    }
+    
+    .description-details {
+        order: 1; /* Text appears first on mobile */
     }
 }
 
@@ -692,6 +773,7 @@ body.page-loaded {
     font-size: 0.9rem;
     font-weight: 400;
     margin-bottom: 2.5rem;
+    margin-top: 2.5rem;
     color: #e0e0e0;
     text-decoration: none;
     display: inline-block;
@@ -779,6 +861,12 @@ body.page-loaded {
 .blog-preview-content {
     max-width: 700px;
     margin-left: 7rem;
+}
+
+@media (max-width: 968px) {
+    .blog-preview-content {
+        margin-left: 0;
+    }
 }
 
 .blog-preview-title {
@@ -923,8 +1011,16 @@ body.page-loaded {
         padding: 1rem 1.5rem;
     }
     
+    .logo-text {
+        font-size: 0.9rem;
+    }
+    
+    .menu-text {
+        font-size: 0.9rem;
+    }
+    
     .description-section {
-        padding: 6rem 1.5rem 3rem;
+        padding: 5rem 1.5rem 2rem;
     }
     
     .description-content {
@@ -937,7 +1033,7 @@ body.page-loaded {
     }
     
     .page-content {
-        padding: 6rem 1.5rem 3rem;
+        padding: 5rem 1.5rem 2rem;
     }
     
     .blog-post-layout,
@@ -952,7 +1048,11 @@ body.page-loaded {
     }
     
     .blog-post-content {
-        padding: 6rem 1.5rem 3rem;
+        padding: 5rem 1.5rem 2rem;
+    }
+    
+    .blog-index-content {
+        padding: 5rem 1.5rem 2rem;
     }
     
     .art-gallery-grid {
@@ -961,7 +1061,24 @@ body.page-loaded {
     }
     
     .art-gallery-section {
-        padding: 6rem 1.5rem 3rem;
+        padding: 5rem 1.5rem 2rem;
+    }
+    
+    .intro-text {
+        font-size: 0.95rem;
+    }
+    
+    .intro-heading {
+        font-size: clamp(1.5rem, 6vw, 2.5rem);
+    }
+    
+    .slogan-link-button {
+        font-size: 1rem;
+    }
+    
+    .intro-image-placeholder-home {
+        max-width: 100%;
+        margin: 1rem 0;
     }
 }
 
