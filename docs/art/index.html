@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Art gallery by Livi Poon - A collection of creative works and visual art pieces.">
+    <title>Art - Livi Poon</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body class="page-loading">
+    <div class="video-background-container">
+        <iframe 
+            class="video-background"
+            src="https://www.youtube.com/embed/IX3k6Wu7esI?autoplay=1&mute=1&loop=1&playlist=IX3k6Wu7esI&controls=0&showinfo=0&rel=0&modestbranding=1&playsinline=1&enablejsapi=0"
+            frameborder="0"
+            allow="autoplay; encrypted-media"
+            allowfullscreen>
+        </iframe>
+    </div>
+    
+    <header class="site-header">
+        <div class="header-container">
+            <a href="/" class="logo-text">livi poon</a>
+            <div class="menu-wrapper">
+                <div class="menu-text">explore.</div>
+                <div class="menu-dropdown">
+                    <a href="/research" class="menu-item">my research</a>
+                    <a href="/art" class="menu-item">my art</a>
+                    <a href="/blog" class="menu-item">my thoughts</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="page-content">
+        <div class="page-container">
+            <h1 class="page-title">Art</h1>
+            <div class="page-body">
+            </div>
+        </div>
+    </main>
+
+    <section id="art-gallery-section" class="art-gallery-section">
+        <div class="gallery-container">
+            <div id="art-gallery" class="art-gallery-grid"></div>
+        </div>
+    </section>
+
+    <script src="/assets/js/art-scroll-handler.js"></script>
+    <script src="/assets/js/art-gallery.js"></script>
+    <script src="/assets/js/text-shimmer.js"></script>
+    <script src="/assets/js/page-transition.js"></script>
+    <script src="/assets/js/mobile-menu.js"></script>
+    <script>
+        // Mark page as loaded after a brief delay to ensure smooth fade-in
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.body.classList.remove('page-loading');
+                document.body.classList.add('page-loaded');
+            }, 50);
+        });
+    </script>
+</body>
+</html>
+
