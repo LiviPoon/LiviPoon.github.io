@@ -5,6 +5,113 @@
     let hueRotateValue = 0;
     let feColorMatrixElement = null;
     let isInitialized = false;
+    let animationPaused = false;
+    let performanceMode = 'auto'; // 'auto', 'enabled', 'disabled'
+    
+    // Performance detection
+    function detectConnectionSpeed() {
+        // Check Network Information API (if available)
+        if ('connection' in navigator) {
+            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            if (connection) {
+                // Check effective connection type
+                const effectiveType = connection.effectiveType;
+                if (effectiveType === 'slow-2g' || effectiveType === '2g') {
+                    return 'slow';
+                }
+                // Check downlink speed (Mbps)
+                if (connection.downlink && connection.downlink < 1.5) {
+                    return 'slow';
+                }
+            }
+        }
+        
+        // Check for prefers-reduced-motion
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            return 'reduced';
+        }
+        
+        return 'normal';
+    }
+    
+    // Check if animations should be disabled
+    function shouldDisableAnimations() {
+        if (performanceMode === 'disabled') {
+            return true;
+        }
+        if (performanceMode === 'enabled') {
+            return false;
+        }
+        // Auto mode: check connection and preferences
+        const connectionSpeed = detectConnectionSpeed();
+        return connectionSpeed === 'slow' || connectionSpeed === 'reduced';
+    }
+    
+    // Pause animation
+    function pauseAnimation() {
+        if (animationId !== null) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+            animationPaused = true;
+        }
+    }
+    
+    // Resume animation
+    function resumeAnimation() {
+        if (animationPaused && feColorMatrixElement && !shouldDisableAnimations()) {
+            const config = { scale: 100, speed: 90 };
+            const animationDuration = mapRange(config.speed, 1, 100, 1000, 50);
+            const hueRotateDuration = animationDuration / 25;
+            const startTime = Date.now();
+            
+            function animateHue() {
+                if (shouldDisableAnimations()) {
+                    pauseAnimation();
+                    return;
+                }
+                
+                const elapsed = Date.now() - startTime;
+                hueRotateValue = (elapsed / hueRotateDuration) % 360;
+                
+                if (feColorMatrixElement) {
+                    feColorMatrixElement.setAttribute('values', hueRotateValue.toString());
+                }
+                
+                animationId = requestAnimationFrame(animateHue);
+            }
+            
+            animationPaused = false;
+            animateHue();
+        }
+    }
+    
+    // Monitor connection changes
+    function setupConnectionMonitoring() {
+        if ('connection' in navigator) {
+            const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+            if (connection) {
+                connection.addEventListener('change', function() {
+                    if (shouldDisableAnimations()) {
+                        pauseAnimation();
+                    } else {
+                        resumeAnimation();
+                    }
+                });
+            }
+        }
+        
+        // Monitor prefers-reduced-motion changes
+        if (window.matchMedia) {
+            const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+            mediaQuery.addEventListener('change', function() {
+                if (shouldDisableAnimations()) {
+                    pauseAnimation();
+                } else {
+                    resumeAnimation();
+                }
+            });
+        }
+    }
 
     function mapRange(value, fromLow, fromHigh, toLow, toHigh) {
         if (fromLow === fromHigh) {
@@ -132,35 +239,64 @@
         
         const shadowInner = document.createElement('div');
         shadowInner.style.backgroundColor = config.color;
-        shadowInner.style.maskImage = `url('https://framerusercontent.com/images/ceBGguIpUU8luwByxuQz79t7To.png')`;
-        shadowInner.style.maskSize = config.sizing === 'stretch' ? '100% 100%' : 'cover';
-        shadowInner.style.maskRepeat = 'no-repeat';
-        shadowInner.style.maskPosition = 'center';
         shadowInner.style.width = '100%';
         shadowInner.style.height = '100%';
+        
+        // Test mask image loading before applying
+        const maskImageUrl = 'https://framerusercontent.com/images/ceBGguIpUU8luwByxuQz79t7To.png';
+        const testMaskImage = new Image();
+        testMaskImage.onload = function() {
+            shadowInner.style.maskImage = `url('${maskImageUrl}')`;
+            shadowInner.style.maskSize = config.sizing === 'stretch' ? '100% 100%' : 'cover';
+            shadowInner.style.maskRepeat = 'no-repeat';
+            shadowInner.style.maskPosition = 'center';
+        };
+        testMaskImage.onerror = function() {
+            // If mask image fails to load, use a simple gradient fallback
+            shadowInner.style.background = `radial-gradient(circle at center, ${config.color}, transparent)`;
+            shadowInner.style.maskImage = 'none';
+        };
+        testMaskImage.src = maskImageUrl;
         
         shadowElement.appendChild(shadowInner);
         container.appendChild(shadowElement);
 
-        // Create noise overlay
-        if (config.noiseOpacity > 0) {
+        // Create noise overlay with error handling
+        if (config.noiseOpacity > 0 && !shouldDisableAnimations()) {
             const noiseOverlay = document.createElement('div');
             noiseOverlay.style.position = 'absolute';
             noiseOverlay.style.inset = '0';
-            noiseOverlay.style.backgroundImage = 'url("https://framerusercontent.com/images/g0QcWrxr87K0ufOxIUFBakwYA8.png")';
             noiseOverlay.style.backgroundSize = `${config.noiseScale * 200}px`;
             noiseOverlay.style.backgroundRepeat = 'repeat';
             noiseOverlay.style.opacity = (config.noiseOpacity / 2).toString();
+            
+            // Test image loading before applying
+            const testImage = new Image();
+            testImage.onload = function() {
+                noiseOverlay.style.backgroundImage = 'url("https://framerusercontent.com/images/g0QcWrxr87K0ufOxIUFBakwYA8.png")';
+            };
+            testImage.onerror = function() {
+                // If image fails to load, just skip the noise overlay
+                noiseOverlay.style.display = 'none';
+            };
+            testImage.src = 'https://framerusercontent.com/images/g0QcWrxr87K0ufOxIUFBakwYA8.png';
+            
             container.appendChild(noiseOverlay);
         }
 
-        // Start hue rotation animation
-        if (animationEnabled) {
+        // Start hue rotation animation (only if not disabled)
+        if (animationEnabled && !shouldDisableAnimations()) {
             hueRotateValue = 0;
             const hueRotateDuration = animationDuration / 25;
             const startTime = Date.now();
 
             function animateHue() {
+                // Check if animations should be disabled during animation
+                if (shouldDisableAnimations()) {
+                    pauseAnimation();
+                    return;
+                }
+                
                 const elapsed = Date.now() - startTime;
                 hueRotateValue = (elapsed / hueRotateDuration) % 360;
                 
@@ -172,8 +308,16 @@
             }
 
             animateHue();
+        } else if (animationEnabled && shouldDisableAnimations()) {
+            // Animation is disabled, set static hue value
+            if (feColorMatrixElement) {
+                feColorMatrixElement.setAttribute('values', '0');
+            }
         }
 
+        // Setup connection monitoring
+        setupConnectionMonitoring();
+        
         isInitialized = true;
     }
 
@@ -184,8 +328,21 @@
         }
     }
 
-    // Expose init function globally
+    // Expose functions globally
     window.initEtherealShadow = initEtherealShadow;
     window.cleanupEtherealShadow = cleanupEtherealShadow;
+    window.setAnimationMode = function(mode) {
+        if (mode === 'auto' || mode === 'enabled' || mode === 'disabled') {
+            performanceMode = mode;
+            if (shouldDisableAnimations()) {
+                pauseAnimation();
+            } else {
+                resumeAnimation();
+            }
+        }
+    };
+    window.getAnimationMode = function() {
+        return performanceMode;
+    };
 })();
 

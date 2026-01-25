@@ -234,6 +234,26 @@ body.page-loaded {
     opacity: 0;
 }
 
+/* Respect user's motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .ethereal-shadow-container {
+        animation: none;
+    }
+    
+    .ethereal-shadow-container * {
+        animation: none !important;
+        transition: none !important;
+    }
+    
+    .video-background-container {
+        display: none;
+    }
+    
+    body {
+        background-color: #1a1a1a;
+    }
+}
+
 .video-background-container {
     position: fixed;
     top: 0;
