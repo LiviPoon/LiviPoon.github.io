@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0">
+    <channel>
+      <title>Livi Poon</title>
+      <link>https://www.livipoon.com</link>
+      <description>Last 10 notes on Livi Poon</description>
+      <generator>Quartz -- quartz.jzhao.xyz</generator>
+      <item>
+    <title>Art</title>
+    <link>https://www.livipoon.com/art/</link>
+    <guid>https://www.livipoon.com/art/</guid>
+    <description><![CDATA[ Art gallery by Livi Poon. ]]></description>
+    <pubDate>Wed, 18 Feb 2026 19:15:47 GMT</pubDate>
+  </item><item>
+    <title>thoughts.</title>
+    <link>https://www.livipoon.com/blog/</link>
+    <guid>https://www.livipoon.com/blog/</guid>
+    <description><![CDATA[  ]]></description>
+    <pubDate>Wed, 18 Feb 2026 17:12:21 GMT</pubDate>
+  </item><item>
+    <title>My Research</title>
+    <link>https://www.livipoon.com/research/</link>
+    <guid>https://www.livipoon.com/research/</guid>
+    <description><![CDATA[ Research in machine learning, AI, and precision medicine. ]]></description>
+    <pubDate>Wed, 18 Feb 2026 15:23:36 GMT</pubDate>
+  </item><item>
+    <title>The Platypus (Ornithorhynchus anatinus)</title>
+    <link>https://www.livipoon.com/blog/platypus</link>
+    <guid>https://www.livipoon.com/blog/platypus</guid>
+    <description><![CDATA[ If you have ever watched Phineas and Ferb, you would be well acquainted with Perry the Platypus. ]]></description>
+    <pubDate>Mon, 16 Feb 2026 05:00:00 GMT</pubDate>
+  </item><item>
+    <title>index</title>
+    <link>https://www.livipoon.com/</link>
+    <guid>https://www.livipoon.com/</guid>
+    <description><![CDATA[ Salutations! I’m Livi Poon. A joint research scholar focused on making measurable impacts through empathic, holistic, and collaborative solutions. ]]></description>
+    <pubDate>Wed, 23 Aug 2023 19:09:04 GMT</pubDate>
+  </item>
+    </channel>
+  </rss>
