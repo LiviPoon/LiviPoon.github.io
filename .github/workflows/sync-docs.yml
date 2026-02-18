@@ -1,0 +1,51 @@
+name: Build Quartz and Sync docs
+
+on:
+  push:
+    paths:
+      - "livipoon-quartz4/**"
+      - ".github/workflows/sync-docs.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-sync-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        working-directory: livipoon-quartz4
+        run: npm ci
+
+      - name: Build Quartz
+        working-directory: livipoon-quartz4
+        run: npm run quartz -- build
+
+      - name: Sync public output to docs
+        run: |
+          mkdir -p docs
+          rsync -a --delete --exclude ".vscode/" livipoon-quartz4/public/ docs/
+          touch docs/.nojekyll
+
+      - name: Commit and push docs updates
+        run: |
+          if [[ -n "$(git status --porcelain docs)" ]]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add docs
+            git commit -m "chore: sync docs from Quartz build [skip ci]"
+            git push
+          else
+            echo "No docs changes to commit."
+          fi
