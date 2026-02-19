@@ -1,5 +1,4 @@
 
-# <span class="handwritten">Salutations!</span>
 
 ![Livi Poon portrait](/images/x2211281553270635285893742d1971da2f418486d1b2_480_600.jpg)
 
