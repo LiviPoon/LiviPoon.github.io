@@ -7,6 +7,12 @@ const notHome = (component: ReturnType<typeof Component.PageTitle>) =>
     condition: (page) => page.fileData.slug !== "index",
   })
 
+const notArt = (component: ReturnType<typeof Component.PageTitle>) =>
+  Component.ConditionalRender({
+    component,
+    condition: (page) => page.fileData.slug !== "art",
+  })
+
 // components shared across all pages
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
@@ -24,7 +30,7 @@ export const defaultContentPageLayout: PageLayout = {
     notHome(Component.TagList()),
   ],
   left: [
-    notHome(Component.PageTitle()),
+    notHome(notArt(Component.PageTitle())),
     notHome(Component.MobileOnly(Component.Spacer())),
     notHome(
       Component.Flex({
@@ -50,7 +56,7 @@ export const defaultContentPageLayout: PageLayout = {
 export const defaultListPageLayout: PageLayout = {
   beforeBody: [Component.Breadcrumbs(), Component.ArticleTitle(), Component.ContentMeta()],
   left: [
-    Component.PageTitle(),
+    notArt(Component.PageTitle()),
     Component.MobileOnly(Component.Spacer()),
     Component.Flex({
       components: [
