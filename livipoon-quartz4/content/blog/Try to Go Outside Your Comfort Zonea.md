@@ -1,10 +1,9 @@
 ---
-title: going out of your comfort zone
+title: Try to Go Outside Your Comfort Zone
 date: 2026-02-19
 tags:
   - brain_dump
   - introspection
-  - self-improvement
 ---
 I was thinking recently about going outside your comfort zone and how important it is to strive to do so.
 

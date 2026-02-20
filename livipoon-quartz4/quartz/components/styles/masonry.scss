@@ -1,0 +1,112 @@
+@use "../../styles/variables.scss" as *;
+
+.masonry-container {
+  width: 100%;
+  min-height: 60vh;
+  padding: 0;
+  column-count: 1 !important;
+  column-width: auto !important;
+  column-gap: 0 !important;
+}
+
+.masonry-grid {
+  position: relative;
+  width: 100%;
+  min-height: 1000px;
+  margin: 0 auto;
+}
+
+.masonry-image {
+  position: absolute;
+  opacity: 0;
+  object-fit: cover;
+  cursor: pointer;
+  margin: 0 !important;
+  float: none !important;
+  max-width: none !important;
+  border-radius: 14px;
+  border: 1px solid var(--lightgray);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease,
+    opacity 200ms ease;
+
+  &.positioned {
+    opacity: 1;
+  }
+
+  &:hover {
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.3);
+    transform: translateY(-1px);
+    z-index: 10;
+  }
+}
+
+.masonry-caption-modal {
+  position: fixed;
+  display: none;
+  background: var(--light);
+  border: 1px solid var(--lightgray);
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  max-width: 300px;
+  z-index: 1000;
+  pointer-events: none;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: var(--dark);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.24);
+
+  &.visible {
+    display: block;
+  }
+}
+
+.masonry-empty {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  font-size: 1rem;
+  color: var(--gray);
+}
+
+body.masonry-layout .page > #quartz-body {
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-areas:
+    "grid-header"
+    "grid-center"
+    "grid-footer" !important;
+}
+
+body.masonry-layout .page > #quartz-body .sidebar {
+  display: none;
+}
+
+body.masonry-layout .page > #quartz-body .page-header {
+  margin-top: 1.75rem;
+}
+
+body.masonry-layout .center > hr,
+body.masonry-layout .center .page-footer {
+  display: none;
+}
+
+@media all and ($tablet) {
+  .masonry-container {
+    padding: 0.25rem 0;
+  }
+}
+
+@media all and ($mobile) {
+  .masonry-container {
+    padding: 0.1rem 0;
+  }
+
+  .masonry-caption-modal {
+    max-width: 200px;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.6rem;
+  }
+}
