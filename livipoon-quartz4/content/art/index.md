@@ -1,7 +1,10 @@
 ---
 title: Art
 description: Art gallery by Livi Poon.
+layout: masonry
 ---
+
+### [Instagram](https://www.instagram.com/povellestodraws/)
 
 ![Artwork](/images/hannah.jpg)
 
