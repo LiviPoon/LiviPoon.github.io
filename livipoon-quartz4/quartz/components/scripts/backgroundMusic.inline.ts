@@ -12,19 +12,21 @@ interface BackgroundMusicState {
   button: HTMLButtonElement
   licenseLink: HTMLAnchorElement
   playlist: string[]
-  currentTrack: number
+  currentTrackSrc: string | null
+  playQueue: string[]
+  lastPlayedTrackSrc: string | null
   baseVolume: number
   duckedVolume: number
   isDucked: boolean
   volumeAnimationFrame: number | null
   hasUnlockListeners: boolean
   hasVisibilityListeners: boolean
-  hasCompletedPlayback: boolean
 }
 
 type BackgroundMusicWindow = Window &
   typeof globalThis & {
     __backgroundMusicState?: BackgroundMusicState
+    __backgroundMusicDucked?: boolean
     webkitAudioContext?: {
       new (): AudioContext
     }
@@ -57,6 +59,29 @@ function emitMuteChange(muted: boolean) {
   )
 }
 
+function normalizePlaylist(rawPlaylist: unknown[]): string[] {
+  const normalized: string[] = []
+  const seen = new Set<string>()
+
+  for (const value of rawPlaylist) {
+    if (typeof value !== "string" || value.length === 0) continue
+    if (seen.has(value)) continue
+    seen.add(value)
+    normalized.push(value)
+  }
+
+  return normalized
+}
+
+function shuffle<T>(list: T[]): T[] {
+  const copy = [...list]
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[copy[i], copy[j]] = [copy[j], copy[i]]
+  }
+  return copy
+}
+
 function parsePlaylist(): string[] {
   const host = document.getElementById("quartz-body") as HTMLElement | null
   const raw = host?.dataset.backgroundSongs
@@ -65,7 +90,7 @@ function parsePlaylist(): string[] {
   try {
     const parsed = JSON.parse(raw) as unknown
     if (!Array.isArray(parsed)) return []
-    return parsed.filter((value): value is string => typeof value === "string" && value.length > 0)
+    return normalizePlaylist(parsed)
   } catch {
     return []
   }
@@ -188,19 +213,46 @@ function rampVolume(state: BackgroundMusicState) {
   state.volumeAnimationFrame = window.requestAnimationFrame(animate)
 }
 
-function loadTrack(state: BackgroundMusicState, index: number) {
-  if (state.playlist.length === 0) return
-
-  const safeIndex =
-    ((index % state.playlist.length) + state.playlist.length) % state.playlist.length
-  state.currentTrack = safeIndex
-
-  const src = state.playlist[safeIndex]
+function loadTrack(state: BackgroundMusicState, src: string) {
   if (!src) return
-
-  state.hasCompletedPlayback = false
+  state.currentTrackSrc = src
+  state.lastPlayedTrackSrc = src
   state.audio.src = src
   state.audio.load()
+}
+
+function refillPlayQueue(state: BackgroundMusicState) {
+  if (state.playlist.length === 0) {
+    state.playQueue = []
+    return
+  }
+
+  const shuffled = shuffle(state.playlist)
+  if (
+    shuffled.length > 1 &&
+    state.lastPlayedTrackSrc &&
+    shuffled[0] === state.lastPlayedTrackSrc
+  ) {
+    const swapIndex = shuffled.findIndex((track) => track !== state.lastPlayedTrackSrc)
+    if (swapIndex > 0) {
+      ;[shuffled[0], shuffled[swapIndex]] = [shuffled[swapIndex], shuffled[0]]
+    }
+  }
+
+  state.playQueue = shuffled
+}
+
+function queueNextTrack(state: BackgroundMusicState): boolean {
+  if (state.playlist.length === 0) return false
+  if (state.playQueue.length === 0) {
+    refillPlayQueue(state)
+  }
+
+  const nextTrack = state.playQueue.shift()
+  if (!nextTrack) return false
+
+  loadTrack(state, nextTrack)
+  return true
 }
 
 function addUnlockListeners(state: BackgroundMusicState) {
@@ -223,9 +275,9 @@ function addUnlockListeners(state: BackgroundMusicState) {
 async function attemptPlay(state: BackgroundMusicState) {
   if (state.playlist.length === 0) return
   if (document.visibilityState === "hidden") return
-  if (state.hasCompletedPlayback) return
-  if (!state.audio.src) {
-    loadTrack(state, 0)
+  if (!state.audio.src || !state.currentTrackSrc) {
+    const loaded = queueNextTrack(state)
+    if (!loaded) return
   }
 
   await tryEnableConcertHallReverb(state)
@@ -322,18 +374,20 @@ function createState(playlist: string[]): BackgroundMusicState {
     button,
     licenseLink,
     playlist: [...playlist],
-    currentTrack: 0,
+    currentTrackSrc: null,
+    playQueue: [],
+    lastPlayedTrackSrc: null,
     baseVolume: BASE_VOLUME,
     duckedVolume: DUCKED_VOLUME,
-    isDucked: false,
+    isDucked: backgroundWindow.__backgroundMusicDucked === true,
     volumeAnimationFrame: null,
     hasUnlockListeners: false,
     hasVisibilityListeners: false,
-    hasCompletedPlayback: false,
   }
 
   const onDuckChanged = (event: Event) => {
     const ducked = (event as CustomEvent<{ ducked?: boolean }>).detail?.ducked === true
+    backgroundWindow.__backgroundMusicDucked = ducked
     if (ducked === state.isDucked) return
     state.isDucked = ducked
     rampVolume(state)
@@ -352,12 +406,17 @@ function createState(playlist: string[]): BackgroundMusicState {
   })
 
   audio.addEventListener("ended", () => {
-    state.hasCompletedPlayback = true
-    state.audio.pause()
+    const loaded = queueNextTrack(state)
+    if (!loaded) {
+      state.audio.pause()
+      return
+    }
+    void attemptPlay(state)
   })
 
   document.body.appendChild(controls)
   document.body.appendChild(licenseCluster)
+  state.audio.volume = getTargetVolume(state)
   updateButton(state)
   emitMuteChange(state.audio.muted)
   addVisibilityListeners(state)
@@ -373,7 +432,7 @@ function syncBackgroundMusicForPage() {
   if (!state) {
     state = createState(playlist)
     backgroundWindow.__backgroundMusicState = state
-    loadTrack(state, 0)
+    queueNextTrack(state)
     void attemptPlay(state)
     return
   }
@@ -386,18 +445,21 @@ function syncBackgroundMusicForPage() {
   }
 
   if (!playlistsEqual(state.playlist, playlist)) {
-    const currentSrc = state.playlist[state.currentTrack]
+    const currentSrc = state.currentTrackSrc
     state.playlist = [...playlist]
+    const playlistSet = new Set(state.playlist)
+    state.playQueue = state.playQueue.filter(
+      (track) => track !== state.currentTrackSrc && playlistSet.has(track),
+    )
 
-    if (!currentSrc) {
-      loadTrack(state, 0)
-    } else {
-      const index = state.playlist.indexOf(currentSrc)
-      if (index >= 0) {
-        state.currentTrack = index
-      } else {
-        loadTrack(state, 0)
-      }
+    if (currentSrc && !playlistSet.has(currentSrc)) {
+      state.currentTrackSrc = null
+      state.audio.removeAttribute("src")
+      state.audio.load()
+    }
+
+    if (!state.currentTrackSrc) {
+      queueNextTrack(state)
     }
   }
 

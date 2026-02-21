@@ -1,0 +1,37 @@
+.site-visit-counter {
+  position: fixed;
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%);
+  z-index: 1300;
+  display: none;
+  align-items: center;
+  gap: 0.25rem;
+  pointer-events: none;
+  color: #9a9a9a;
+  font-family: var(--bodyFont);
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.2;
+  text-transform: lowercase;
+  white-space: nowrap;
+  opacity: 0.38;
+}
+
+.site-visit-counter.is-visible {
+  display: inline-flex;
+}
+
+.site-visit-counter-value {
+  font-variant-numeric: tabular-nums;
+}
+
+@media all and (max-width: 800px) {
+  .site-visit-counter {
+    bottom: calc(0.6rem + env(safe-area-inset-bottom));
+    font-size: 0.72rem;
+    max-width: 56vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

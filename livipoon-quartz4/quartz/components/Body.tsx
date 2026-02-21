@@ -4,8 +4,11 @@ import path from "path"
 import clipboardScript from "./scripts/clipboard.inline"
 // @ts-ignore
 import backgroundMusicScript from "./scripts/backgroundMusic.inline"
+// @ts-ignore
+import siteVisitCounterScript from "./scripts/siteVisitCounter.inline"
 import clipboardStyle from "./styles/clipboard.scss"
 import backgroundMusicStyle from "./styles/backgroundMusic.scss"
+import siteVisitCounterStyle from "./styles/siteVisitCounter.scss"
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 import { concatenateResources } from "../util/resources"
 import { FilePath, slugifyFilePath } from "../util/path"
@@ -47,7 +50,8 @@ const Body: QuartzComponent = ({ children }: QuartzComponentProps) => {
 Body.afterDOMLoaded = concatenateResources(
   clipboardScript,
   backgroundMusicScript,
+  siteVisitCounterScript,
 )
-Body.css = concatenateResources(clipboardStyle, backgroundMusicStyle)
+Body.css = concatenateResources(clipboardStyle, backgroundMusicStyle, siteVisitCounterStyle)
 
 export default (() => Body) satisfies QuartzComponentConstructor

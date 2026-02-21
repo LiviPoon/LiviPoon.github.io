@@ -13,3 +13,6 @@ I look forward to expanding my mind and working towards a resilient, interconnec
 Feel free to check out my other interests including [my thoughts](/blog/) and [my art](/art/).
 
 [read more.](/research/) · [contact.](https://www.linkedin.com/in/livi-poon-9a93a8116/)
+
+<script data-goatcounter="https://livipoon.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>

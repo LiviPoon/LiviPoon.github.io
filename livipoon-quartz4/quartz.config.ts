@@ -1,13 +1,20 @@
 import { QuartzConfig } from "./quartz/cfg"
 import * as Plugin from "./quartz/plugins"
 
+const goatcounterWebsiteId = process.env.GOATCOUNTER_WEBSITE_ID ?? "livipoon"
+const goatcounterHost = process.env.GOATCOUNTER_HOST
+
 const config: QuartzConfig = {
   configuration: {
     pageTitle: "Livi Poon",
     pageTitleSuffix: "",
     enableSPA: true,
     enablePopovers: true,
-    analytics: null,
+    analytics: {
+      provider: "goatcounter",
+      websiteId: goatcounterWebsiteId,
+      ...(goatcounterHost ? { host: goatcounterHost } : {}),
+    },
     locale: "en-US",
     baseUrl: "www.livipoon.com",
     ignorePatterns: ["private", "templates", ".obsidian"],

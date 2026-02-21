@@ -295,11 +295,16 @@ body:is([data-slug="research"], [data-slug="research/index"])
     justify-content: flex-start;
     padding-top: 1.25rem;
     padding-bottom: 1.25rem;
+    padding-left: clamp(0.7rem, 3.4vw, 1rem);
+    padding-right: clamp(0.7rem, 3.4vw, 1rem);
   }
 
   body[data-slug="index"] #quartz-body .center > article,
   body[data-slug="index"] #quartz-body .center > .popover-hint {
     width: min(100%, 720px);
+    margin-left: auto;
+    margin-right: auto;
+    box-sizing: border-box;
     border-radius: 18px;
   }
 

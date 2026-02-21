@@ -88,15 +88,18 @@
 }
 
 @media all and (max-width: 800px) {
+  .background-music-controls,
+  .background-music-license-cluster {
+    bottom: calc(0.6rem + env(safe-area-inset-bottom));
+  }
+
   .background-music-controls {
     right: 0.6rem;
-    bottom: calc(0.6rem + env(safe-area-inset-bottom));
   }
 
   .background-music-license-cluster {
     left: 0.6rem;
-    bottom: calc(2.2rem + env(safe-area-inset-bottom));
-    max-width: 72vw;
+    max-width: 66vw;
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;

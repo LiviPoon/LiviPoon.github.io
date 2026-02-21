@@ -20,6 +20,13 @@ type QuoteSpeechPlayback = {
   completion: Promise<void>
 }
 
+type BlogTypewriterWindow = Window &
+  typeof globalThis & {
+    __backgroundMusicDucked?: boolean
+  }
+
+const blogTypewriterWindow = window as BlogTypewriterWindow
+
 const parser = new DOMParser()
 const minChars = 24
 const maxChars = 320
@@ -75,6 +82,7 @@ const minPostQuotePauseMs = 1000
 const maxPostQuotePauseMs = 3000
 
 function emitMusicDuckChange(ducked: boolean) {
+  blogTypewriterWindow.__backgroundMusicDucked = ducked
   document.dispatchEvent(
     new CustomEvent(musicDuckEventName, {
       detail: { ducked },
