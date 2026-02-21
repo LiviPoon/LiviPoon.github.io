@@ -1,6 +1,7 @@
 type GoatcounterWindow = Window &
   typeof globalThis & {
     goatcounter?: {
+      endpoint?: string
       visit_count?: (options: {
         append: string
         path: string
@@ -45,7 +46,28 @@ function ensureCounterElement(): HTMLDivElement {
 }
 
 function hasVisitCounterApi(): boolean {
-  return typeof counterWindow.goatcounter?.visit_count === "function"
+  return (
+    typeof counterWindow.goatcounter?.visit_count === "function" &&
+    typeof resolveGoatcounterEndpoint() === "string"
+  )
+}
+
+function resolveGoatcounterEndpoint(): string | null {
+  const fromWindow = counterWindow.goatcounter?.endpoint
+  if (typeof fromWindow === "string" && fromWindow.length > 0) {
+    return fromWindow
+  }
+
+  const script = document.querySelector("script[data-goatcounter]") as HTMLScriptElement | null
+  const fromScript = script?.getAttribute("data-goatcounter")
+  if (fromScript && fromScript.length > 0) {
+    if (counterWindow.goatcounter) {
+      counterWindow.goatcounter.endpoint = fromScript
+    }
+    return fromScript
+  }
+
+  return null
 }
 
 function renderLocalPreviewCounter(): boolean {
@@ -73,6 +95,16 @@ function renderCounter(): boolean {
     path: "TOTAL",
     no_branding: true,
   })
+
+  // If GoatCounter responds with text errors (for example 403),
+  // avoid showing raw status text in the UI.
+  window.setTimeout(() => {
+    const currentText = value.textContent?.trim().toLowerCase() ?? ""
+    if (currentText.includes("403") || currentText.includes("forbidden")) {
+      value.textContent = "counter unavailable"
+    }
+  }, 500)
+
   root.classList.add(visibleClass)
   return true
 }

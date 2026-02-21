@@ -146,12 +146,16 @@ function addGlobalPageResources(ctx: BuildCtx, componentResources: ComponentReso
       goatcounterScript.src = "${cfg.analytics.scriptSrc ?? "https://gc.zgo.at/count.js"}";
       goatcounterScript.defer = true;
       goatcounterScript.setAttribute('data-goatcounter', endpoint);
+      const currentPath = () => location.pathname + location.search + location.hash;
+      const countPageview = () => {
+        if (window.goatcounter && typeof goatcounter.count === "function") {
+          goatcounter.count({ path: currentPath() });
+        }
+      };
       goatcounterScript.onload = () => {
         window.goatcounter.endpoint = endpoint;
-        goatcounter.count({ path: location.pathname });
-        document.addEventListener('nav', () => {
-          goatcounter.count({ path: location.pathname });
-        });
+        countPageview();
+        document.addEventListener('nav', countPageview);
       };
 
       document.head.appendChild(goatcounterScript);
