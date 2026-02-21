@@ -4,16 +4,25 @@
 :root,
 :root[saved-theme="light"],
 :root[saved-theme="dark"] {
-  color-scheme: dark;
-  --light: #1a1715;
-  --lightgray: #3d3733;
-  --gray: #6e6660;
-  --darkgray: #d5cec8;
-  --dark: #f2eeea;
-  --secondary: #8eb4d3;
-  --tertiary: #9dc1a8;
-  --highlight: rgba(142, 180, 211, 0.16);
-  --textHighlight: #b7a20088;
+  color-scheme: light;
+  --light: #f9fded;
+  --lightgray: #bba0b2;
+  --gray: #bba0b2;
+  --darkgray: #070600;
+  --dark: #070600;
+  --secondary: #4f517d;
+  --tertiary: #bba0b2;
+  --highlight: #070600;
+  --textHighlight: #070600;
+}
+
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  background-color: #4f517d;
+  border-color: #4f517d;
+  color: #f9fded;
 }
 
 article img {
@@ -56,6 +65,210 @@ body:is([data-slug="art"], [data-slug="art/index"], [data-slug^="art/"]) .center
 
 body:is([data-slug="art"], [data-slug="art/index"], [data-slug^="art/"]) .center article img:hover {
   transform: translateY(-1px);
+}
+
+html:has(body:is([data-slug="index"], [data-slug="blog"], [data-slug="blog/index"])) {
+  overflow: hidden;
+}
+
+body:is([data-slug="index"], [data-slug="blog"], [data-slug="blog/index"]) {
+  height: 100vh;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body:is([data-slug="index"], [data-slug="blog"], [data-slug="blog/index"]) #quartz-root {
+  height: 100vh;
+  overflow: hidden;
+}
+
+body[data-slug="index"] #quartz-body .center {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+body[data-slug="index"] #quartz-body .center > article,
+body[data-slug="index"] #quartz-body .center > .popover-hint {
+  width: min(100%, 900px);
+  margin: 0 auto;
+  padding: clamp(1rem, 1.4vw, 1.5rem) clamp(1rem, 2vw, 2rem);
+  border-radius: 24px;
+  border: none !important;
+  background: color-mix(in srgb, var(--light) 72%, transparent) !important;
+  background-color: color-mix(in srgb, var(--light) 72%, transparent) !important;
+  backdrop-filter: blur(14px) saturate(108%) !important;
+  -webkit-backdrop-filter: blur(14px) saturate(108%) !important;
+  box-shadow: none !important;
+}
+
+body[data-slug="index"] #quartz-body .page-header,
+body[data-slug="index"] #quartz-body .page-footer {
+  margin-top: 0;
+}
+
+body[data-slug="index"] #quartz-body .center > hr {
+  display: none;
+}
+
+body[data-slug="index"] .popover,
+body[data-slug="index"] .search > .search-container,
+body[data-slug="index"] .graph > .global-graph-outer,
+body[data-slug="index"] #mermaid-container {
+  display: none !important;
+}
+
+body:is([data-slug="blog"], [data-slug="blog/index"]) .page > #quartz-body {
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-areas:
+    "grid-header"
+    "grid-center"
+    "grid-footer" !important;
+}
+
+body:is([data-slug="blog"], [data-slug="blog/index"]) .page > #quartz-body > .center {
+  grid-area: grid-center;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+body:is([data-slug="blog"], [data-slug="blog/index"])
+  .page
+  > #quartz-body
+  > .center
+  > .popover-hint {
+  width: min(100%, 860px);
+  margin: 0 auto;
+}
+
+body:is([data-slug="blog"], [data-slug="blog/index"]) .blog-typewriter {
+  min-height: 3.4rem;
+  margin: 0 0 1rem;
+  color: var(--darkgray);
+  line-height: 1.45;
+  font-size: 1.05rem;
+}
+
+body:is([data-slug="blog"], [data-slug="blog/index"]) .blog-typewriter-text {
+  font-style: italic;
+}
+
+body:is([data-slug="blog"], [data-slug="blog/index"]) .blog-typewriter-caret {
+  display: inline-block;
+  width: 0.55ch;
+  border-right: 2px solid var(--secondary);
+  margin-left: 0.1rem;
+  transform: translateY(0.1rem);
+  animation: blog-typewriter-caret-blink 0.95s steps(1, end) infinite;
+}
+
+@keyframes blog-typewriter-caret-blink {
+  50% {
+    border-color: transparent;
+  }
+}
+
+body:is(
+    [data-slug="blog"],
+    [data-slug="blog/index"],
+    [data-slug="research"],
+    [data-slug="research/index"]
+  )
+  .folder-back-link {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 0 1rem;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: #000;
+  text-decoration: none;
+  font-family: var(--bodyFont);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.2;
+  transition: color 120ms ease;
+
+  &:hover {
+    color: #000;
+    text-decoration: underline;
+  }
+}
+
+body:is([data-slug="blog"], [data-slug="blog/index"]) .page > #quartz-body .sidebar,
+body:is([data-slug="blog"], [data-slug="blog/index"]) .page > #quartz-body .page-header,
+body:is([data-slug="blog"], [data-slug="blog/index"]) .page > #quartz-body .page-footer,
+body:is([data-slug="blog"], [data-slug="blog/index"]) .page > #quartz-body > footer,
+body:is([data-slug="blog"], [data-slug="blog/index"]) .center > hr,
+body:is([data-slug="blog"], [data-slug="blog/index"]) .center article,
+body:is([data-slug="blog"], [data-slug="blog/index"]) .page-listing > p {
+  display: none;
+}
+
+body:is([data-slug="blog"], [data-slug="blog/index"]) .page-listing .section-ul {
+  margin: 0;
+}
+
+body:is([data-slug="blog"], [data-slug="blog/index"]) .page-listing .section {
+  grid-template-columns: fit-content(8.5em) minmax(0, 1fr) fit-content(11em);
+  column-gap: 1rem;
+}
+
+body:is([data-slug="blog"], [data-slug="blog/index"]) .page-listing > div {
+  max-height: 18.5rem;
+  overflow-y: auto;
+}
+
+body:is([data-slug="blog"], [data-slug="blog/index"]) .page-listing .section-li:last-child {
+  margin-bottom: 0;
+}
+
+body:is([data-slug="blog"], [data-slug="blog/index"]) .folder-back-link {
+  margin: 1rem 0 0;
+}
+
+body:is([data-slug="research"], [data-slug="research/index"]) .page > #quartz-body {
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-areas:
+    "grid-header"
+    "grid-center"
+    "grid-footer" !important;
+}
+
+body:is([data-slug="research"], [data-slug="research/index"]) .page > #quartz-body .sidebar,
+body:is([data-slug="research"], [data-slug="research/index"]) .page > #quartz-body > footer,
+body:is([data-slug="research"], [data-slug="research/index"]) .center > hr,
+body:is([data-slug="research"], [data-slug="research/index"]) .center .page-footer,
+body:is([data-slug="research"], [data-slug="research/index"]) .page-listing,
+body:is([data-slug="research"], [data-slug="research/index"]) .breadcrumb-container {
+  display: none;
+}
+
+body:is([data-slug="research"], [data-slug="research/index"])
+  .page
+  > #quartz-body
+  > .center
+  > .page-header,
+body:is([data-slug="research"], [data-slug="research/index"])
+  .page
+  > #quartz-body
+  > .center
+  > .popover-hint {
+  width: min(100%, 860px);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+body:is([data-slug="research"], [data-slug="research/index"])
+  .page
+  > #quartz-body
+  > .center
+  > .page-header {
+  margin-top: 2rem;
 }
 
 @media all and (max-width: 800px) {

@@ -1,0 +1,43 @@
+body[data-slug="index"] #quartz-root {
+  position: relative;
+  isolation: isolate;
+}
+
+body[data-slug="index"] #quartz-body {
+  position: relative;
+  z-index: 2;
+}
+
+body[data-slug="index"] .home-vanta-birds-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: var(--light);
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(
+    ellipse 58% 46% at 50% 50%,
+    transparent 0%,
+    transparent 34%,
+    #000 56%,
+    #000 100%
+  );
+  mask-image: radial-gradient(
+    ellipse 58% 46% at 50% 50%,
+    transparent 0%,
+    transparent 34%,
+    #000 56%,
+    #000 100%
+  );
+}
+
+body[data-slug="index"] .home-vanta-birds-layer > canvas {
+  opacity: 0.78;
+  filter: saturate(0.9) contrast(1.02) brightness(1);
+}
+
+@media all and (max-width: 800px) {
+  body[data-slug="index"] .home-vanta-birds-layer {
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+}

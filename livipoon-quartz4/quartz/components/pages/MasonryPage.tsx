@@ -1,4 +1,5 @@
 import { classNames } from "../../util/lang"
+import { pathToRoot } from "../../util/path"
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "../types"
 // @ts-ignore
 import script from "../scripts/masonry.inline"
@@ -10,25 +11,24 @@ export default (() => {
     const images = fileData.masonryImages ?? []
     const jsonPath = fileData.masonryJsonPath
     const classes: string[] = fileData.frontmatter?.cssclasses ?? []
-
-    if (images.length === 0 || !jsonPath) {
-      return (
-        <article
-          class={classNames(displayClass, ...classes, "popover-hint", "masonry-container")}
-          data-masonry-layout=""
-        >
-          <div class="masonry-empty">No images found.</div>
-        </article>
+    const backHref = fileData.slug ? pathToRoot(fileData.slug) : "."
+    const className = classNames(displayClass, ...classes, "popover-hint", "masonry-container")
+    const content =
+      images.length > 0 && jsonPath ? (
+        <>
+          <div class="masonry-grid" id="masonry-grid" data-json-path={jsonPath}></div>
+          <div class="masonry-caption-modal" id="masonry-caption-modal"></div>
+        </>
+      ) : (
+        <div class="masonry-empty">No images found.</div>
       )
-    }
 
     return (
-      <article
-        class={classNames(displayClass, ...classes, "popover-hint", "masonry-container")}
-        data-masonry-layout=""
-      >
-        <div class="masonry-grid" id="masonry-grid" data-json-path={jsonPath}></div>
-        <div class="masonry-caption-modal" id="masonry-caption-modal"></div>
+      <article class={className} data-masonry-layout="">
+        <a class="masonry-back-link" href={backHref}>
+          back
+        </a>
+        {content}
       </article>
     )
   }

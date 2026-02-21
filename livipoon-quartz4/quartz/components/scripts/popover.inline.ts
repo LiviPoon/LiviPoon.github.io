@@ -9,8 +9,17 @@ async function mouseEnterHandler(
   this: HTMLAnchorElement,
   { clientX, clientY }: { clientX: number; clientY: number },
 ) {
+  if (document.body.dataset.slug === "index") {
+    return
+  }
+
   const link = (activeAnchor = this)
   if (link.dataset.noPopover === "true") {
+    return
+  }
+
+  const targetPath = new URL(link.href).pathname.replace(/\/+$/, "")
+  if (targetPath === "/art" || targetPath.startsWith("/art/")) {
     return
   }
 
@@ -27,7 +36,7 @@ async function mouseEnterHandler(
   function showPopover(popoverElement: HTMLElement) {
     clearActivePopover()
     popoverElement.classList.add("active-popover")
-    setPosition(popoverElement as HTMLElement)
+    setPosition(popoverElement)
 
     if (hash !== "") {
       const targetAnchor = `#popover-internal-${hash.slice(1)}`
@@ -44,11 +53,11 @@ async function mouseEnterHandler(
   targetUrl.hash = ""
   targetUrl.search = ""
   const popoverId = `popover-${link.pathname}`
-  const prevPopoverElement = document.getElementById(popoverId)
+  const existingPopover = document.getElementById(popoverId) as HTMLElement | null
 
   // dont refetch if there's already a popover
-  if (!!document.getElementById(popoverId)) {
-    showPopover(prevPopoverElement as HTMLElement)
+  if (existingPopover) {
+    showPopover(existingPopover)
     return
   }
 
@@ -57,7 +66,9 @@ async function mouseEnterHandler(
   })
 
   if (!response) return
-  const [contentType] = response.headers.get("Content-Type")!.split(";")
+  const contentTypeHeader =
+    response.headers.get("Content-Type") ?? response.headers.get("content-type") ?? "text/html"
+  const [contentType] = contentTypeHeader.split(";")
   const [contentTypeCategory, typeInfo] = contentType.split("/")
 
   const popoverElement = document.createElement("div")
@@ -102,7 +113,7 @@ async function mouseEnterHandler(
       elts.forEach((elt) => popoverInner.appendChild(elt))
   }
 
-  if (!!document.getElementById(popoverId)) {
+  if (document.getElementById(popoverId)) {
     return
   }
 
@@ -120,7 +131,18 @@ function clearActivePopover() {
   allPopoverElements.forEach((popoverElement) => popoverElement.classList.remove("active-popover"))
 }
 
+function removeAllPopovers() {
+  const allPopoverElements = document.querySelectorAll(".popover")
+  allPopoverElements.forEach((popoverElement) => popoverElement.remove())
+}
+
 document.addEventListener("nav", () => {
+  if (document.body.dataset.slug === "index") {
+    clearActivePopover()
+    removeAllPopovers()
+    return
+  }
+
   const links = [...document.querySelectorAll("a.internal")] as HTMLAnchorElement[]
   for (const link of links) {
     link.addEventListener("mouseenter", mouseEnterHandler)

@@ -9,6 +9,28 @@
   column-gap: 0 !important;
 }
 
+.masonry-back-link {
+  display: inline-flex;
+  align-items: center;
+  margin: 0 0 1rem 1.75rem;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: #000;
+  text-decoration: none;
+  font-family: var(--bodyFont);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.2;
+  transition: color 120ms ease;
+
+  &:hover {
+    color: #000;
+    text-decoration: underline;
+  }
+}
+
 .masonry-grid {
   position: relative;
   width: 100%;
