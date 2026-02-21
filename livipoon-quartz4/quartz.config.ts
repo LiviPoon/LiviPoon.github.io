@@ -1,9 +1,6 @@
 import { QuartzConfig } from "./quartz/cfg"
 import * as Plugin from "./quartz/plugins"
 
-const goatcounterWebsiteId = process.env.GOATCOUNTER_WEBSITE_ID ?? "livipoon"
-const goatcounterHost = process.env.GOATCOUNTER_HOST
-
 const config: QuartzConfig = {
   configuration: {
     pageTitle: "Livi Poon",
@@ -12,8 +9,8 @@ const config: QuartzConfig = {
     enablePopovers: true,
     analytics: {
       provider: "goatcounter",
-      websiteId: goatcounterWebsiteId,
-      ...(goatcounterHost ? { host: goatcounterHost } : {}),
+      websiteId: "livipoon",
+      host: "goatcounter.com",
     },
     locale: "en-US",
     baseUrl: "www.livipoon.com",
