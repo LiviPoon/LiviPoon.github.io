@@ -272,10 +272,113 @@ body:is([data-slug="research"], [data-slug="research/index"])
 }
 
 @media all and (max-width: 800px) {
+  html:has(body:is([data-slug="index"], [data-slug="blog"], [data-slug="blog/index"])) {
+    overflow-y: auto;
+  }
+
+  body:is([data-slug="index"], [data-slug="blog"], [data-slug="blog/index"]) {
+    height: auto;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: auto;
+  }
+
+  body:is([data-slug="index"], [data-slug="blog"], [data-slug="blog/index"]) #quartz-root {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  body[data-slug="index"] #quartz-body .center {
+    min-height: 0;
+    justify-content: flex-start;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+  }
+
+  body[data-slug="index"] #quartz-body .center > article,
+  body[data-slug="index"] #quartz-body .center > .popover-hint {
+    width: min(100%, 720px);
+    border-radius: 18px;
+  }
+
+  body:is([data-slug="blog"], [data-slug="blog/index"]) .page > #quartz-body > .center {
+    min-height: 0;
+    justify-content: flex-start;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    padding-left: clamp(0.7rem, 3.4vw, 1rem);
+    padding-right: clamp(0.7rem, 3.4vw, 1rem);
+  }
+
+  body:is([data-slug="blog"], [data-slug="blog/index"]) .blog-typewriter {
+    min-height: 2.8rem;
+    margin: 0 0 0.7rem;
+    font-size: clamp(0.9rem, 3.7vw, 1rem);
+    line-height: 1.35;
+  }
+
+  body:is([data-slug="blog"], [data-slug="blog/index"]) .blog-typewriter-text {
+    display: block;
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+
+  body:is([data-slug="blog"], [data-slug="blog/index"]) .page > #quartz-body > .center > .popover-hint {
+    width: min(100%, 700px);
+    margin: 0 auto;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  body:is([data-slug="blog"], [data-slug="blog/index"]) .page-listing > div {
+    max-height: none;
+    overflow: visible;
+    padding-bottom: calc(3.8rem + env(safe-area-inset-bottom));
+  }
+
+  body:is([data-slug="blog"], [data-slug="blog/index"]) .page-listing .section-li {
+    margin-bottom: 0.8rem;
+  }
+
+  body:is([data-slug="blog"], [data-slug="blog/index"]) .page-listing .section {
+    grid-template-columns: minmax(0, 1fr);
+    column-gap: 0;
+    row-gap: 0.28rem;
+  }
+
+  body:is([data-slug="blog"], [data-slug="blog/index"]) .page-listing .section > .desc > h3 {
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  body:is([data-slug="blog"], [data-slug="blog/index"]) .page-listing .section > .desc > h3 > a {
+    font-size: clamp(1.2rem, 6.2vw, 1.5rem);
+  }
+
+  body:is([data-slug="blog"], [data-slug="blog/index"]) .page-listing .section > .meta {
+    margin: 0 0 0.02rem;
+    font-size: 0.84rem;
+  }
+
+  body:is([data-slug="blog"], [data-slug="blog/index"]) .folder-back-link {
+    margin-top: 0.45rem;
+    padding-bottom: calc(0.25rem + env(safe-area-inset-bottom));
+  }
+
   body[data-slug="index"] article img {
     float: none;
     width: 100%;
     max-width: 420px;
+    margin: 0.8rem auto 1rem;
+    display: block;
+  }
+
+  body:not([data-slug="art"]):not([data-slug="art/index"]):not([data-slug^="art/"]) article img {
+    float: none;
+    width: 100%;
+    max-width: min(100%, 420px);
     margin: 0.8rem auto 1rem;
     display: block;
   }
