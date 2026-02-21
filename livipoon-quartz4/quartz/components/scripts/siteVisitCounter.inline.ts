@@ -1,7 +1,6 @@
 type GoatcounterWindow = Window &
   typeof globalThis & {
     goatcounter?: {
-      endpoint?: string
       visit_count?: (options: {
         append: string
         path: string
@@ -14,10 +13,10 @@ const counterWindow = window as GoatcounterWindow
 const counterId = "site-visit-counter"
 const counterValueId = "site-visit-counter-value"
 const visibleClass = "is-visible"
-const maxAttempts = 50
-const retryDelayMs = 220
-let renderAttempts = 0
-let renderTimer: number | null = null
+const pollIntervalMs = 110
+const maxPollChecks = 80
+let pollTimer: number | null = null
+let pollChecks = 0
 
 function isLocalPreviewHost(): boolean {
   const host = location.hostname.toLowerCase()
@@ -45,31 +44,6 @@ function ensureCounterElement(): HTMLDivElement {
   return root
 }
 
-function hasVisitCounterApi(): boolean {
-  return (
-    typeof counterWindow.goatcounter?.visit_count === "function" &&
-    typeof resolveGoatcounterEndpoint() === "string"
-  )
-}
-
-function resolveGoatcounterEndpoint(): string | null {
-  const fromWindow = counterWindow.goatcounter?.endpoint
-  if (typeof fromWindow === "string" && fromWindow.length > 0) {
-    return fromWindow
-  }
-
-  const script = document.querySelector("script[data-goatcounter]") as HTMLScriptElement | null
-  const fromScript = script?.getAttribute("data-goatcounter")
-  if (fromScript && fromScript.length > 0) {
-    if (counterWindow.goatcounter) {
-      counterWindow.goatcounter.endpoint = fromScript
-    }
-    return fromScript
-  }
-
-  return null
-}
-
 function renderLocalPreviewCounter(): boolean {
   if (!isLocalPreviewHost()) return false
 
@@ -82,13 +56,28 @@ function renderLocalPreviewCounter(): boolean {
   return true
 }
 
+function stopPolling() {
+  if (pollTimer === null) return
+  window.clearInterval(pollTimer)
+  pollTimer = null
+}
+
+function sanitizeCounterValue(value: HTMLElement) {
+  const currentText = value.textContent?.trim().toLowerCase() ?? ""
+  if (currentText.includes("403") || currentText.includes("forbidden")) {
+    value.textContent = "counter unavailable"
+  }
+}
+
 function renderCounter(): boolean {
-  if (!hasVisitCounterApi()) return false
+  if (typeof counterWindow.goatcounter?.visit_count !== "function") return false
 
   const root = ensureCounterElement()
   const value = document.getElementById(counterValueId)
   if (!value) return false
 
+  // GoatCounter visitor counter reference:
+  // https://www.goatcounter.com/help/visitor-counter
   value.textContent = ""
   counterWindow.goatcounter!.visit_count!({
     append: `#${counterValueId}`,
@@ -96,40 +85,34 @@ function renderCounter(): boolean {
     no_branding: true,
   })
 
-  // If GoatCounter responds with text errors (for example 403),
-  // avoid showing raw status text in the UI.
   window.setTimeout(() => {
-    const currentText = value.textContent?.trim().toLowerCase() ?? ""
-    if (currentText.includes("403") || currentText.includes("forbidden")) {
-      value.textContent = "counter unavailable"
-    }
-  }, 500)
+    sanitizeCounterValue(value)
+  }, 550)
 
   root.classList.add(visibleClass)
   return true
 }
 
-function queueRetry() {
-  if (renderTimer !== null) {
-    window.clearTimeout(renderTimer)
-    renderTimer = null
-  }
-
-  if (renderAttempts >= maxAttempts) return
-  renderAttempts += 1
-  renderTimer = window.setTimeout(() => {
-    renderTimer = null
-    if (!renderCounter()) {
-      queueRetry()
-    }
-  }, retryDelayMs)
-}
-
 function syncVisitCounter() {
-  renderAttempts = 0
+  stopPolling()
+  pollChecks = 0
+
   if (renderCounter()) return
   if (renderLocalPreviewCounter()) return
-  queueRetry()
+
+  // Keep checking until GoatCounter script has initialized.
+  pollTimer = window.setInterval(() => {
+    pollChecks += 1
+
+    if (renderCounter()) {
+      stopPolling()
+      return
+    }
+
+    if (pollChecks >= maxPollChecks) {
+      stopPolling()
+    }
+  }, pollIntervalMs)
 }
 
 document.addEventListener("nav", syncVisitCounter)
