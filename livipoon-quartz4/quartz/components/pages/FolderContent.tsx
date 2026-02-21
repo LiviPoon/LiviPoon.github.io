@@ -1,6 +1,8 @@
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "../types"
 
 import style from "../styles/listPage.scss"
+// @ts-ignore
+import script from "../scripts/blogTypewriter.inline"
 import { PageList, SortFn } from "../PageList"
 import { Root } from "hast"
 import { htmlToJsx } from "../../util/jsx"
@@ -9,6 +11,7 @@ import { QuartzPluginData } from "../../plugins/vfile"
 import { ComponentChildren } from "preact"
 import { concatenateResources } from "../../util/resources"
 import { trieFromAllFiles } from "../../util/ctx"
+import { pathToRoot } from "../../util/path"
 
 interface FolderContentOptions {
   /**
@@ -90,6 +93,13 @@ export default ((opts?: Partial<FolderContentOptions>) => {
         .filter((page) => page !== undefined) ?? []
     const cssClasses: string[] = fileData.frontmatter?.cssclasses ?? []
     const classes = cssClasses.join(" ")
+    const slug = fileData.slug ?? ""
+    const isBlogIndex = slug === "blog" || slug === "blog/index"
+    const showFolderBackLink =
+      isBlogIndex ||
+      slug === "research" ||
+      slug === "research/index"
+    const backHref = fileData.slug ? pathToRoot(fileData.slug) : "."
     const listProps = {
       ...props,
       sort: options.sort,
@@ -104,6 +114,19 @@ export default ((opts?: Partial<FolderContentOptions>) => {
 
     return (
       <div class="popover-hint">
+        {isBlogIndex && (
+          <div class="blog-typewriter" data-blog-typewriter="">
+            <span class="blog-typewriter-text" data-blog-typewriter-text="">
+              Loading quote...
+            </span>
+            <span class="blog-typewriter-caret" aria-hidden="true"></span>
+          </div>
+        )}
+        {showFolderBackLink && !isBlogIndex && (
+          <a class="folder-back-link" href={backHref}>
+            back
+          </a>
+        )}
         <article class={classes}>{content}</article>
         <div class="page-listing">
           {options.showFolderCount && (
@@ -117,10 +140,16 @@ export default ((opts?: Partial<FolderContentOptions>) => {
             <PageList {...listProps} />
           </div>
         </div>
+        {showFolderBackLink && isBlogIndex && (
+          <a class="folder-back-link" href={backHref}>
+            back
+          </a>
+        )}
       </div>
     )
   }
 
+  FolderContent.afterDOMLoaded = script
   FolderContent.css = concatenateResources(style, PageList.css)
   return FolderContent
 }) satisfies QuartzComponentConstructor

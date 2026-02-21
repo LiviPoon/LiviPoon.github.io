@@ -1,0 +1,88 @@
+.background-music-controls {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 1300;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.background-music-license-cluster {
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 1300;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.background-music-mute,
+.background-music-license {
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: #000;
+  font-family: var(--bodyFont);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.2;
+  opacity: 0.72;
+  transition: opacity 120ms ease;
+}
+
+.background-music-mute {
+  text-transform: lowercase;
+  cursor: pointer;
+}
+
+.background-music-license {
+  font-size: 0.8rem;
+  text-transform: lowercase;
+  color: #d4d4d4;
+  opacity: 0.38;
+  text-decoration: none;
+}
+
+.background-music-credit {
+  font-family: var(--bodyFont);
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.2;
+  text-transform: lowercase;
+  color: #d4d4d4;
+  opacity: 0.38;
+}
+
+.background-music-credit-link {
+  font-family: var(--bodyFont);
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.2;
+  text-transform: lowercase;
+  color: #d4d4d4;
+  opacity: 0.38;
+  text-decoration: none;
+  transition: opacity 120ms ease;
+}
+
+.background-music-mute:hover {
+  opacity: 0.95;
+  text-decoration: underline;
+}
+
+.background-music-license:hover {
+  opacity: 0.56;
+  text-decoration: underline;
+}
+
+.background-music-credit-link:hover {
+  opacity: 0.56;
+  text-decoration: underline;
+}
+
+.background-music-mute.is-muted {
+  opacity: 0.62;
+}
