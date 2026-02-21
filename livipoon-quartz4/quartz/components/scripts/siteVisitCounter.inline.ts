@@ -1,11 +1,7 @@
 type GoatcounterWindow = Window &
   typeof globalThis & {
     goatcounter?: {
-      visit_count?: (options: {
-        append: string
-        path: string
-        no_branding?: boolean
-      }) => void
+      endpoint?: string
     }
   }
 
@@ -13,10 +9,13 @@ const counterWindow = window as GoatcounterWindow
 const counterId = "site-visit-counter"
 const counterValueId = "site-visit-counter-value"
 const visibleClass = "is-visible"
-const pollIntervalMs = 110
-const maxPollChecks = 80
-let pollTimer: number | null = null
-let pollChecks = 0
+const initPollIntervalMs = 250
+const refreshIntervalMs = 5000
+const maxInitPollChecks = 40
+const localPreviewValue = "2"
+let initPollTimer: number | null = null
+let refreshTimer: number | null = null
+let initPollChecks = 0
 
 function isLocalPreviewHost(): boolean {
   const host = location.hostname.toLowerCase()
@@ -44,76 +43,153 @@ function ensureCounterElement(): HTMLDivElement {
   return root
 }
 
-function renderLocalPreviewCounter(): boolean {
-  if (!isLocalPreviewHost()) return false
-
+function setCounterValue(valueText: string) {
   const root = ensureCounterElement()
   const value = document.getElementById(counterValueId)
-  if (!value) return false
+  if (!value) return
 
-  value.textContent = "12,345 (preview)"
+  value.textContent = valueText
   root.classList.add(visibleClass)
+}
+
+function renderLocalPreviewCounter(): boolean {
+  if (!isLocalPreviewHost()) return false
+  setCounterValue(localPreviewValue)
   return true
 }
 
-function stopPolling() {
-  if (pollTimer === null) return
-  window.clearInterval(pollTimer)
-  pollTimer = null
+function resolveGoatcounterEndpoint(): string | null {
+  const fromWindow = counterWindow.goatcounter?.endpoint
+  if (typeof fromWindow === "string" && fromWindow.length > 0) {
+    return fromWindow
+  }
+
+  const script = document.querySelector("script[data-goatcounter]") as HTMLScriptElement | null
+  const fromScript = script?.getAttribute("data-goatcounter")
+  if (fromScript && fromScript.length > 0) {
+    return fromScript
+  }
+
+  return null
 }
 
-function sanitizeCounterValue(value: HTMLElement) {
-  const currentText = value.textContent?.trim().toLowerCase() ?? ""
-  if (currentText.includes("403") || currentText.includes("forbidden")) {
-    value.textContent = "counter unavailable"
+function resolveTotalCounterJsonUrl(): string | null {
+  const endpoint = resolveGoatcounterEndpoint()
+  if (!endpoint) return null
+
+  try {
+    const endpointUrl = new URL(endpoint, location.href)
+    return `${endpointUrl.origin}/counter/${encodeURIComponent("TOTAL")}.json`
+  } catch {
+    return null
   }
 }
 
-function renderCounter(): boolean {
-  if (typeof counterWindow.goatcounter?.visit_count !== "function") return false
+async function fetchTotalCount(): Promise<string | null> {
+  const jsonUrl = resolveTotalCounterJsonUrl()
+  if (!jsonUrl) return null
 
-  const root = ensureCounterElement()
-  const value = document.getElementById(counterValueId)
+  try {
+    // GoatCounter visitor counter JSON endpoint:
+    // https://www.goatcounter.com/help/visitor-counter
+    const response = await fetch(jsonUrl, {
+      method: "GET",
+      cache: "no-store",
+      credentials: "omit",
+    })
+
+    if (response.status === 403) {
+      return "counter unavailable"
+    }
+    if (!response.ok) {
+      return null
+    }
+
+    const payload = (await response.json()) as { count?: string | number }
+    const count = payload.count
+    if (typeof count === "number") return count.toLocaleString()
+    if (typeof count === "string" && count.trim().length > 0) return count.trim()
+    return null
+  } catch {
+    return null
+  }
+}
+
+async function updateCounterFromJson(): Promise<boolean> {
+  const value = await fetchTotalCount()
   if (!value) return false
-
-  // GoatCounter visitor counter reference:
-  // https://www.goatcounter.com/help/visitor-counter
-  value.textContent = ""
-  counterWindow.goatcounter!.visit_count!({
-    append: `#${counterValueId}`,
-    path: "TOTAL",
-    no_branding: true,
-  })
-
-  window.setTimeout(() => {
-    sanitizeCounterValue(value)
-  }, 550)
-
-  root.classList.add(visibleClass)
+  setCounterValue(value)
   return true
 }
 
-function syncVisitCounter() {
-  stopPolling()
-  pollChecks = 0
-
-  if (renderCounter()) return
-  if (renderLocalPreviewCounter()) return
-
-  // Keep checking until GoatCounter script has initialized.
-  pollTimer = window.setInterval(() => {
-    pollChecks += 1
-
-    if (renderCounter()) {
-      stopPolling()
-      return
-    }
-
-    if (pollChecks >= maxPollChecks) {
-      stopPolling()
-    }
-  }, pollIntervalMs)
+function stopInitPoll() {
+  if (initPollTimer === null) return
+  window.clearInterval(initPollTimer)
+  initPollTimer = null
 }
 
-document.addEventListener("nav", syncVisitCounter)
+function stopRefreshLoop() {
+  if (refreshTimer === null) return
+  window.clearInterval(refreshTimer)
+  refreshTimer = null
+}
+
+function startRefreshLoop() {
+  stopRefreshLoop()
+  refreshTimer = window.setInterval(() => {
+    void updateCounterFromJson()
+  }, refreshIntervalMs)
+}
+
+function syncVisitCounter() {
+  stopInitPoll()
+  stopRefreshLoop()
+  initPollChecks = 0
+
+  if (renderLocalPreviewCounter()) return
+
+  void (async () => {
+    if (await updateCounterFromJson()) {
+      startRefreshLoop()
+    }
+  })()
+
+  // Wait for GoatCounter endpoint script to be present on initial load.
+  initPollTimer = window.setInterval(() => {
+    initPollChecks += 1
+    void (async () => {
+      if (await updateCounterFromJson()) {
+        stopInitPoll()
+        startRefreshLoop()
+      } else if (initPollChecks >= maxInitPollChecks) {
+        stopInitPoll()
+      }
+    })()
+  }, initPollIntervalMs)
+}
+
+window.addEventListener("beforeunload", () => {
+  stopInitPoll()
+  stopRefreshLoop()
+})
+
+document.addEventListener("nav", () => {
+  // For SPA navigations, restart polling and refresh loop.
+  syncVisitCounter()
+})
+
+document.addEventListener("visibilitychange", () => {
+  if (document.visibilityState === "visible") {
+    void updateCounterFromJson()
+    if (!isLocalPreviewHost()) {
+      startRefreshLoop()
+    }
+  } else {
+    stopRefreshLoop()
+    if (!isLocalPreviewHost()) {
+      stopInitPoll()
+    }
+  }
+})
+
 syncVisitCounter()
