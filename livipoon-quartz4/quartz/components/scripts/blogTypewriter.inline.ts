@@ -71,6 +71,8 @@ const fallbackQuotes = [
   "Small risks can open larger lives.",
   "Empathy makes difficult work more human.",
 ]
+const minPostQuotePauseMs = 1000
+const maxPostQuotePauseMs = 3000
 
 function emitMusicDuckChange(ducked: boolean) {
   document.dispatchEvent(
@@ -336,6 +338,15 @@ function estimateSpeechDurationMs(text: string, rate: number): number {
   return Math.max(900, baseMs + punctuationPauseMs + 140)
 }
 
+function postQuotePauseMs(quoteText: string): number {
+  const length = normalizeWhitespace(quoteText).length
+  const clampedLength = Math.min(maxChars, Math.max(minChars, length))
+  const lengthRange = Math.max(1, maxChars - minChars)
+  const normalized = (clampedLength - minChars) / lengthRange
+  const inverse = 1 - normalized
+  return Math.round(minPostQuotePauseMs + inverse * (maxPostQuotePauseMs - minPostQuotePauseMs))
+}
+
 function createSpeechRuntime(): TypewriterSpeechRuntime {
   const unsupported: TypewriterSpeechRuntime = {
     enabled: false,
@@ -532,7 +543,7 @@ async function runTypewriter(
     await Promise.race([speechPlayback.completion, sleep(speechPlayback.expectedDurationMs + 240)])
     if (cancelled()) return
 
-    await sleep(450 + Math.random() * 300)
+    await sleep(postQuotePauseMs(quoteText))
     if (cancelled()) return
 
     const erased = await eraseText(textEl, cancelled)
