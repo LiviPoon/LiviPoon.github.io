@@ -330,7 +330,11 @@ body:is([data-slug="research"], [data-slug="research/index"])
     word-break: normal;
   }
 
-  body:is([data-slug="blog"], [data-slug="blog/index"]) .page > #quartz-body > .center > .popover-hint {
+  body:is([data-slug="blog"], [data-slug="blog/index"])
+    .page
+    > #quartz-body
+    > .center
+    > .popover-hint {
     width: min(100%, 700px);
     margin: 0 auto;
     padding-left: 0;
@@ -386,5 +390,37 @@ body:is([data-slug="research"], [data-slug="research/index"])
     max-width: min(100%, 420px);
     margin: 0.8rem auto 1rem;
     display: block;
+  }
+
+  // Keep one consistent mobile gutter. Prevent center containers from adding
+  // extra left/right padding on top of #quartz-body mobile padding.
+  body:is(
+      [data-slug="index"],
+      [data-slug="blog"],
+      [data-slug="blog/index"],
+      [data-slug="research"],
+      [data-slug="research/index"]
+    )
+    .page
+    > #quartz-body {
+    padding-left: clamp(0.72rem, 3.6vw, 1rem);
+    padding-right: clamp(0.72rem, 3.6vw, 1rem);
+  }
+
+  body:is(
+      [data-slug="index"],
+      [data-slug="blog"],
+      [data-slug="blog/index"],
+      [data-slug="research"],
+      [data-slug="research/index"]
+    )
+    .page
+    > #quartz-body
+    > .center {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 0;
+    padding-right: 0;
   }
 }
