@@ -25,6 +25,25 @@ input[type="reset"] {
   color: #f9fded;
 }
 
+.left.sidebar .giscus {
+  width: 100%;
+  max-width: 100%;
+}
+
+body[data-slug^="blog/"] .left.sidebar .desktop-only.giscus {
+  max-height: calc(100vh - 12rem);
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+body[data-slug^="blog/"] .left.sidebar .desktop-only.giscus iframe.giscus-frame {
+  width: 100%;
+}
+
+body[data-slug^="blog/"] .center .page-footer .mobile-only.giscus {
+  margin-top: 1rem;
+}
+
 article img {
   float: right;
   width: min(38%, 240px);
@@ -272,6 +291,10 @@ body:is([data-slug="research"], [data-slug="research/index"])
 }
 
 @media all and (max-width: 800px) {
+  body[data-slug^="blog/"] .center .page-footer .mobile-only.giscus {
+    margin-top: 0.75rem;
+  }
+
   html:has(body:is([data-slug="index"], [data-slug="blog"], [data-slug="blog/index"])) {
     overflow-y: auto;
   }
