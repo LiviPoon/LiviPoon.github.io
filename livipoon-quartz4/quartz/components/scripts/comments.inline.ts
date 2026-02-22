@@ -1,53 +1,31 @@
-const isVisible = (element: HTMLElement) => {
-  const style = window.getComputedStyle(element)
-  return (
-    style.display !== "none" && style.visibility !== "hidden" && element.getClientRects().length > 0
-  )
-}
-
-const getGiscusContainers = () =>
-  Array.from(document.querySelectorAll(".giscus")) as GiscusElement[]
-
-const getGiscusContainer = () => {
-  const containers = getGiscusContainers()
-  if (containers.length === 0) {
-    return null
-  }
-
-  return containers.find((container) => isVisible(container)) ?? containers[0]
-}
-
 const changeTheme = (e: CustomEventMap["themechange"]) => {
-  const theme = getThemeUrl(getThemeName(e.detail.theme))
-  const iframes = document.querySelectorAll("iframe.giscus-frame")
-  if (iframes.length === 0) {
+  const theme = e.detail.theme
+  const iframe = document.querySelector("iframe.giscus-frame") as HTMLIFrameElement
+  if (!iframe) {
     return
   }
 
-  for (const frame of iframes) {
-    const iframe = frame as HTMLIFrameElement
-    if (!iframe.contentWindow) {
-      continue
-    }
+  if (!iframe.contentWindow) {
+    return
+  }
 
-    iframe.contentWindow.postMessage(
-      {
-        giscus: {
-          setConfig: {
-            theme,
-          },
+  iframe.contentWindow.postMessage(
+    {
+      giscus: {
+        setConfig: {
+          theme: getThemeUrl(getThemeName(theme)),
         },
       },
-      "https://giscus.app",
-    )
-  }
+    },
+    "https://giscus.app",
+  )
 }
 
 const getThemeName = (theme: string) => {
   if (theme !== "dark" && theme !== "light") {
     return theme
   }
-  const giscusContainer = getGiscusContainer()
+  const giscusContainer = document.querySelector(".giscus") as GiscusElement
   if (!giscusContainer) {
     return theme
   }
@@ -57,11 +35,34 @@ const getThemeName = (theme: string) => {
 }
 
 const getThemeUrl = (theme: string) => {
-  const giscusContainer = getGiscusContainer()
+  const giscusContainer = document.querySelector(".giscus") as GiscusElement
+  const version = "20260222-8"
+  const localThemeBase = `${window.location.origin}/static/giscus`
   if (!giscusContainer) {
-    return `https://giscus.app/themes/${theme}.css`
+    return `${localThemeBase}/${theme}.css?v=${version}`
   }
-  return `${giscusContainer.dataset.themeUrl ?? "https://giscus.app/themes"}/${theme}.css`
+
+  const configuredThemeBase = giscusContainer.dataset.themeUrl
+  if (!configuredThemeBase) {
+    return `${localThemeBase}/${theme}.css?v=${version}`
+  }
+
+  try {
+    const configuredUrl = new URL(configuredThemeBase, window.location.origin)
+    const configuredBase = configuredUrl.toString().replace(/\/+$/, "")
+    const canUseLocalThemeBase = window.location.protocol === "https:"
+
+    // Use local theme files in cross-host previews when possible.
+    // On HTTP localhost, giscus (HTTPS iframe) may block HTTP theme URLs as mixed content.
+    const themeBase =
+      configuredUrl.hostname === window.location.hostname || !canUseLocalThemeBase
+        ? configuredBase
+        : localThemeBase
+
+    return `${themeBase}/${theme}.css?v=${version}`
+  } catch {
+    return `${localThemeBase}/${theme}.css?v=${version}`
+  }
 }
 
 type GiscusElement = Omit<HTMLElement, "dataset"> & {
@@ -82,12 +83,10 @@ type GiscusElement = Omit<HTMLElement, "dataset"> & {
 }
 
 document.addEventListener("nav", () => {
-  const giscusContainer = getGiscusContainer()
+  const giscusContainer = document.querySelector(".giscus") as GiscusElement
   if (!giscusContainer) {
     return
   }
-
-  giscusContainer.innerHTML = ""
 
   const giscusScript = document.createElement("script")
   giscusScript.src = "https://giscus.app/client.js"

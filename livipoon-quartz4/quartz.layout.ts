@@ -37,7 +37,7 @@ const giscusComments = Component.Comments({
     lang: "en",
     themeUrl: "https://www.livipoon.com/static/giscus",
     lightTheme: "light",
-    darkTheme: "light",
+    darkTheme: "dark",
   },
 })
 
@@ -45,7 +45,7 @@ const giscusComments = Component.Comments({
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
-  afterBody: [blogPostsOnly(Component.MobileOnly(giscusComments))],
+  afterBody: [],
   footer: Component.Footer(),
 }
 

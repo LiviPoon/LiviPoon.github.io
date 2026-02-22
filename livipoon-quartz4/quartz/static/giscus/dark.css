@@ -34,46 +34,46 @@ main {
   --color-prettylights-syntax-brackethighlighter-angle: #8b949e;
   --color-prettylights-syntax-sublimelinter-gutter-mark: #484f58;
   --color-prettylights-syntax-constant-other-reference-link: #a5d6ff;
-  --color-btn-text: #d4d4d4; /* --darkgray */
-  --color-btn-bg: #161618; /* --light */
-  --color-btn-border: rgb(240, 246, 252 / 10%); /* --dark */
+  --color-btn-text: #d5cec8; /* site darkgray */
+  --color-btn-bg: #1a1715; /* site light */
+  --color-btn-border: #3d3733; /* site lightgray */
   --color-btn-shadow: 0 0 transparent;
   --color-btn-inset-shadow: 0 0 transparent;
-  --color-btn-hover-bg: #30363d;
-  --color-btn-hover-border: #8b949e;
-  --color-btn-active-bg: hsl(212deg 12% 18% / 100%);
-  --color-btn-active-border: #6e7681;
-  --color-btn-selected-bg: #161b22;
-  --color-btn-primary-text: #fff;
-  --color-btn-primary-bg: #84a59d; /* --tertiary */
-  --color-btn-primary-border: rgb(240, 246, 252 / 10%); /* --dark */
+  --color-btn-hover-bg: #3d3733; /* site lightgray */
+  --color-btn-hover-border: #6e6660; /* site gray */
+  --color-btn-active-bg: #3d3733; /* site lightgray */
+  --color-btn-active-border: #6e6660; /* site gray */
+  --color-btn-selected-bg: #3d3733; /* site lightgray */
+  --color-btn-primary-text: #1a1715; /* site light */
+  --color-btn-primary-bg: #8eb4d3; /* site secondary */
+  --color-btn-primary-border: rgb(61 55 51 / 80%); /* site lightgray */
   --color-btn-primary-shadow: 0 0 transparent;
   --color-btn-primary-inset-shadow: 0 0 transparent;
-  --color-btn-primary-hover-bg: #7b97aa; /* --secondary */
-  --color-btn-primary-hover-border: rgb(240, 246, 252 / 10%); /* --dark */
-  --color-btn-primary-selected-bg: #7b97aa; /* --secondary */
+  --color-btn-primary-hover-bg: #9dc1a8; /* site tertiary */
+  --color-btn-primary-hover-border: rgb(61 55 51 / 80%); /* site lightgray */
+  --color-btn-primary-selected-bg: #9dc1a8; /* site tertiary */
   --color-btn-primary-selected-shadow: 0 0 transparent;
-  --color-btn-primary-disabled-text: rgba(33, 32, 32, 0.5);
-  --color-btn-primary-disabled-bg: rgb(35 134 54 / 60%);
-  --color-btn-primary-disabled-border: rgb(240 246 252 / 10%);
-  --color-action-list-item-default-hover-bg: rgb(177 186 196 / 12%);
-  --color-segmented-control-bg: rgb(110 118 129 / 10%);
-  --color-segmented-control-button-bg: #0d1117;
-  --color-segmented-control-button-selected-border: #6e7681;
-  --color-fg-default: #ebebec; /* --dark */
-  --color-fg-muted: #d4d4d4; /* --darkgray */
-  --color-fg-subtle: #d4d4d4; /* --darkgray */
-  --color-canvas-default: #0d1117;
-  --color-canvas-overlay: #161b22;
-  --color-canvas-inset: #010409;
-  --color-canvas-subtle: #161b22;
-  --color-border-default: #30363d;
-  --color-border-muted: #21262d;
-  --color-neutral-muted: rgb(110 118 129 / 40%);
-  --color-accent-fg: #2f81f7;
-  --color-accent-emphasis: #1f6feb;
-  --color-accent-muted: rgb(56 139 253 / 40%);
-  --color-accent-subtle: rgb(56 139 253 / 10%);
+  --color-btn-primary-disabled-text: rgb(26 23 21 / 55%);
+  --color-btn-primary-disabled-bg: rgb(142 180 211 / 58%);
+  --color-btn-primary-disabled-border: rgb(61 55 51 / 72%);
+  --color-action-list-item-default-hover-bg: rgb(142 180 211 / 16%);
+  --color-segmented-control-bg: rgb(110 102 96 / 22%);
+  --color-segmented-control-button-bg: #1a1715;
+  --color-segmented-control-button-selected-border: #6e6660;
+  --color-fg-default: #f2eeea; /* site dark */
+  --color-fg-muted: #d5cec8; /* site darkgray */
+  --color-fg-subtle: #6e6660; /* site gray */
+  --color-canvas-default: #1a1715; /* site light */
+  --color-canvas-overlay: #1a1715; /* site light */
+  --color-canvas-inset: #161311;
+  --color-canvas-subtle: #3d3733; /* site lightgray */
+  --color-border-default: #3d3733; /* site lightgray */
+  --color-border-muted: #3d3733;
+  --color-neutral-muted: rgb(61 55 51 / 40%);
+  --color-accent-fg: #8eb4d3; /* site secondary */
+  --color-accent-emphasis: #9dc1a8; /* site tertiary */
+  --color-accent-muted: rgb(142 180 211 / 38%);
+  --color-accent-subtle: rgb(142 180 211 / 14%);
   --color-success-fg: #3fb950;
   --color-attention-fg: #d29922;
   --color-attention-muted: rgb(187 128 9 / 40%);
@@ -81,9 +81,9 @@ main {
   --color-danger-fg: #f85149;
   --color-danger-muted: rgb(248 81 73 / 40%);
   --color-danger-subtle: rgb(248 81 73 / 10%);
-  --color-primer-shadow-inset: 0 0 transparent;
-  --color-scale-gray-7: #21262d;
-  --color-scale-blue-8: #0c2d6b;
+  --color-primer-shadow-inset: inset 0 1px 0 rgb(61 55 51 / 24%);
+  --color-scale-gray-7: #3d3733;
+  --color-scale-blue-8: #38556d;
 
   /*! Extensions from @primer/css/alerts/flash.scss */
   --color-social-reaction-bg-hover: var(--color-scale-gray-7);
