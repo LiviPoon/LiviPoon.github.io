@@ -2,46 +2,39 @@
 
 // put your custom CSS here!
 :root,
-:root[saved-theme="light"],
-:root[saved-theme="dark"] {
+:root[saved-theme="light"] {
   color-scheme: light;
-  --light: #f9fded;
-  --lightgray: #bba0b2;
-  --gray: #bba0b2;
-  --darkgray: #070600;
-  --dark: #070600;
-  --secondary: #4f517d;
-  --tertiary: #bba0b2;
-  --highlight: #070600;
-  --textHighlight: #070600;
+  --light: #f7f5f2;
+  --lightgray: #dfdbd6;
+  --gray: #b4aea8;
+  --darkgray: #5a5450;
+  --dark: #1f1b19;
+  --secondary: #359ad4;
+  --tertiary: #206c97;
+  --highlight: rgba(53, 92, 125, 0.12);
+  --textHighlight: #ffe38a88;
+}
+
+:root[saved-theme="dark"] {
+  color-scheme: dark;
+  --light: #1a1715;
+  --lightgray: #3d3733;
+  --gray: #6e6660;
+  --darkgray: #d5cec8;
+  --dark: #f2eeea;
+  --secondary: #8eb4d3;
+  --tertiary: #9dc1a8;
+  --highlight: rgba(142, 180, 211, 0.16);
+  --textHighlight: #b7a20088;
 }
 
 button,
 input[type="button"],
 input[type="submit"],
 input[type="reset"] {
-  background-color: #4f517d;
-  border-color: #4f517d;
-  color: #f9fded;
-}
-
-.left.sidebar .giscus {
-  width: 100%;
-  max-width: 100%;
-}
-
-body[data-slug^="blog/"] .left.sidebar .desktop-only.giscus {
-  max-height: calc(100vh - 12rem);
-  overflow-y: auto;
-  padding-right: 0.25rem;
-}
-
-body[data-slug^="blog/"] .left.sidebar .desktop-only.giscus iframe.giscus-frame {
-  width: 100%;
-}
-
-body[data-slug^="blog/"] .center .page-footer .mobile-only.giscus {
-  margin-top: 1rem;
+  background-color: var(--secondary);
+  border-color: var(--secondary);
+  color: var(--light);
 }
 
 article img {
@@ -291,10 +284,6 @@ body:is([data-slug="research"], [data-slug="research/index"])
 }
 
 @media all and (max-width: 800px) {
-  body[data-slug^="blog/"] .center .page-footer .mobile-only.giscus {
-    margin-top: 0.75rem;
-  }
-
   html:has(body:is([data-slug="index"], [data-slug="blog"], [data-slug="blog/index"])) {
     overflow-y: auto;
   }

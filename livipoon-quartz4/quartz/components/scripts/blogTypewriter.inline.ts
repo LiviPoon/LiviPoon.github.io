@@ -30,7 +30,7 @@ const blogTypewriterWindow = window as BlogTypewriterWindow
 const parser = new DOMParser()
 const minChars = 24
 const maxChars = 320
-const minWords = 4
+const minWords = 8
 const maxWords = 50
 const minScore = 1
 
@@ -73,10 +73,10 @@ const muteEventName = "background-mute-changed"
 const musicDuckEventName = "background-music-duck-changed"
 const recentQuoteWindowSize = 24
 const fallbackQuotes = [
-  "Curiosity lives where comfort ends.",
-  "Meaning grows when we choose challenge.",
-  "Small risks can open larger lives.",
-  "Empathy makes difficult work more human.",
+  "Curiosity often begins where comfort finally starts to end.",
+  "Meaning grows when we choose challenge over familiar safety.",
+  "Small risks taken consistently can open unexpectedly larger lives.",
+  "Empathy makes difficult work feel more honest and deeply human.",
 ]
 const minPostQuotePauseMs = 1000
 const maxPostQuotePauseMs = 3000
@@ -92,6 +92,16 @@ function emitMusicDuckChange(ducked: boolean) {
 
 function normalizeWhitespace(text: string): string {
   return text.replace(/\s+/g, " ").trim()
+}
+
+function wordCount(text: string): number {
+  const normalized = normalizeWhitespace(text)
+  if (normalized.length === 0) return 0
+  return normalized.split(/\s+/).length
+}
+
+function isQuoteLongEnough(text: string): boolean {
+  return wordCount(text) > 7
 }
 
 function isSpeechMuted(): boolean {
@@ -150,7 +160,7 @@ function splitSentences(text: string): string[] {
 
 function scoreSentence(sentence: string): number {
   const lower = sentence.toLowerCase()
-  const words = sentence.split(/\s+/).length
+  const words = wordCount(sentence)
 
   if (!isCompleteSentence(sentence)) return -1
   if (sentence.length < minChars || sentence.length > maxChars) return -1
@@ -270,7 +280,7 @@ async function collectQuotes(postLinks: string[], cancelled: () => boolean): Pro
   const deduped: string[] = []
   const seenQuotes = new Set<string>()
   for (const quote of shuffle(quotes)) {
-    if (!seenQuotes.has(quote)) {
+    if (isQuoteLongEnough(quote) && !seenQuotes.has(quote)) {
       seenQuotes.add(quote)
       deduped.push(quote)
     }
@@ -284,17 +294,19 @@ async function pickFreshQuote(
   recentQuotes: string[],
   cancelled: () => boolean,
 ): Promise<string> {
+  const eligibleFallbackQuotes = fallbackQuotes.filter(isQuoteLongEnough)
+
   if (postLinks.length === 0) {
-    return pickRandom(fallbackQuotes) ?? fallbackQuotes[0]!
+    return pickRandom(eligibleFallbackQuotes) ?? eligibleFallbackQuotes[0] ?? ""
   }
 
   const fetched = await collectQuotes(postLinks, cancelled)
   if (cancelled()) return ""
 
   const recentQuoteSet = new Set(recentQuotes)
-  const unseenPool = fetched.filter((quote) => !recentQuoteSet.has(quote))
+  const unseenPool = fetched.filter((quote) => isQuoteLongEnough(quote) && !recentQuoteSet.has(quote))
   const pool = unseenPool.length > 0 ? unseenPool : fetched
-  return pickRandom(pool) ?? pickRandom(fallbackQuotes) ?? fallbackQuotes[0]!
+  return pickRandom(pool) ?? pickRandom(eligibleFallbackQuotes) ?? eligibleFallbackQuotes[0] ?? ""
 }
 
 function scoreVoice(voice: SpeechSynthesisVoice): number {

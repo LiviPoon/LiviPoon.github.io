@@ -34,46 +34,46 @@ main {
   --color-prettylights-syntax-brackethighlighter-angle: #57606a;
   --color-prettylights-syntax-sublimelinter-gutter-mark: #8c959f;
   --color-prettylights-syntax-constant-other-reference-link: #0a3069;
-  --color-btn-text: #070600; /* site dark */
-  --color-btn-bg: #f9fded; /* site light */
-  --color-btn-border: rgb(7 6 0 / 18%); /* site dark */
+  --color-btn-text: #1f1b19; /* site dark */
+  --color-btn-bg: #f7f5f2; /* site light */
+  --color-btn-border: #dfdbd6; /* site lightgray */
   --color-btn-shadow: 0 1px 0 rgb(31 35 40 / 4%);
   --color-btn-inset-shadow: inset 0 1px 0 rgb(255 255 255 / 25%);
-  --color-btn-hover-bg: #f1f4e2;
-  --color-btn-hover-border: rgb(7 6 0 / 22%); /* site dark */
-  --color-btn-active-bg: #ecefd8;
-  --color-btn-active-border: rgb(7 6 0 / 26%);
-  --color-btn-selected-bg: #ecefd8;
-  --color-btn-primary-text: #fff;
-  --color-btn-primary-bg: #4f517d; /* site secondary */
-  --color-btn-primary-border: rgb(7 6 0 / 18%); /* site dark */
+  --color-btn-hover-bg: #dfdbd6; /* site lightgray */
+  --color-btn-hover-border: #b4aea8; /* site gray */
+  --color-btn-active-bg: #dfdbd6; /* site lightgray */
+  --color-btn-active-border: #b4aea8; /* site gray */
+  --color-btn-selected-bg: #dfdbd6; /* site lightgray */
+  --color-btn-primary-text: #f7f5f2; /* site light */
+  --color-btn-primary-bg: #359ad4; /* site secondary */
+  --color-btn-primary-border: rgb(31 27 25 / 14%); /* site dark */
   --color-btn-primary-shadow: 0 1px 0 rgb(31 35 40 / 10%);
   --color-btn-primary-inset-shadow: inset 0 1px 0 rgb(255 255 255 / 3%);
-  --color-btn-primary-hover-bg: #3f4064; /* site secondary (hover) */
-  --color-btn-primary-hover-border: rgb(7 6 0 / 18%); /* site dark */
-  --color-btn-primary-selected-bg: #3a3b5d; /* site secondary (active) */
+  --color-btn-primary-hover-bg: #206c97; /* site tertiary */
+  --color-btn-primary-hover-border: rgb(31 27 25 / 14%); /* site dark */
+  --color-btn-primary-selected-bg: #206c97; /* site tertiary */
   --color-btn-primary-selected-shadow: inset 0 1px 0 rgb(0 45 17 / 20%);
-  --color-btn-primary-disabled-text: rgb(255 255 255 / 80%);
-  --color-btn-primary-disabled-bg: #8e91b8;
-  --color-btn-primary-disabled-border: rgb(31 35 40 / 15%);
-  --color-action-list-item-default-hover-bg: rgb(79 81 125 / 18%);
-  --color-segmented-control-bg: #f9fded; /* match site light background */
-  --color-segmented-control-button-bg: #f9fded;
-  --color-segmented-control-button-selected-border: #bba0b2;
-  --color-fg-default: #070600; /* site dark */
-  --color-fg-muted: #4f517d; /* site secondary */
-  --color-fg-subtle: #4f517d; /* site secondary */
-  --color-canvas-default: #f9fded; /* site light */
-  --color-canvas-overlay: #f9fded; /* site light */
-  --color-canvas-inset: #f9fded; /* match site light background */
-  --color-canvas-subtle: #f9fded; /* match site light background */
-  --color-border-default: #bba0b2; /* site lightgray */
-  --color-border-muted: rgb(187 160 178 / 70%);
-  --color-neutral-muted: rgb(187 160 178 / 24%);
-  --color-accent-fg: #4f517d; /* site secondary */
-  --color-accent-emphasis: #4f517d; /* site secondary */
-  --color-accent-muted: rgb(79 81 125 / 32%);
-  --color-accent-subtle: rgb(79 81 125 / 12%);
+  --color-btn-primary-disabled-text: rgb(247 245 242 / 78%);
+  --color-btn-primary-disabled-bg: rgb(53 154 212 / 56%);
+  --color-btn-primary-disabled-border: rgb(31 27 25 / 12%);
+  --color-action-list-item-default-hover-bg: rgb(53 92 125 / 12%); /* site highlight */
+  --color-segmented-control-bg: #f7f5f2; /* match site light background */
+  --color-segmented-control-button-bg: #f7f5f2; /* site light */
+  --color-segmented-control-button-selected-border: #b4aea8; /* site gray */
+  --color-fg-default: #1f1b19; /* site dark */
+  --color-fg-muted: #5a5450; /* site darkgray */
+  --color-fg-subtle: #b4aea8; /* site gray */
+  --color-canvas-default: #f7f5f2; /* site light */
+  --color-canvas-overlay: #f7f5f2; /* site light */
+  --color-canvas-inset: #f7f5f2; /* match site light background */
+  --color-canvas-subtle: #f7f5f2; /* match site light background */
+  --color-border-default: #dfdbd6; /* site lightgray */
+  --color-border-muted: rgb(223 219 214 / 88%);
+  --color-neutral-muted: rgb(180 174 168 / 30%);
+  --color-accent-fg: #359ad4; /* site secondary */
+  --color-accent-emphasis: #206c97; /* site tertiary */
+  --color-accent-muted: rgb(53 154 212 / 34%);
+  --color-accent-subtle: rgb(53 92 125 / 12%);
   --color-success-fg: #1a7f37;
   --color-attention-fg: #9a6700;
   --color-attention-muted: rgb(212 167 44 / 40%);
@@ -81,9 +81,9 @@ main {
   --color-danger-fg: #d1242f;
   --color-danger-muted: rgb(255 129 130 / 40%);
   --color-danger-subtle: #ffebe9;
-  --color-primer-shadow-inset: inset 0 1px 0 rgb(187 160 178 / 20%);
-  --color-scale-gray-1: #efe8ee;
-  --color-scale-blue-1: #d7d6ea;
+  --color-primer-shadow-inset: inset 0 1px 0 rgb(223 219 214 / 34%);
+  --color-scale-gray-1: #dfdbd6;
+  --color-scale-blue-1: #d9ecf7;
 
   /*! Extensions from @primer/css/alerts/flash.scss */
   --color-social-reaction-bg-hover: var(--color-scale-gray-1);
