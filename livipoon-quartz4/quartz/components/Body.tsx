@@ -6,9 +6,12 @@ import clipboardScript from "./scripts/clipboard.inline"
 import backgroundMusicScript from "./scripts/backgroundMusic.inline"
 // @ts-ignore
 import siteVisitCounterScript from "./scripts/siteVisitCounter.inline"
+// @ts-ignore
+import customCursorScript from "./scripts/customCursor.inline"
 import clipboardStyle from "./styles/clipboard.scss"
 import backgroundMusicStyle from "./styles/backgroundMusic.scss"
 import siteVisitCounterStyle from "./styles/siteVisitCounter.scss"
+import customCursorStyle from "./styles/customCursor.scss"
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 import { concatenateResources } from "../util/resources"
 import { FilePath, slugifyFilePath } from "../util/path"
@@ -51,7 +54,13 @@ Body.afterDOMLoaded = concatenateResources(
   clipboardScript,
   backgroundMusicScript,
   siteVisitCounterScript,
+  customCursorScript,
 )
-Body.css = concatenateResources(clipboardStyle, backgroundMusicStyle, siteVisitCounterStyle)
+Body.css = concatenateResources(
+  clipboardStyle,
+  backgroundMusicStyle,
+  siteVisitCounterStyle,
+  customCursorStyle,
+)
 
 export default (() => Body) satisfies QuartzComponentConstructor

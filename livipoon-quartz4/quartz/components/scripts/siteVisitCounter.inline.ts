@@ -12,15 +12,9 @@ const visibleClass = "is-visible"
 const initPollIntervalMs = 250
 const refreshIntervalMs = 5000
 const maxInitPollChecks = 40
-const localPreviewValue = "2"
 let initPollTimer: number | null = null
 let refreshTimer: number | null = null
 let initPollChecks = 0
-
-function isLocalPreviewHost(): boolean {
-  const host = location.hostname.toLowerCase()
-  return host === "localhost" || host === "127.0.0.1" || host === "0.0.0.0" || host === "::1"
-}
 
 function ensureCounterElement(): HTMLDivElement {
   let root = document.getElementById(counterId) as HTMLDivElement | null
@@ -52,10 +46,42 @@ function setCounterValue(valueText: string) {
   root.classList.add(visibleClass)
 }
 
-function renderLocalPreviewCounter(): boolean {
-  if (!isLocalPreviewHost()) return false
-  setCounterValue(localPreviewValue)
-  return true
+function removeLegacyGoatcounterWidgets() {
+  const markerSelectors = [
+    "#gcvc",
+    "#gcvc-for",
+    "#gcvc-views",
+    "#gcvc-by",
+    "#gcvc-border",
+  ]
+  const removals = new Set<HTMLElement>()
+
+  for (const selector of markerSelectors) {
+    const matches = document.querySelectorAll(selector)
+    for (const node of matches) {
+      let current: HTMLElement | null =
+        node instanceof HTMLElement ? node : node.parentElement
+      while (current?.parentElement && current.parentElement !== document.body) {
+        current = current.parentElement
+      }
+      if (current && current.id !== counterId) {
+        removals.add(current)
+      }
+    }
+  }
+
+  // Remove HTML variant cards from older code paths.
+  const textMatches = document.querySelectorAll("div,svg")
+  for (const node of textMatches) {
+    if (!(node instanceof HTMLElement)) continue
+    if (node.id === counterId) continue
+    const text = (node.textContent ?? "").toLowerCase()
+    if (text.includes("views for this site") || text.includes("views for this page")) {
+      removals.add(node)
+    }
+  }
+
+  removals.forEach((el) => el.remove())
 }
 
 function resolveGoatcounterEndpoint(): string | null {
@@ -145,8 +171,7 @@ function syncVisitCounter() {
   stopInitPoll()
   stopRefreshLoop()
   initPollChecks = 0
-
-  if (renderLocalPreviewCounter()) return
+  removeLegacyGoatcounterWidgets()
 
   void (async () => {
     if (await updateCounterFromJson()) {
@@ -181,14 +206,10 @@ document.addEventListener("nav", () => {
 document.addEventListener("visibilitychange", () => {
   if (document.visibilityState === "visible") {
     void updateCounterFromJson()
-    if (!isLocalPreviewHost()) {
-      startRefreshLoop()
-    }
+    startRefreshLoop()
   } else {
     stopRefreshLoop()
-    if (!isLocalPreviewHost()) {
-      stopInitPoll()
-    }
+    stopInitPoll()
   }
 })
 

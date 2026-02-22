@@ -24,12 +24,12 @@
   border: none;
   border-radius: 0;
   background: transparent;
-  color: #000;
+  color: #9a9a9a;
   font-family: var(--bodyFont);
   font-size: 0.95rem;
   font-weight: 500;
   line-height: 1.2;
-  opacity: 0.72;
+  opacity: 0.38;
   transition: opacity 120ms ease;
 }
 
@@ -41,8 +41,6 @@
 .background-music-license {
   font-size: 0.8rem;
   text-transform: lowercase;
-  color: #d4d4d4;
-  opacity: 0.38;
   text-decoration: none;
 }
 
@@ -52,7 +50,7 @@
   font-weight: 500;
   line-height: 1.2;
   text-transform: lowercase;
-  color: #d4d4d4;
+  color: #9a9a9a;
   opacity: 0.38;
 }
 
@@ -62,7 +60,7 @@
   font-weight: 500;
   line-height: 1.2;
   text-transform: lowercase;
-  color: #d4d4d4;
+  color: #9a9a9a;
   opacity: 0.38;
   text-decoration: none;
   transition: opacity 120ms ease;
@@ -84,7 +82,7 @@
 }
 
 .background-music-mute.is-muted {
-  opacity: 0.62;
+  opacity: 0.38;
 }
 
 @media all and (max-width: 800px) {

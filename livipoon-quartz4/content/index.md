@@ -4,9 +4,7 @@
 
 I'm **Livi Poon**.
 
-A joint research scholar focused on making measurable impacts through empathic, holistic, and collaborative solutions.
-
-My mission is to keep patients out of the doctor's office by discovering and developing predictive, preventative, and precision medicine through machine learning and artificial intelligence techniques.
+I discover and develop predictive, preventative, and precision medicine through artificial intelligence and machine learning techniques.
 
 I look forward to expanding my mind and working towards a resilient, interconnected, and empathetic world. I challenge you to do the same.
 
