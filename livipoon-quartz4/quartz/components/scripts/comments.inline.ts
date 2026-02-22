@@ -58,10 +58,33 @@ const getThemeName = (theme: string) => {
 
 const getThemeUrl = (theme: string) => {
   const giscusContainer = getGiscusContainer()
+  const version = "20260222-9"
+  const localThemeBase = `${window.location.origin}/static/giscus`
   if (!giscusContainer) {
-    return `https://giscus.app/themes/${theme}.css`
+    return `${localThemeBase}/${theme}.css?v=${version}`
   }
-  return `${giscusContainer.dataset.themeUrl ?? "https://giscus.app/themes"}/${theme}.css`
+
+  const configuredThemeBase = giscusContainer.dataset.themeUrl
+  if (!configuredThemeBase) {
+    return `${localThemeBase}/${theme}.css?v=${version}`
+  }
+
+  try {
+    const configuredUrl = new URL(configuredThemeBase, window.location.origin)
+    const configuredBase = configuredUrl.toString().replace(/\/+$/, "")
+    const canUseLocalThemeBase = window.location.protocol === "https:"
+
+    // In preview hosts, prefer local static themes when HTTPS is available.
+    // On HTTP localhost, giscus (HTTPS iframe) blocks HTTP theme URLs as mixed content.
+    const themeBase =
+      configuredUrl.hostname === window.location.hostname || !canUseLocalThemeBase
+        ? configuredBase
+        : localThemeBase
+
+    return `${themeBase}/${theme}.css?v=${version}`
+  } catch {
+    return `${localThemeBase}/${theme}.css?v=${version}`
+  }
 }
 
 type GiscusElement = Omit<HTMLElement, "dataset"> & {
@@ -104,10 +127,10 @@ document.addEventListener("nav", () => {
   giscusScript.setAttribute("data-reactions-enabled", giscusContainer.dataset.reactionsEnabled)
   giscusScript.setAttribute("data-input-position", giscusContainer.dataset.inputPosition)
   giscusScript.setAttribute("data-lang", giscusContainer.dataset.lang)
-  const theme = document.documentElement.getAttribute("saved-theme")
-  if (theme) {
-    giscusScript.setAttribute("data-theme", getThemeUrl(getThemeName(theme)))
-  }
+  // If Darkmode component is not mounted, saved-theme can be missing.
+  // In that case, force light to avoid giscus auto-selecting dark on a light page.
+  const theme = document.documentElement.getAttribute("saved-theme") ?? "light"
+  giscusScript.setAttribute("data-theme", getThemeUrl(getThemeName(theme)))
 
   giscusContainer.appendChild(giscusScript)
 
