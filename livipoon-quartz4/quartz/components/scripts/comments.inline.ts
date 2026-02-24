@@ -58,7 +58,7 @@ const getThemeName = (theme: string) => {
 
 const getThemeUrl = (theme: string) => {
   const giscusContainer = getGiscusContainer()
-  const version = "20260222-9"
+  const version = "20260224-10"
   const localThemeBase = `${window.location.origin}/static/giscus`
   if (!giscusContainer) {
     return `${localThemeBase}/${theme}.css?v=${version}`
