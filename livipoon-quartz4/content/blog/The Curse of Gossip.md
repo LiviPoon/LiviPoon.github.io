@@ -1,5 +1,5 @@
 ---
-title: Gossip is A Waste of Time.
+title: Gossip is a Curse.
 date: 2026-02-22
 tags:
   - brain_dump

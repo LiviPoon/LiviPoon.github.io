@@ -8,6 +8,8 @@ type GoatcounterWindow = Window &
 const counterWindow = window as GoatcounterWindow
 const counterId = "site-visit-counter"
 const counterValueId = "site-visit-counter-value"
+const musicControlsSelector = ".background-music-controls"
+const dockedClass = "is-docked"
 const visibleClass = "is-visible"
 const initPollIntervalMs = 250
 const refreshIntervalMs = 5000
@@ -16,24 +18,41 @@ let initPollTimer: number | null = null
 let refreshTimer: number | null = null
 let initPollChecks = 0
 
+function dockCounterElement(root: HTMLDivElement) {
+  const controls = document.querySelector(musicControlsSelector)
+  if (controls instanceof HTMLElement) {
+    if (root.parentElement !== controls) {
+      controls.appendChild(root)
+    }
+    root.classList.add(dockedClass)
+    return
+  }
+
+  if (root.parentElement !== document.body) {
+    document.body.appendChild(root)
+  }
+  root.classList.remove(dockedClass)
+}
+
 function ensureCounterElement(): HTMLDivElement {
   let root = document.getElementById(counterId) as HTMLDivElement | null
-  if (root) return root
+  if (!root) {
+    root = document.createElement("div")
+    root.id = counterId
+    root.className = "site-visit-counter"
 
-  root = document.createElement("div")
-  root.id = counterId
-  root.className = "site-visit-counter"
+    const label = document.createElement("span")
+    label.className = "site-visit-counter-label"
+    label.textContent = "site visits:"
 
-  const label = document.createElement("span")
-  label.className = "site-visit-counter-label"
-  label.textContent = "site visits:"
+    const value = document.createElement("span")
+    value.id = counterValueId
+    value.className = "site-visit-counter-value"
 
-  const value = document.createElement("span")
-  value.id = counterValueId
-  value.className = "site-visit-counter-value"
+    root.append(label, value)
+  }
 
-  root.append(label, value)
-  document.body.appendChild(root)
+  dockCounterElement(root)
   return root
 }
 
@@ -172,6 +191,7 @@ function syncVisitCounter() {
   stopRefreshLoop()
   initPollChecks = 0
   removeLegacyGoatcounterWidgets()
+  ensureCounterElement()
 
   void (async () => {
     if (await updateCounterFromJson()) {

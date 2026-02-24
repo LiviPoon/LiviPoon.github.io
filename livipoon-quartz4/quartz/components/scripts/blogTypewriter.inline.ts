@@ -44,6 +44,16 @@ const rejectedFragments = [
   "references",
 ]
 
+const referenceSectionHeadings = [
+  "reference",
+  "references",
+  "sources",
+  "works cited",
+  "bibliography",
+  "citations",
+  "further reading",
+]
+
 const interestingTerms = [
   "comfort zone",
   "success",
@@ -92,6 +102,20 @@ function emitMusicDuckChange(ducked: boolean) {
 
 function normalizeWhitespace(text: string): string {
   return text.replace(/\s+/g, " ").trim()
+}
+
+function normalizeHeadingText(text: string): string {
+  return normalizeWhitespace(text.toLowerCase().replace(/[^a-z0-9\s]/g, " "))
+}
+
+function isReferenceSectionHeading(text: string): boolean {
+  const normalized = normalizeHeadingText(text)
+  return normalized.length > 0 && referenceSectionHeadings.includes(normalized)
+}
+
+function getHeadingLevel(node: Element): number {
+  const level = node.tagName.match(/^H([1-6])$/i)?.[1]
+  return level ? Number(level) : 0
 }
 
 function wordCount(text: string): number {
@@ -213,11 +237,31 @@ function pickGoodQuotesFromDoc(doc: Document): string[] {
   const article = doc.querySelector(".center article") ?? doc.querySelector("article")
   if (!article) return []
 
-  const blocks = [...article.querySelectorAll("p, li, blockquote")]
+  const contentNodes = [...article.querySelectorAll("h1, h2, h3, h4, h5, h6, p, li, blockquote")]
   const candidates: QuoteCandidate[] = []
+  let referenceSectionLevel: number | null = null
 
-  for (const block of blocks) {
-    const blockText = normalizeWhitespace(block.textContent ?? "")
+  for (const node of contentNodes) {
+    if (/^H[1-6]$/i.test(node.tagName)) {
+      const headingText = normalizeWhitespace(node.textContent ?? "")
+      const headingLevel = getHeadingLevel(node)
+
+      if (referenceSectionLevel === null) {
+        if (isReferenceSectionHeading(headingText)) {
+          referenceSectionLevel = headingLevel
+        }
+        continue
+      }
+
+      if (headingLevel <= referenceSectionLevel) {
+        referenceSectionLevel = isReferenceSectionHeading(headingText) ? headingLevel : null
+      }
+      continue
+    }
+
+    if (referenceSectionLevel !== null) continue
+
+    const blockText = normalizeWhitespace(node.textContent ?? "")
     if (blockText.length === 0) continue
     candidates.push(...collectSentenceCandidates(blockText))
   }
@@ -304,7 +348,9 @@ async function pickFreshQuote(
   if (cancelled()) return ""
 
   const recentQuoteSet = new Set(recentQuotes)
-  const unseenPool = fetched.filter((quote) => isQuoteLongEnough(quote) && !recentQuoteSet.has(quote))
+  const unseenPool = fetched.filter(
+    (quote) => isQuoteLongEnough(quote) && !recentQuoteSet.has(quote),
+  )
   const pool = unseenPool.length > 0 ? unseenPool : fetched
   return pickRandom(pool) ?? pickRandom(eligibleFallbackQuotes) ?? eligibleFallbackQuotes[0] ?? ""
 }

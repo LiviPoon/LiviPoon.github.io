@@ -1,6 +1,7 @@
 :root {
   --dot-cursor-size: 10px;
   --dot-cursor-color: #2a97ff;
+  --dot-cursor-heart-color: #fcb0ba;
 }
 
 @media (pointer: fine) and (hover: hover) {
@@ -65,8 +66,8 @@
   height: 15px;
   border-radius: 4px;
   transform: translate(-50%, -50%) rotate(-45deg) scale(1);
-  background: #1e8fff;
-  box-shadow: 0 0 12px rgba(30, 143, 255, 0.5);
+  background: var(--dot-cursor-heart-color);
+  box-shadow: 0 0 12px rgba(252, 176, 186, 0.56);
 }
 
 .dot-heart-cursor.is-heart::before {

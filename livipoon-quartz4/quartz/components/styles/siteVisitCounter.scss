@@ -18,6 +18,14 @@
   opacity: 0.38;
 }
 
+.site-visit-counter.is-docked {
+  position: static;
+  left: auto;
+  bottom: auto;
+  transform: none;
+  max-width: none;
+}
+
 .site-visit-counter.is-visible {
   display: inline-flex;
 }
@@ -33,5 +41,12 @@
     max-width: 56vw;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  .site-visit-counter.is-docked {
+    bottom: auto;
+    max-width: none;
+    overflow: visible;
+    text-overflow: clip;
   }
 }
