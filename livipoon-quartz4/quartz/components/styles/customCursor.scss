@@ -31,7 +31,7 @@
   opacity: 0;
   transform: translate(-50%, -50%);
   transform-origin: center center;
-  box-shadow: 0 0 10px rgba(42, 151, 255, 0.45);
+  box-shadow: none;
   transition:
     opacity 120ms ease,
     width 200ms cubic-bezier(0.2, 0.8, 0.2, 1),
@@ -67,7 +67,7 @@
   border-radius: 4px;
   transform: translate(-50%, -50%) rotate(-45deg) scale(1);
   background: var(--dot-cursor-heart-color);
-  box-shadow: 0 0 12px rgba(252, 176, 186, 0.56);
+  box-shadow: none;
 }
 
 .dot-heart-cursor.is-heart::before {

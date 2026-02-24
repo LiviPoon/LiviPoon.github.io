@@ -5,6 +5,7 @@ type DotHeartCursorState = {
   rafId: number | null
   active: boolean
   initialized: boolean
+  visible: boolean
 }
 
 type DotHeartCursorWindow = Window &
@@ -44,16 +45,6 @@ function setHeartState(state: DotHeartCursorState, active: boolean) {
   state.root.classList.toggle("is-heart", active)
 }
 
-function syncHeartStateAtPointer(state: DotHeartCursorState) {
-  if (state.x < 0 || state.y < 0) {
-    setHeartState(state, false)
-    return
-  }
-
-  const targetAtPointer = document.elementFromPoint(state.x, state.y)
-  setHeartState(state, Boolean(resolveHoverTarget(targetAtPointer)))
-}
-
 function schedulePositionUpdate(state: DotHeartCursorState) {
   if (state.rafId !== null) return
 
@@ -78,7 +69,10 @@ function initCustomCursor() {
     if (!document.body.contains(existingState.root)) {
       document.body.appendChild(existingState.root)
     }
-    syncHeartStateAtPointer(existingState)
+    if (!existingState.visible) {
+      existingState.root.classList.remove("is-visible")
+      setHeartState(existingState, false)
+    }
     return
   }
 
@@ -89,19 +83,34 @@ function initCustomCursor() {
     rafId: null,
     active: false,
     initialized: false,
+    visible: false,
   }
   cursorWindow.__dotHeartCursorState = state
 
   if (state.initialized) return
   state.initialized = true
 
-  document.addEventListener("mousemove", (event) => {
-    state.x = event.clientX
-    state.y = event.clientY
-    state.root.classList.add("is-visible")
-    syncHeartStateAtPointer(state)
+  const handleMove = (clientX: number, clientY: number) => {
+    state.x = clientX
+    state.y = clientY
+    if (!state.visible) {
+      state.visible = true
+      state.root.classList.add("is-visible")
+    }
     schedulePositionUpdate(state)
-  })
+  }
+
+  document.addEventListener(
+    "pointermove",
+    (event) => {
+      if (event.pointerType && event.pointerType !== "mouse" && event.pointerType !== "pen") {
+        return
+      }
+
+      handleMove(event.clientX, event.clientY)
+    },
+    { passive: true },
+  )
 
   document.addEventListener("mouseover", (event) => {
     const hoverTarget = resolveHoverTarget(event.target)
@@ -124,6 +133,7 @@ function initCustomCursor() {
 
   document.addEventListener("mouseout", (event) => {
     if (event.relatedTarget !== null) return
+    state.visible = false
     state.root.classList.remove("is-visible")
     setHeartState(state, false)
   })
@@ -134,12 +144,14 @@ function initCustomCursor() {
 
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "hidden") {
+      state.visible = false
       state.root.classList.remove("is-visible")
       setHeartState(state, false)
     }
   })
 
   window.addEventListener("blur", () => {
+    state.visible = false
     state.root.classList.remove("is-visible")
     setHeartState(state, false)
   })

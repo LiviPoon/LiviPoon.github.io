@@ -68,6 +68,21 @@ type TweenNode = {
   stop: () => void
 }
 
+let cachedGraphData: Map<SimpleSlug, ContentDetails> | null = null
+async function getGraphData(): Promise<Map<SimpleSlug, ContentDetails>> {
+  if (cachedGraphData) {
+    return cachedGraphData
+  }
+
+  cachedGraphData = new Map(
+    Object.entries<ContentDetails>(await fetchData).map(([k, v]) => [
+      simplifySlug(k as FullSlug),
+      v,
+    ]),
+  )
+  return cachedGraphData
+}
+
 async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
   const slug = simplifySlug(fullSlug)
   const visited = getVisited()
@@ -89,15 +104,30 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
     enableRadial,
   } = JSON.parse(graph.dataset["cfg"]!) as D3Config
 
-  const data: Map<SimpleSlug, ContentDetails> = new Map(
-    Object.entries<ContentDetails>(await fetchData).map(([k, v]) => [
-      simplifySlug(k as FullSlug),
-      v,
-    ]),
-  )
+  const data = await getGraphData()
   const links: SimpleLinkData[] = []
-  const tags: SimpleSlug[] = []
+  const tags = new Set<SimpleSlug>()
   const validLinks = new Set(data.keys())
+  const outgoingBySource = new Map<SimpleSlug, SimpleSlug[]>()
+  const incomingByTarget = new Map<SimpleSlug, SimpleSlug[]>()
+
+  function addLink(source: SimpleSlug, target: SimpleSlug) {
+    links.push({ source, target })
+
+    const outgoing = outgoingBySource.get(source)
+    if (outgoing) {
+      outgoing.push(target)
+    } else {
+      outgoingBySource.set(source, [target])
+    }
+
+    const incoming = incomingByTarget.get(target)
+    if (incoming) {
+      incoming.push(source)
+    } else {
+      incomingByTarget.set(target, [source])
+    }
+  }
 
   const tweens = new Map<string, TweenNode>()
   for (const [source, details] of data.entries()) {
@@ -105,7 +135,7 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
 
     for (const dest of outgoing) {
       if (validLinks.has(dest)) {
-        links.push({ source: source, target: dest })
+        addLink(source, dest)
       }
     }
 
@@ -114,10 +144,12 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
         .filter((tag) => !removeTags.includes(tag))
         .map((tag) => simplifySlug(("tags/" + tag) as FullSlug))
 
-      tags.push(...localTags.filter((tag) => !tags.includes(tag)))
+      for (const tag of localTags) {
+        tags.add(tag)
+      }
 
       for (const tag of localTags) {
-        links.push({ source: source, target: tag })
+        addLink(source, tag)
       }
     }
   }
@@ -133,14 +165,14 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
         wl.push("__SENTINEL")
       } else {
         neighbourhood.add(cur)
-        const outgoing = links.filter((l) => l.source === cur)
-        const incoming = links.filter((l) => l.target === cur)
-        wl.push(...outgoing.map((l) => l.target), ...incoming.map((l) => l.source))
+        wl.push(...(outgoingBySource.get(cur) ?? []), ...(incomingByTarget.get(cur) ?? []))
       }
     }
   } else {
     validLinks.forEach((id) => neighbourhood.add(id))
-    if (showTags) tags.forEach((tag) => neighbourhood.add(tag))
+    if (showTags) {
+      tags.forEach((tag) => neighbourhood.add(tag))
+    }
   }
 
   const nodes = [...neighbourhood].map((url) => {
@@ -151,18 +183,43 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
       tags: data.get(url)?.tags ?? [],
     }
   })
+
+  const nodesById = new Map(nodes.map((node) => [node.id, node] as const))
+  const graphLinks: LinkData[] = []
+  for (const link of links) {
+    if (!neighbourhood.has(link.source) || !neighbourhood.has(link.target)) {
+      continue
+    }
+
+    const source = nodesById.get(link.source)
+    const target = nodesById.get(link.target)
+    if (!source || !target) {
+      continue
+    }
+
+    graphLinks.push({ source, target })
+  }
+
   const graphData: { nodes: NodeData[]; links: LinkData[] } = {
     nodes,
-    links: links
-      .filter((l) => neighbourhood.has(l.source) && neighbourhood.has(l.target))
-      .map((l) => ({
-        source: nodes.find((n) => n.id === l.source)!,
-        target: nodes.find((n) => n.id === l.target)!,
-      })),
+    links: graphLinks,
   }
 
   const width = graph.offsetWidth
   const height = Math.max(graph.offsetHeight, 250)
+  const renderResolution = Math.min(window.devicePixelRatio || 1, 1.5)
+  const labelResolution = Math.min(3, renderResolution * 2)
+
+  const nodeLinkCounts = new Map<SimpleSlug, number>()
+  for (const link of graphData.links) {
+    nodeLinkCounts.set(link.source.id, (nodeLinkCounts.get(link.source.id) ?? 0) + 1)
+    nodeLinkCounts.set(link.target.id, (nodeLinkCounts.get(link.target.id) ?? 0) + 1)
+  }
+
+  function nodeRadius(d: NodeData) {
+    const numLinks = nodeLinkCounts.get(d.id) ?? 0
+    return 2 + Math.sqrt(numLinks)
+  }
 
   // we virtualize the simulation and use pixi to actually render it
   const simulation: Simulation<NodeData, LinkData> = forceSimulation<NodeData>(graphData.nodes)
@@ -203,13 +260,6 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
     } else {
       return computedStyleMap["--gray"]
     }
-  }
-
-  function nodeRadius(d: NodeData) {
-    const numLinks = graphData.links.filter(
-      (l) => l.source.id === d.id || l.target.id === d.id,
-    ).length
-    return 2 + Math.sqrt(numLinks)
   }
 
   let hoveredNodeId: string | null = null
@@ -344,6 +394,7 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
     renderNodes()
     renderLinks()
     renderLabels()
+    wakeRenderer(260)
   }
 
   tweens.forEach((tween) => tween.stop())
@@ -357,8 +408,8 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
     autoStart: false,
     autoDensity: true,
     backgroundAlpha: 0,
-    preference: "webgpu",
-    resolution: window.devicePixelRatio,
+    preference: "webgl",
+    resolution: renderResolution,
     eventMode: "static",
   })
   graph.appendChild(app.canvas)
@@ -385,7 +436,7 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
         fill: computedStyleMap["--dark"],
         fontFamily: computedStyleMap["--bodyFont"],
       },
-      resolution: window.devicePixelRatio * 4,
+      resolution: labelResolution,
     })
     label.scale.set(1 / scale)
 
@@ -467,17 +518,20 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
           }
           dragStartTime = Date.now()
           dragging = true
+          wakeRenderer(180)
         })
         .on("drag", function dragged(event) {
           const initPos = event.subject.__initialDragPos
           event.subject.fx = initPos.x + (event.x - initPos.x) / currentTransform.k
           event.subject.fy = initPos.y + (event.y - initPos.y) / currentTransform.k
+          wakeRenderer(180)
         })
         .on("end", function dragended(event) {
           if (!event.active) simulation.alphaTarget(0)
           event.subject.fx = null
           event.subject.fy = null
           dragging = false
+          wakeRenderer(220)
 
           // if the time between mousedown and mouseup is short, we consider it a click
           if (Date.now() - dragStartTime < 500) {
@@ -519,13 +573,22 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
               label.alpha = scaleOpacity
             }
           }
+
+          wakeRenderer(140)
         }),
     )
   }
 
   let stopAnimation = false
-  function animate(time: number) {
-    if (stopAnimation) return
+  let frameId: number | null = null
+  let renderWakeUntil = 0
+  let needsPositionSync = true
+  let graphIsVisible = true
+  let pageIsVisible = document.visibilityState === "visible"
+  let pausedForVisibility = false
+  let intersectionObserver: IntersectionObserver | null = null
+
+  function syncGraphPositions() {
     for (const n of nodeRenderData) {
       const { x, y } = n.simulationData
       if (!x || !y) continue
@@ -543,15 +606,122 @@ async function renderGraph(graph: HTMLElement, fullSlug: FullSlug) {
         .lineTo(linkData.target.x! + width / 2, linkData.target.y! + height / 2)
         .stroke({ alpha: l.alpha, width: 1, color: l.color })
     }
+  }
+
+  function canRenderFrame() {
+    return !stopAnimation && pageIsVisible && graphIsVisible
+  }
+
+  function isSimulationActive() {
+    return simulation.alpha() > simulation.alphaMin() + 0.001
+  }
+
+  function updateSimulationVisibilityState() {
+    const shouldRunSimulation = !stopAnimation && pageIsVisible && graphIsVisible
+    if (shouldRunSimulation && pausedForVisibility) {
+      pausedForVisibility = false
+      simulation.restart()
+    } else if (!shouldRunSimulation && !pausedForVisibility) {
+      pausedForVisibility = true
+      simulation.stop()
+    }
+  }
+
+  function wakeRenderer(extraMs = 0) {
+    if (extraMs > 0) {
+      renderWakeUntil = Math.max(renderWakeUntil, performance.now() + extraMs)
+    }
+
+    if (!canRenderFrame() || frameId !== null) {
+      return
+    }
+
+    frameId = window.requestAnimationFrame(animate)
+  }
+
+  function animate(time: number) {
+    frameId = null
+    if (!canRenderFrame()) return
+
+    if (needsPositionSync || isSimulationActive() || dragging) {
+      syncGraphPositions()
+      needsPositionSync = false
+    }
 
     tweens.forEach((t) => t.update(time))
     app.renderer.render(stage)
-    requestAnimationFrame(animate)
+
+    if (isSimulationActive() || dragging || time < renderWakeUntil) {
+      wakeRenderer()
+    }
   }
 
-  requestAnimationFrame(animate)
+  const handleVisibilityChange = () => {
+    pageIsVisible = document.visibilityState === "visible"
+    updateSimulationVisibilityState()
+    if (pageIsVisible) {
+      needsPositionSync = true
+      wakeRenderer(160)
+    } else if (frameId !== null) {
+      window.cancelAnimationFrame(frameId)
+      frameId = null
+    }
+  }
+
+  document.addEventListener("visibilitychange", handleVisibilityChange)
+  if (typeof IntersectionObserver !== "undefined") {
+    intersectionObserver = new IntersectionObserver(
+      (entries) => {
+        const nextVisible = entries.some(
+          (entry) => entry.isIntersecting && entry.intersectionRatio > 0,
+        )
+        if (nextVisible === graphIsVisible) {
+          return
+        }
+
+        graphIsVisible = nextVisible
+        updateSimulationVisibilityState()
+        if (graphIsVisible) {
+          needsPositionSync = true
+          wakeRenderer(160)
+        } else if (frameId !== null) {
+          window.cancelAnimationFrame(frameId)
+          frameId = null
+        }
+      },
+      { threshold: [0, 0.01] },
+    )
+    intersectionObserver.observe(graph)
+  }
+
+  simulation.on("tick.render", () => {
+    needsPositionSync = true
+    wakeRenderer()
+  })
+
+  simulation.on("end.render", () => {
+    needsPositionSync = true
+    wakeRenderer(120)
+  })
+
+  updateSimulationVisibilityState()
+  renderPixiFromD3()
+  needsPositionSync = true
+  wakeRenderer(420)
+
   return () => {
     stopAnimation = true
+    if (frameId !== null) {
+      window.cancelAnimationFrame(frameId)
+      frameId = null
+    }
+    document.removeEventListener("visibilitychange", handleVisibilityChange)
+    intersectionObserver?.disconnect()
+    simulation.on("tick.render", null)
+    simulation.on("end.render", null)
+    simulation.stop()
+    tweens.forEach((tween) => tween.stop())
+    tweens.clear()
     app.destroy()
   }
 }
