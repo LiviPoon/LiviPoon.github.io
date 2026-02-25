@@ -90,6 +90,7 @@ const fallbackQuotes = [
 ]
 const minPostQuotePauseMs = 1000
 const maxPostQuotePauseMs = 3000
+const quoteSourcePostLimit = 3
 
 function emitMusicDuckChange(ducked: boolean) {
   blogTypewriterWindow.__backgroundMusicDucked = ducked
@@ -630,9 +631,35 @@ document.addEventListener("nav", () => {
     speech.dispose()
   })
 
-  const quoteLinks = [...document.querySelectorAll(".page-listing .section .desc a.internal")]
-    .map((link) => (link as HTMLAnchorElement).href)
-    .filter((href) => href.length > 0)
+  const quoteLinks = [...document.querySelectorAll(".page-listing .section")]
+    .map((section, index) => {
+      const link = section.querySelector(".desc a.internal") as HTMLAnchorElement | null
+      if (!link?.href) return null
+
+      const time = section.querySelector(".meta time[datetime]") as HTMLTimeElement | null
+      const rawDateTime = time?.dateTime?.trim() ?? ""
+      const parsedDateTime = rawDateTime.length > 0 ? Date.parse(rawDateTime) : Number.NaN
+      const dateMs = Number.isFinite(parsedDateTime) ? parsedDateTime : null
+
+      return {
+        href: link.href,
+        dateMs,
+        index,
+      }
+    })
+    .filter(
+      (source): source is { href: string; dateMs: number | null; index: number } => source !== null,
+    )
+    .sort((left, right) => {
+      if (left.dateMs !== null && right.dateMs !== null) {
+        return right.dateMs - left.dateMs
+      }
+      if (left.dateMs !== null) return -1
+      if (right.dateMs !== null) return 1
+      return left.index - right.index
+    })
+    .slice(0, quoteSourcePostLimit)
+    .map((source) => source.href)
 
   void (async () => {
     await runTypewriter(textEl, quoteLinks, speech, () => cancelled)

@@ -8,7 +8,6 @@ type GoatcounterWindow = Window &
 const counterWindow = window as GoatcounterWindow
 const counterId = "site-visit-counter"
 const counterValueId = "site-visit-counter-value"
-const musicControlsSelector = ".background-music-controls"
 const dockedClass = "is-docked"
 const visibleClass = "is-visible"
 const initPollIntervalMs = 250
@@ -19,15 +18,6 @@ let refreshTimer: number | null = null
 let initPollChecks = 0
 
 function dockCounterElement(root: HTMLDivElement) {
-  const controls = document.querySelector(musicControlsSelector)
-  if (controls instanceof HTMLElement) {
-    if (root.parentElement !== controls) {
-      controls.appendChild(root)
-    }
-    root.classList.add(dockedClass)
-    return
-  }
-
   if (root.parentElement !== document.body) {
     document.body.appendChild(root)
   }

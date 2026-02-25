@@ -28,6 +28,26 @@
   --textHighlight: rgba(252, 176, 186, 0.42);
 }
 
+/* Disable text highlighting across the site UI. */
+body,
+body .page,
+body .page * {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+/* Keep form/editable fields usable. */
+input,
+textarea,
+[contenteditable="true"] {
+  -webkit-touch-callout: default;
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  user-select: text;
+}
+
 body .page * {
   border-color: #000;
 }
