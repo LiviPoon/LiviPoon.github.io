@@ -213,7 +213,7 @@ body[data-slug="index"] .habit-timeline-line {
 body[data-slug="index"] .habit-timeline-line.is-animating {
   stroke-dasharray: var(--habit-line-length);
   stroke-dashoffset: var(--habit-line-length);
-  animation: habit-timeline-line-draw 7.4s ease-out forwards;
+  animation: habit-timeline-line-draw 11.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 body[data-slug="index"] .habit-timeline-point {
@@ -224,7 +224,7 @@ body[data-slug="index"] .habit-timeline-point {
 
 body[data-slug="index"] .habit-timeline-point.is-animating {
   opacity: 0;
-  animation: habit-timeline-point-in 1s ease-out 6.2s forwards;
+  animation: habit-timeline-point-in 1.2s ease-out 10.1s forwards;
 }
 
 body[data-slug="index"] .index-profile-photo-wrap {

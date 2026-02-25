@@ -322,8 +322,12 @@ function renderIndexChart(container: HTMLElement, timeline: HabitTimelinePoint[]
     return
   }
 
-  const width = Math.max(container.clientWidth, 42)
-  const height = Math.max(container.clientHeight, 220)
+  const measuredWidth = container.clientWidth
+  const measuredHeight = container.clientHeight
+  const hasRenderableArea = measuredWidth > 0 && measuredHeight > 0
+
+  const width = Math.max(measuredWidth, 42)
+  const height = Math.max(measuredHeight, 220)
   const padding = { top: 0, right: 2, bottom: 0, left: 0.5 }
   const axisX = padding.left
   const chartDepth = Math.max(1, width - padding.right - axisX)
@@ -349,7 +353,7 @@ function renderIndexChart(container: HTMLElement, timeline: HabitTimelinePoint[]
   const linePath = points
     .map((point, index) => `${index === 0 ? "M" : "L"} ${point.x.toFixed(2)} ${point.y.toFixed(2)}`)
     .join(" ")
-  const shouldAnimate = habitTimelineWindow.__habitTimelineAnimated !== true
+  const shouldAnimate = hasRenderableArea && habitTimelineWindow.__habitTimelineAnimated !== true
   const lineLength = polylineLength(points)
   const firstPoint = points[0] ?? { x: axisX, y: padding.top + chartHeight / 2, count: 0 }
   const lastPoint = points[points.length - 1] ?? firstPoint
@@ -377,7 +381,25 @@ function renderIndexChart(container: HTMLElement, timeline: HabitTimelinePoint[]
   }
 
   if (shouldAnimate) {
-    habitTimelineWindow.__habitTimelineAnimated = true
+    const animatedLine = container.querySelector(".habit-timeline-line.is-animating")
+    if (animatedLine) {
+      const onAnimationEnd = () => {
+        habitTimelineWindow.__habitTimelineAnimated = true
+      }
+
+      animatedLine.addEventListener("animationend", onAnimationEnd, { once: true })
+      registerCleanup(() => {
+        animatedLine.removeEventListener("animationend", onAnimationEnd)
+      })
+
+      // Fallback if animationend doesn't fire (tab hidden, browser quirks, etc.).
+      const fallbackTimer = window.setTimeout(() => {
+        habitTimelineWindow.__habitTimelineAnimated = true
+      }, 13000)
+      registerCleanup(() => window.clearTimeout(fallbackTimer))
+    } else {
+      habitTimelineWindow.__habitTimelineAnimated = true
+    }
   }
 }
 
