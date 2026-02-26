@@ -5,6 +5,26 @@ import { googleFontHref, googleFontSubsetHref } from "../util/theme"
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 import { unescapeHTML } from "../util/escape"
 import { CustomOgImagesEmitterName } from "../plugins/emitters/ogImage"
+
+function toTitleCaseSlugSegment(segment: string): string {
+  return segment
+    .replace(/[-_]+/g, " ")
+    .trim()
+    .replace(/\b\w/g, (char) => char.toUpperCase())
+}
+
+function deriveTitleFromSlug(slug: string | undefined): string | null {
+  if (!slug) return null
+  if (slug === "index") return null
+
+  const withoutIndex = slug.endsWith("/index") ? slug.slice(0, -"/index".length) : slug
+  if (!withoutIndex) return null
+
+  const segment = withoutIndex.split("/").pop()
+  if (!segment) return null
+  return toTitleCaseSlugSegment(segment)
+}
+
 export default (() => {
   const Head: QuartzComponent = ({
     cfg,
@@ -13,8 +33,15 @@ export default (() => {
     ctx,
   }: QuartzComponentProps) => {
     const titleSuffix = cfg.pageTitleSuffix ?? ""
-    const title =
-      (fileData.frontmatter?.title ?? i18n(cfg.locale).propertyDefaults.title) + titleSuffix
+    const frontmatterTitle = fileData.frontmatter?.title?.trim() ?? ""
+    const fallbackTitle =
+      deriveTitleFromSlug(fileData.slug) ??
+      (fileData.slug === "index" ? cfg.pageTitle : i18n(cfg.locale).propertyDefaults.title)
+    const baseTitle =
+      frontmatterTitle.length > 0 && frontmatterTitle.toLowerCase() !== "index"
+        ? frontmatterTitle
+        : fallbackTitle
+    const title = baseTitle + titleSuffix
     const description =
       fileData.frontmatter?.socialDescription ??
       fileData.frontmatter?.description ??
@@ -25,7 +52,8 @@ export default (() => {
     const url = new URL(`https://${cfg.baseUrl ?? "example.com"}`)
     const path = url.pathname as FullSlug
     const baseDir = fileData.slug === "404" ? path : pathToRoot(fileData.slug!)
-    const iconPath = joinSegments(baseDir, "static/icon.png")
+    const iconSvgPath = joinSegments(baseDir, "static/logo.svg")
+    const iconPngPath = joinSegments(baseDir, "static/icon.png")
 
     // Url of current page
     const socialUrl =
@@ -82,7 +110,8 @@ export default (() => {
           </>
         )}
 
-        <link rel="icon" href={iconPath} />
+        <link rel="icon" href={iconSvgPath} type="image/svg+xml" />
+        <link rel="icon" href={iconPngPath} type="image/png" />
         <meta name="description" content={description} />
         <meta name="generator" content="Quartz" />
 
