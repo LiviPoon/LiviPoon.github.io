@@ -249,8 +249,9 @@ body[data-slug="index"] .index-profile-photo-note {
   margin: 0.24rem 0 0;
   color: rgb(var(--habit-timeline-stats-rgb));
   font-family: var(--codeFont);
-  font-size: 0.58rem;
-  line-height: 1.22;
+  font-size: 0.62rem;
+  letter-spacing: 0.01em;
+  line-height: 1.2;
   opacity: var(--habit-timeline-stats-opacity);
 }
 
@@ -976,7 +977,7 @@ body:is([data-slug="research"], [data-slug="research/index"])
   }
 
   body[data-slug="index"] .index-profile-photo-note {
-    font-size: 0.56rem;
+    font-size: 0.62rem;
   }
 
   body:is([data-slug="tracked-habits"], [data-slug="tracked-habits/index"]) .habit-detail-chart {
