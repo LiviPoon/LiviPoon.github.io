@@ -199,7 +199,7 @@
             &:hover,
             &:focus,
             &.focus {
-              background: var(--lightgray);
+              background: color-mix(in srgb, var(--tertiary) 14%, var(--light));
             }
 
             & > h3 {
