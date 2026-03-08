@@ -16,9 +16,9 @@ For example, one night during high school I had a very sad dream about someone w
 
 *As I turned the corner I saw her sitting on the floor against the wall. Her knees were pulled close to her chest and her face was buried in her hands. Her shoulders trembled with each breath, and strands of her hair stuck to her damp cheeks.*
 
-*I slowed down as I reached her and lowered myself to the floor. For a while we simply sat there in the quiet hallway while her crying filled the space around us.
+*I slowed down as I reached her and lowered myself to the floor. For a while we simply sat there in the quiet hallway while her crying filled the space around us.*
 
-*Air hung still, as if even the dust motes had agreed to drift more quietly. A second passed, then another.
+*Air hung still, as if even the dust motes had agreed to drift more quietly. A second passed, then another.*
 
 *No footsteps. No voice breaking the air. No rustle of movement.*
 
