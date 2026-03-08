@@ -11,7 +11,7 @@ Many chronic diseases such as Alzheimer's disease, cancer, and mental health dis
 
 I have presented my research at notable conferences including the American Public Health Association Annual Meeting & Expo, the IEEE Engineering in Medicine and Biology Conference, and Stanford School of Medicine's Maternal & Child Health Research Institute Symposium.
 
-I have several hobbies including powerlifting (CT: 1,038lbs -- deadlift: 423lbs, squat: 365lbs, and bench: 250lbs) and [[art/index|art]]. 
+I have several hobbies including powerlifting (CT: 1,055lbs -- deadlift: 440lbs, squat: 365lbs, and bench: 250lbs) and [[art/index|art]]. 
 ## Recently
 
 ### Presidential Leadership Fellow (2026)
