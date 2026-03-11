@@ -23,6 +23,6 @@ A Neurobotics & Artificial Intelligence Joint Research Scholar focused on discov
 
 I look forward to expanding my mind and working towards a resilient, interconnected, and empathetic world. I challenge you to do the same.
 
-Feel free to check out my other interests including [my thoughts](/blog/) and [my art](/art/).
+Feel free to check out my other interests including [my thoughts](/blog/), [art](/art/), and [powerlifting](/powerlifting/).
 
 [read more.](/research/) · [contact.](https://www.linkedin.com/in/livi-poon-9a93a8116/)

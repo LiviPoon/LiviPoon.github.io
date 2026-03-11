@@ -28,7 +28,23 @@ export function pageResources(
   staticResources: StaticResources,
 ): StaticResources {
   const contentIndexPath = joinSegments(baseDir, "static/contentIndex.json")
-  const contentIndexScript = `const fetchData = fetch("${contentIndexPath}").then(data => data.json())`
+  const contentIndexScript = `const fetchData = (async () => {
+  const primaryPath = "${contentIndexPath}"
+  const fallbackPath = "/static/contentIndex.json"
+
+  const readContentIndex = async (path) => {
+    const response = await fetch(path)
+    if (!response.ok) throw new Error(\`Failed to fetch \${path}: \${response.status}\`)
+    return response.json()
+  }
+
+  try {
+    return await readContentIndex(primaryPath)
+  } catch {
+    if (primaryPath === fallbackPath) throw new Error("Unable to load content index")
+    return readContentIndex(fallbackPath)
+  }
+})()`
 
   const resources: StaticResources = {
     css: [

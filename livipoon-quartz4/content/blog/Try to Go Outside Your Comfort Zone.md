@@ -17,10 +17,9 @@ Let us take the example of learning a new skill, most of us don't dread trying o
 
 *Why should I decide to hide myself from the world simply based on the opinions of others or because I am insecure?*
 
-I am not at all asking someone to try sky diving today, but we all can start by taking small actions outside of our own comfort zone. Such as walking to the gym and hanging out for 5min, sitting somewhere new in class, or trying a new restaurant. 
+I am not at all asking someone to try sky diving today, but we all can start by taking small actions outside of our own comfort zone. Such as visiting a community space and hanging out for 5min, sitting somewhere new in class, or trying a new restaurant. 
 
 The simple act of making minute changes to our environment primes our body first and allows us to experience new things while only subjecting ourselves to small doses of fear. Just like working towards a goal by breaking it down into small pieces, the same can be applied for going outside of your comfort zone.
-
 
 
 

@@ -23,6 +23,15 @@ const blogPostsOnly = (component: QuartzComponent) =>
     },
   })
 
+const notPowerlifting = (component: QuartzComponent) =>
+  Component.ConditionalRender({
+    component,
+    condition: (page) => {
+      const slug = page.fileData.slug
+      return slug !== "powerlifting" && slug !== "powerlifting/index"
+    },
+  })
+
 const giscusComments = Component.Comments({
   provider: "giscus",
   options: {
@@ -46,55 +55,63 @@ export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
   afterBody: [],
-  footer: Component.Footer(),
+  footer: notPowerlifting(Component.Footer()),
 }
 
 // components for pages that display a single page (e.g. a single note)
 export const defaultContentPageLayout: PageLayout = {
   beforeBody: [
-    notHome(Component.Breadcrumbs()),
-    notHome(Component.ArticleTitle()),
-    notHome(Component.ContentMeta()),
-    notHome(Component.TagList()),
+    notPowerlifting(notHome(Component.Breadcrumbs())),
+    notPowerlifting(notHome(Component.ArticleTitle())),
+    notPowerlifting(notHome(Component.ContentMeta())),
+    notPowerlifting(notHome(Component.TagList())),
   ],
   left: [
-    notHome(notArt(Component.PageTitle())),
-    notHome(Component.MobileOnly(Component.Spacer())),
-    notHome(
+    notPowerlifting(notHome(notArt(Component.PageTitle()))),
+    notPowerlifting(notHome(Component.MobileOnly(Component.Spacer()))),
+    notPowerlifting(
+      notHome(
+        Component.Flex({
+          components: [
+            {
+              Component: Component.Search(),
+              grow: true,
+            },
+            { Component: Component.ReaderMode() },
+          ],
+        }),
+      ),
+    ),
+    notPowerlifting(blogPostsOnly(Component.DesktopOnly(giscusComments))),
+    // notHome(Component.Explorer()),
+  ],
+  right: [
+    notPowerlifting(notHome(Component.Graph())),
+    notPowerlifting(notHome(Component.DesktopOnly(Component.TableOfContents()))),
+    notPowerlifting(notHome(Component.Backlinks())),
+  ],
+}
+
+// components for pages that display lists of pages  (e.g. tags or folders)
+export const defaultListPageLayout: PageLayout = {
+  beforeBody: [
+    notPowerlifting(Component.Breadcrumbs()),
+    notPowerlifting(Component.ArticleTitle()),
+    notPowerlifting(Component.ContentMeta()),
+  ],
+  left: [
+    notPowerlifting(notArt(Component.PageTitle())),
+    notPowerlifting(Component.MobileOnly(Component.Spacer())),
+    notPowerlifting(
       Component.Flex({
         components: [
           {
             Component: Component.Search(),
             grow: true,
           },
-          { Component: Component.ReaderMode() },
         ],
       }),
     ),
-    blogPostsOnly(Component.DesktopOnly(giscusComments)),
-    // notHome(Component.Explorer()),
   ],
-  right: [
-    notHome(Component.Graph()),
-    notHome(Component.DesktopOnly(Component.TableOfContents())),
-    notHome(Component.Backlinks()),
-  ],
-}
-
-// components for pages that display lists of pages  (e.g. tags or folders)
-export const defaultListPageLayout: PageLayout = {
-  beforeBody: [Component.Breadcrumbs(), Component.ArticleTitle(), Component.ContentMeta()],
-  left: [
-    notArt(Component.PageTitle()),
-    Component.MobileOnly(Component.Spacer()),
-    Component.Flex({
-      components: [
-        {
-          Component: Component.Search(),
-          grow: true,
-        },
-      ],
-    }),
-  ],
-  right: [notHome(Component.Graph())],
+  right: [notPowerlifting(notHome(Component.Graph()))],
 }

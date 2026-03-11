@@ -94,6 +94,7 @@ export default ((opts?: Partial<FolderContentOptions>) => {
     const cssClasses: string[] = fileData.frontmatter?.cssclasses ?? []
     const classes = cssClasses.join(" ")
     const slug = fileData.slug ?? ""
+    const isPowerlifting = slug === "powerlifting" || slug === "powerlifting/index"
     const isBlogIndex = slug === "blog" || slug === "blog/index"
     const showFolderBackLink =
       isBlogIndex ||
@@ -128,18 +129,20 @@ export default ((opts?: Partial<FolderContentOptions>) => {
           </a>
         )}
         <article class={classes}>{content}</article>
-        <div class="page-listing">
-          {options.showFolderCount && (
-            <p>
-              {i18n(cfg.locale).pages.folderContent.itemsUnderFolder({
-                count: allPagesInFolder.length,
-              })}
-            </p>
-          )}
-          <div>
-            <PageList {...listProps} />
+        {!isPowerlifting && (
+          <div class="page-listing">
+            {options.showFolderCount && (
+              <p>
+                {i18n(cfg.locale).pages.folderContent.itemsUnderFolder({
+                  count: allPagesInFolder.length,
+                })}
+              </p>
+            )}
+            <div>
+              <PageList {...listProps} />
+            </div>
           </div>
-        </div>
+        )}
         {showFolderBackLink && isBlogIndex && (
           <a class="folder-back-link" href={backHref}>
             back

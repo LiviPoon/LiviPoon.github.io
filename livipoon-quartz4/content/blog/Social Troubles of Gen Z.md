@@ -7,7 +7,7 @@ date: 2026-02-25
 ---
 Noise cancelling headphones, phones, and social media are, just to name a few, creating unsocial environments. Never has a generation been more connected yet *disconnected*.
 
-As I have been trying to actively go outside of my [[go outside of my comfort zone|comfort zone]], I have seen first hand how more and more people I introduce myself act. Its obvious in the gym and the bus, you wave a hand or say hi and people either don't respond or respond as if you are going to harm them.
+As I have been trying to actively go outside of my [[go outside of my comfort zone|comfort zone]], I have seen first hand how more and more people I introduce myself act. Its obvious in shared public spaces and on the bus, you wave a hand or say hi and people either don't respond or respond as if you are going to harm them.
 
 Once, I caught someone’s eye and smiled. It was not an ambitious gesture. Just a small offering. They hesitated, then pulled out one earbud.
 
@@ -42,6 +42,5 @@ I am more willing to approach a stranger. More willing to risk awkwardness. More
 And in observing my own relationship with my devices—and watching others—I have come to a difficult conclusion:
 
 I believe our generation is terrified, scared, and simply not building the social skills that our ancestors built in a internet/technology-less world.
-
 
 
