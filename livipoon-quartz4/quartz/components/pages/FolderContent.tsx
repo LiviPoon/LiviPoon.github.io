@@ -95,11 +95,9 @@ export default ((opts?: Partial<FolderContentOptions>) => {
     const classes = cssClasses.join(" ")
     const slug = fileData.slug ?? ""
     const isPowerlifting = slug === "powerlifting" || slug === "powerlifting/index"
+    const isQuoteJournal = slug === "quote-journal" || slug === "quote-journal/index"
     const isBlogIndex = slug === "blog" || slug === "blog/index"
-    const showFolderBackLink =
-      isBlogIndex ||
-      slug === "research" ||
-      slug === "research/index"
+    const showFolderBackLink = isBlogIndex || slug === "research" || slug === "research/index"
     const backHref = fileData.slug ? pathToRoot(fileData.slug) : "."
     const listProps = {
       ...props,
@@ -115,8 +113,12 @@ export default ((opts?: Partial<FolderContentOptions>) => {
 
     return (
       <div class="popover-hint">
-        {isBlogIndex && (
-          <div class="blog-typewriter" data-blog-typewriter="">
+        {(isBlogIndex || isQuoteJournal) && (
+          <div
+            class="blog-typewriter"
+            data-blog-typewriter=""
+            data-blog-typewriter-source={isQuoteJournal ? "/quote-journal/quote/" : undefined}
+          >
             <span class="blog-typewriter-text" data-blog-typewriter-text="">
               Loading quote...
             </span>
@@ -129,7 +131,7 @@ export default ((opts?: Partial<FolderContentOptions>) => {
           </a>
         )}
         <article class={classes}>{content}</article>
-        {!isPowerlifting && (
+        {!isPowerlifting && !isQuoteJournal && (
           <div class="page-listing">
             {options.showFolderCount && (
               <p>

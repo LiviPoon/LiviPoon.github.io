@@ -43,4 +43,8 @@ And in observing my own relationship with my devices—and watching others—I h
 
 I believe our generation is terrified, scared, and simply not building the social skills that our ancestors built in a internet/technology-less world.
 
+"If trends continue, one in three adults currently in their 20s will never marry, contributing to an epidemic of loneliness that is already generationally acute." - Emba, C
 
+Emba, C. (2026, March 3). _Opinion | The Reason Gen Z Isn’t Dating_. Nytimes.com; The New York Times. https://www.nytimes.com/2026/03/03/opinion/gen-z-dating-clavicular.html?smid=nytcore-android-share
+
+‌

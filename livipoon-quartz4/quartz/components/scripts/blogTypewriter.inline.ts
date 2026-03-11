@@ -20,6 +20,8 @@ type QuoteSpeechPlayback = {
   completion: Promise<void>
 }
 
+type QuoteSourceMode = "blog-posts" | "source-page"
+
 type BlogTypewriterWindow = Window &
   typeof globalThis & {
     __backgroundMusicDucked?: boolean
@@ -129,6 +131,14 @@ function isQuoteLongEnough(text: string): boolean {
   return wordCount(text) > 7
 }
 
+function isQuoteEligibleForSourceMode(text: string, sourceMode: QuoteSourceMode): boolean {
+  if (sourceMode === "source-page") {
+    return wordCount(text) >= 3
+  }
+
+  return isQuoteLongEnough(text)
+}
+
 function isSpeechMuted(): boolean {
   return localStorage.getItem(musicMuteStorageKey) === "true"
 }
@@ -234,7 +244,38 @@ function collectSentenceCandidates(text: string): QuoteCandidate[] {
   return candidates
 }
 
-function pickGoodQuotesFromDoc(doc: Document): string[] {
+function sanitizeSourceQuote(text: string): string {
+  return normalizeWhitespace(
+    text.replace(/^[\s>"“"'`‘’\-*•\d().:]+/, "").replace(/[\s"”"'`’]+$/, ""),
+  )
+}
+
+function pickQuotesFromSourceDoc(doc: Document): string[] {
+  const article = doc.querySelector(".center article") ?? doc.querySelector("article")
+  if (!article) return []
+
+  const contentNodes = [...article.querySelectorAll("blockquote, li, p")]
+  const picked: string[] = []
+  const seen = new Set<string>()
+
+  for (const node of contentNodes) {
+    const text = sanitizeSourceQuote(node.textContent ?? "")
+    if (text.length < 10) continue
+    if (wordCount(text) < 3) continue
+    if (rejectedFragments.some((fragment) => text.toLowerCase().includes(fragment))) continue
+    if (seen.has(text)) continue
+    seen.add(text)
+    picked.push(text)
+  }
+
+  return shuffle(picked)
+}
+
+function pickGoodQuotesFromDoc(doc: Document, sourceMode: QuoteSourceMode): string[] {
+  if (sourceMode === "source-page") {
+    return pickQuotesFromSourceDoc(doc)
+  }
+
   const article = doc.querySelector(".center article") ?? doc.querySelector("article")
   if (!article) return []
 
@@ -296,7 +337,11 @@ function pickGoodQuotesFromDoc(doc: Document): string[] {
         .map((candidate) => candidate.text)
 }
 
-async function collectQuotes(postLinks: string[], cancelled: () => boolean): Promise<string[]> {
+async function collectQuotes(
+  postLinks: string[],
+  cancelled: () => boolean,
+  sourceMode: QuoteSourceMode,
+): Promise<string[]> {
   const quotes: string[] = []
 
   for (const postLink of shuffle(postLinks)) {
@@ -315,7 +360,7 @@ async function collectQuotes(postLinks: string[], cancelled: () => boolean): Pro
       if (cancelled()) return []
 
       const doc = parser.parseFromString(html, "text/html")
-      const picked = pickGoodQuotesFromDoc(doc)
+      const picked = pickGoodQuotesFromDoc(doc, sourceMode)
       quotes.push(...picked)
     } catch {
       // ignore individual post failures and continue with the rest
@@ -325,7 +370,7 @@ async function collectQuotes(postLinks: string[], cancelled: () => boolean): Pro
   const deduped: string[] = []
   const seenQuotes = new Set<string>()
   for (const quote of shuffle(quotes)) {
-    if (isQuoteLongEnough(quote) && !seenQuotes.has(quote)) {
+    if (isQuoteEligibleForSourceMode(quote, sourceMode) && !seenQuotes.has(quote)) {
       seenQuotes.add(quote)
       deduped.push(quote)
     }
@@ -338,6 +383,7 @@ async function pickFreshQuote(
   postLinks: string[],
   recentQuotes: string[],
   cancelled: () => boolean,
+  sourceMode: QuoteSourceMode,
 ): Promise<string> {
   const eligibleFallbackQuotes = fallbackQuotes.filter(isQuoteLongEnough)
 
@@ -345,12 +391,12 @@ async function pickFreshQuote(
     return pickRandom(eligibleFallbackQuotes) ?? eligibleFallbackQuotes[0] ?? ""
   }
 
-  const fetched = await collectQuotes(postLinks, cancelled)
+  const fetched = await collectQuotes(postLinks, cancelled, sourceMode)
   if (cancelled()) return ""
 
   const recentQuoteSet = new Set(recentQuotes)
   const unseenPool = fetched.filter(
-    (quote) => isQuoteLongEnough(quote) && !recentQuoteSet.has(quote),
+    (quote) => isQuoteEligibleForSourceMode(quote, sourceMode) && !recentQuoteSet.has(quote),
   )
   const pool = unseenPool.length > 0 ? unseenPool : fetched
   return pickRandom(pool) ?? pickRandom(eligibleFallbackQuotes) ?? eligibleFallbackQuotes[0] ?? ""
@@ -405,13 +451,21 @@ function estimateSpeechDurationMs(text: string, rate: number): number {
   return Math.max(900, baseMs + punctuationPauseMs + 140)
 }
 
-function postQuotePauseMs(quoteText: string): number {
+function postQuotePauseMs(quoteText: string, sourceMode: QuoteSourceMode): number {
   const length = normalizeWhitespace(quoteText).length
   const clampedLength = Math.min(maxChars, Math.max(minChars, length))
   const lengthRange = Math.max(1, maxChars - minChars)
   const normalized = (clampedLength - minChars) / lengthRange
   const inverse = 1 - normalized
-  return Math.round(minPostQuotePauseMs + inverse * (maxPostQuotePauseMs - minPostQuotePauseMs))
+  const basePause = Math.round(
+    minPostQuotePauseMs + inverse * (maxPostQuotePauseMs - minPostQuotePauseMs),
+  )
+
+  if (sourceMode === "source-page") {
+    return Math.max(320, Math.round(basePause * 0.42))
+  }
+
+  return basePause
 }
 
 function createSpeechRuntime(): TypewriterSpeechRuntime {
@@ -555,10 +609,11 @@ async function typeText(
   text: string,
   cancelled: () => boolean,
   targetDurationMs?: number,
+  fastMode = false,
 ): Promise<boolean> {
-  const minimumCharDelay = 14
-  const maximumCharDelay = 90
-  const fallbackDelay = 32
+  const minimumCharDelay = fastMode ? 5 : 14
+  const maximumCharDelay = fastMode ? 40 : 90
+  const fallbackDelay = fastMode ? 12 : 32
   const charDelay =
     targetDurationMs && text.length > 0
       ? Math.max(minimumCharDelay, Math.min(maximumCharDelay, targetDurationMs / text.length))
@@ -585,13 +640,14 @@ async function eraseText(el: HTMLElement, cancelled: () => boolean): Promise<boo
 async function runTypewriter(
   textEl: HTMLElement,
   postLinks: string[],
+  sourceMode: QuoteSourceMode,
   speech: TypewriterSpeechRuntime,
   cancelled: () => boolean,
 ): Promise<void> {
   const recentQuotes: string[] = []
 
   while (!cancelled()) {
-    const quoteText = await pickFreshQuote(postLinks, recentQuotes, cancelled)
+    const quoteText = await pickFreshQuote(postLinks, recentQuotes, cancelled, sourceMode)
     if (cancelled()) return
     if (!quoteText) {
       await sleep(500)
@@ -604,24 +660,49 @@ async function runTypewriter(
     }
 
     const quote = `“${quoteText}”`
-    const speechPlayback = speakQuote(speech, quoteText, cancelled)
-    const typed = await typeText(textEl, quote, cancelled, speechPlayback.expectedDurationMs)
+    const useSpeech = sourceMode === "blog-posts"
+    const speechPlayback = useSpeech
+      ? speakQuote(speech, quoteText, cancelled)
+      : {
+          expectedDurationMs: 0,
+          completion: Promise.resolve(),
+        }
+    const typed = await typeText(
+      textEl,
+      quote,
+      cancelled,
+      useSpeech ? speechPlayback.expectedDurationMs : undefined,
+      !useSpeech,
+    )
     if (!typed) return
-    await Promise.race([speechPlayback.completion, sleep(speechPlayback.expectedDurationMs + 240)])
-    if (cancelled()) return
+    if (useSpeech) {
+      await Promise.race([
+        speechPlayback.completion,
+        sleep(speechPlayback.expectedDurationMs + 240),
+      ])
+      if (cancelled()) return
+    }
 
-    await sleep(postQuotePauseMs(quoteText))
+    const quoteHoldDelayMs =
+      sourceMode === "source-page"
+        ? Math.max(3000, postQuotePauseMs(quoteText, sourceMode))
+        : postQuotePauseMs(quoteText, sourceMode)
+    await sleep(quoteHoldDelayMs)
     if (cancelled()) return
 
     const erased = await eraseText(textEl, cancelled)
     if (!erased) return
 
-    await sleep(250 + Math.random() * 300)
+    const interQuoteDelayMs = sourceMode === "source-page" ? 250 : 250 + Math.random() * 300
+    await sleep(interQuoteDelayMs)
   }
 }
 
 document.addEventListener("nav", () => {
-  const textEl = document.querySelector("[data-blog-typewriter-text]") as HTMLElement | null
+  const typewriterRoot = document.querySelector("[data-blog-typewriter]") as HTMLElement | null
+  if (!typewriterRoot) return
+
+  const textEl = typewriterRoot.querySelector("[data-blog-typewriter-text]") as HTMLElement | null
   if (!textEl) return
 
   let cancelled = false
@@ -631,37 +712,54 @@ document.addEventListener("nav", () => {
     speech.dispose()
   })
 
-  const quoteLinks = [...document.querySelectorAll(".page-listing .section")]
-    .map((section, index) => {
-      const link = section.querySelector(".desc a.internal") as HTMLAnchorElement | null
-      if (!link?.href) return null
+  const explicitQuoteSource = typewriterRoot.dataset.blogTypewriterSource?.trim() ?? ""
+  let quoteLinks: string[] = []
+  let sourceMode: QuoteSourceMode = "blog-posts"
 
-      const time = section.querySelector(".meta time[datetime]") as HTMLTimeElement | null
-      const rawDateTime = time?.dateTime?.trim() ?? ""
-      const parsedDateTime = rawDateTime.length > 0 ? Date.parse(rawDateTime) : Number.NaN
-      const dateMs = Number.isFinite(parsedDateTime) ? parsedDateTime : null
+  if (explicitQuoteSource.length > 0) {
+    try {
+      quoteLinks = [new URL(explicitQuoteSource, window.location.href).href]
+      sourceMode = "source-page"
+    } catch {
+      quoteLinks = []
+    }
+  }
 
-      return {
-        href: link.href,
-        dateMs,
-        index,
-      }
-    })
-    .filter(
-      (source): source is { href: string; dateMs: number | null; index: number } => source !== null,
-    )
-    .sort((left, right) => {
-      if (left.dateMs !== null && right.dateMs !== null) {
-        return right.dateMs - left.dateMs
-      }
-      if (left.dateMs !== null) return -1
-      if (right.dateMs !== null) return 1
-      return left.index - right.index
-    })
-    .slice(0, quoteSourcePostLimit)
-    .map((source) => source.href)
+  if (quoteLinks.length === 0) {
+    sourceMode = "blog-posts"
+    quoteLinks = [...document.querySelectorAll(".page-listing .section")]
+      .map((section, index) => {
+        const link = section.querySelector(".desc a.internal") as HTMLAnchorElement | null
+        if (!link?.href) return null
+
+        const time = section.querySelector(".meta time[datetime]") as HTMLTimeElement | null
+        const rawDateTime = time?.dateTime?.trim() ?? ""
+        const parsedDateTime = rawDateTime.length > 0 ? Date.parse(rawDateTime) : Number.NaN
+        const dateMs = Number.isFinite(parsedDateTime) ? parsedDateTime : null
+
+        return {
+          href: link.href,
+          dateMs,
+          index,
+        }
+      })
+      .filter(
+        (source): source is { href: string; dateMs: number | null; index: number } =>
+          source !== null,
+      )
+      .sort((left, right) => {
+        if (left.dateMs !== null && right.dateMs !== null) {
+          return right.dateMs - left.dateMs
+        }
+        if (left.dateMs !== null) return -1
+        if (right.dateMs !== null) return 1
+        return left.index - right.index
+      })
+      .slice(0, quoteSourcePostLimit)
+      .map((source) => source.href)
+  }
 
   void (async () => {
-    await runTypewriter(textEl, quoteLinks, speech, () => cancelled)
+    await runTypewriter(textEl, quoteLinks, sourceMode, speech, () => cancelled)
   })()
 })

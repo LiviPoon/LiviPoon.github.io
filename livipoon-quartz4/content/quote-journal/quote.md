@@ -1,0 +1,97 @@
+---
+title: Quotes
+comments: false
+---
+
+- "momma ain't raise no ape" - Aches
+- "back in my day I had to walk 90 miles to school, I had to draw with rocks on the cave wall, and paint with the blood of my enemies." - Sam Does Art
+- "without making expectations, you can't be disappointed" - Sam Does Art
+- "I want to die to a moose. For the content." - Reptos
+- "twinkle twinkle little star, why is art so freaking hard.
+up above the world so high, I can't draw the other eye" - Lawrence Hiebert
+- "It's either all in your face, or in your mouth!" - Teos Game
+- "Be a man Tony... who is the bad guy? Be a man. Go tell her what she needs to hear." - Ziva David
+- "Sometimes the most simple things are the hardest to create" - Livi
+- "You miss 100% of the shots you don't take" - Teo
+- "HATERS —> Having Anger Towards Everyone Reaching Success"- elyalimi
+- "Becoming old is mandatory, but growing up is not." - Livi
+- "I would rather be ashes than dust! I would rather that my spark should burn out in a brilliant blaze than it should be stifled by dry-rot. I would rather be a superb meteor, ever atom of me in magnificent glow, than a sleepy and permanent planet. The proper function of man is to live, not to exist. I shall not waste my days in trying to prolong them. I shall use my time.” Jack London, San Francisco's *The Bulletin* on December 2, 1916.
+- “The proper function of man is to live, not to exist. I shall not waste my days in trying to prolong them. I shall use my time.” - Jack London
+- “I'd rather sing one wild song and burst my heart with it, than live a thousand years watching my digestion and being afraid of the wet.” - Jack London
+- 
+- "Being asked to speak at the same volume as everyone else in the room is not a form of censorship" - Audit the Audit.
+- "I've got places to be, places to see. What if there are no more trees? What if there is no sea? How will I know where to go if there is no snow? Who will be there to create more glee?
+- “Somethings you learn over time, and somethings you have to be kicked in the face.” - John | Lost In Space
+- “Sometimes change can be scary, but it can sometimes help you become better than before.” - Will Robinson Lost in Space
+- “One foot, two foot, three foot, four, I declare a goddamn war. Five foot, six foot, seven foot, eight. We ain't gonna appreciate those we hate.” - Livi
+- “What makes you different, makes you strong.” - Vi, from *Arcane*
+- “Being sad after making a choice, doesn't mean it was the wrong one to make.” - Unknown
+- **“There should be no boundaries to human endeavor. We are all different. However bad life may seem, there is always something you can do, and succeed at. While there's life, there is hope.” - Stephen Hawking**
+- “Harsh words won’t solve problems, action will!” - The Avatar, from *The Avatar.*
+- “I’m here now, and I’m going to make the most of it.” - The Avatar, from *The Avatar.*
+- “Life is 10% what it throws at you, 90% of it is how you deal with it.” - GoodTimesWithScar
+- “To succeed minimally is to fail spectacularly.” - Livi
+- “The rate of improvement increases as you shut the fuck up.” - Xao
+- “Excuses, Excuses, We Hate Excuses.”-Livi
+- “When you put your mind to it — ur stronger than you think.” - Livi.
+- "Love is taking a few steps backward, maybe even more...to give way to the happiness of the person you love.” - A.A. Milne, 'Winnie The Pooh.'
+- “The truth of a man lies not in the land of his birth, but in his heart. A king must be a king on his own terms. He cannot be his father, he can only be himself.” Lord Uthred (The Last Kingdom)
+- “Embrace this idea that you know nothing, because you don’t.” - Ryan Reynold’s
+- "BE THE PERSON YOU NEEDED WHEN YOU WERE YOUNGER" - MELISSA PONZIO, ACTRESS
+- “Why do we fall? So that we can learn to pick ourselves up” - Alfred Pennyworth
+- “If you focus on what you left-behind, you will never be able to see what lies ahead.” - Chef Gusteau
+- “Worrying is like a rocking chair. It gives you something to do, but it doesn’t get you anywhere.” - Van Wildler
+- “In order to be willing to live like nobody else does, you need to be willing todo what nobody else does.” - Matt Graham
+- 'Sometimes our families end up looking nothing like we thought they would. And sometimes, we do things for family that we never thought we could. Because family is always worth it.' - Narrator (Sweet Tooth)
+- 'We don't always know what's right. That's part of growing up.' - Pubba (Sweet Tooth)
+- ‘As I’m getting older, its okay to do things slower. Because then you can do more.” - Michelle Khare
+- “We must use our lives to make the world a better place to live, not just to acquire things. That is what we are put on the earth for.” - Dolores Huerta
+- “You cannot get through a single day without having an impact on the world around you. What you do makes a difference, and you have to decide what kind of difference you want to make.” - Dr. Jane Goodall
+- “I would like for them to say, he took a few cups of love. He took one tablespoon of patience, one tablespoon of generosity, one pint of kindness; he took one quart of laughter, one piece of concern, and then he mixed willingness with happiness. He added lots of faith, and he stirred it up well. Then he spread it and expanded it over a lifetime. And he served each and every deserving person he met.” Muhammed Ali
+- “Every individual matters. Every individual has a role to play. Every individual makes a difference.” - Dr. Jane Goodall
+- “Change happens by listening and then starting a dialogue with the people who are doing something you don’t believe is right.” - Dr. Jane Goodall
+- “The greatest danger to our future is apathy.” - Dr. Jane Goodall
+- “Rain drop. Drop top. How’d you get a boi who’s hot hot?” - Unknown
+- “Learning to stand in somebody else’s shoes, to see through their eyes, that’s how peace begins.  And it’s up to you to make that happen.  Empathy is a quality of character that can  change the world.” – Barack Obama
+- “Peace cannot be kept by force; it can only be achieved by understanding.” – Albert Einstein
+- Dalai Lama XIV said *“When you talk, you are only repeating what you already know. But if you listen, you may learn something new.”*
+- *“The word ‘listen’ contains the same letters as the word ‘silent’.” -* Alfred Brendel
+- “You are fully capable of deciding your own destiny. The question is, which path will you choose? This is something only you can decide.” Sarek, Star Trek 2009
+- “The ones crazy enough to think they can change the world are the ones that do.” - Steve Jobs
+- “All our dreams can come true if we have the courage to pursue them.” - Walt Disney
+- “Toes are just thicker fingers” - Teosgame
+- “The saddest aspect of life right now is that science gathers knowledge faster than society gathers wisdom.” ~Isaac Asimov, Isaac Asimov's Book of Science and Nature Quotations, 1988
+- “Your scientists were so preoccupied with whether they could, they didn’t stop to think if they should.”
+- “We may be growing, but we ain’t dead yet” -
+- non morieris in somnis memorias (die with memories not dreams) - Latin Proverb
+- “per volar sù nata” - Italian for born to soar.
+- “You don't need to put other people down to lift yourself up.” - Brunston Poon
+- “Just because something isn't working out right now, doesn't mean it won't. Keep going.” Joey Kidney
+- “Aut inveniam viam aut faciam” - Hannibal ("I shall either find a way or make one.”)
+    - vincit qui se vincit
+- “It's not if you lose that matters. It's what you do after you lose that does.” -Livi Poon
+- “Maybe the moon is beautiful only because it is far.” - Mahmoud Darwish
+- “Really there are no failures, rather there are experiments whose outcome you did not anticipate.” - Nobel Prize winner Carolyn Bertozzi
+- "For man with no forgiveness in his heart, life is a worse punishment than death.” -Mr.Miyagi
+- “Its one of the characteristics of a leader that he not doubt for one moment the capacity of the people he is leading to realize whatever he is dreaming.” Benjamin Zander
+- To be a leader you have to do something nobody has ever done before. To be a leader you have to be weird. - Livi Feb, 2023
+- If you are grateful to have woken up, then use your time to better yourself — you aren't guaranteed tomorrow. - Livi Feb, 2023
+- Reflecting on the past provides you an opportunity to pursue who you want to become. Take it. - Livi Feb, 2023
+- Success is not born. It is made. - Livi
+- Stop talking. Do it. Achieve it.  - Livi
+- I want to disappear and emerge a butterfly. -Livi
+- Do not rely on others for happiness. Create your own. - Livi
+- With exercise comes rest, just like everything else in life… Including life itself. - Livi
+- “Its lightweight baby ;)”
+- Forget who you were yesterday.
+- “The Pinnacle of human achievement is not winning medals or the amount of things you have accomplished, but when you use today to improve who you were yesterday.” -Livi
+- “Look for what's there, not what you want to be there.” -Sherlock Holmes - Anola
+- “The secret isn't in the journey, but rather who you share the journey with.” -Yes Theory
+- “If you feel like the smartest person in the room, then you’re in the wrong room.” -Unknown
+- “Even you make a mistake or run into any issues, always be the better person.” -Dicky
+- “If something is internal it has no meaning.”
+- People are in your life for a reason and they also leave for a reason.
+- The energy give should be yours and positive, even if they aren't giving it back.”
+- let. them. talk.
+- “Go confidently in the direction of your dreams! Live the life you've imagined.” ~Henry David Thoreau
+- "If you wanna win the lottery, you have to make the money to buy a ticket" - Jake Gyllenhall

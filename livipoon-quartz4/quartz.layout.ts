@@ -28,7 +28,12 @@ const notPowerlifting = (component: QuartzComponent) =>
     component,
     condition: (page) => {
       const slug = page.fileData.slug
-      return slug !== "powerlifting" && slug !== "powerlifting/index"
+      return (
+        slug !== "powerlifting" &&
+        slug !== "powerlifting/index" &&
+        slug !== "quote-journal" &&
+        slug !== "quote-journal/index"
+      )
     },
   })
 
