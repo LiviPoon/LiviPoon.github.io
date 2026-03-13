@@ -11,7 +11,7 @@ import { QuartzPluginData } from "../../plugins/vfile"
 import { ComponentChildren } from "preact"
 import { concatenateResources } from "../../util/resources"
 import { trieFromAllFiles } from "../../util/ctx"
-import { pathToRoot } from "../../util/path"
+import { pathToRoot, resolveRelative, FullSlug } from "../../util/path"
 
 interface FolderContentOptions {
   /**
@@ -99,6 +99,9 @@ export default ((opts?: Partial<FolderContentOptions>) => {
     const isBlogIndex = slug === "blog" || slug === "blog/index"
     const showFolderBackLink = isBlogIndex || slug === "research" || slug === "research/index"
     const backHref = fileData.slug ? pathToRoot(fileData.slug) : "."
+    const quoteSourceHref = fileData.slug
+      ? resolveRelative(fileData.slug, "quote-journal/quote" as FullSlug)
+      : undefined
     const listProps = {
       ...props,
       sort: options.sort,
@@ -117,7 +120,7 @@ export default ((opts?: Partial<FolderContentOptions>) => {
           <div
             class="blog-typewriter"
             data-blog-typewriter=""
-            data-blog-typewriter-source={isQuoteJournal ? "/quote-journal/quote/" : undefined}
+            data-blog-typewriter-source={isQuoteJournal ? quoteSourceHref : undefined}
           >
             <span class="blog-typewriter-text" data-blog-typewriter-text="">
               Loading quote...
