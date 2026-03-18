@@ -97,7 +97,14 @@ export default ((opts?: Partial<FolderContentOptions>) => {
     const isPowerlifting = slug === "powerlifting" || slug === "powerlifting/index"
     const isQuoteJournal = slug === "quote-journal" || slug === "quote-journal/index"
     const isBlogIndex = slug === "blog" || slug === "blog/index"
-    const showFolderBackLink = isBlogIndex || slug === "research" || slug === "research/index"
+    const isResearchLike =
+      slug === "research" ||
+      slug === "research/index" ||
+      slug === "publications" ||
+      slug === "publications/index"
+    const showFolderBackLink =
+      isBlogIndex ||
+      isResearchLike
     const backHref = fileData.slug ? pathToRoot(fileData.slug) : "."
     const quoteSourceHref = fileData.slug
       ? resolveRelative(fileData.slug, "quote-journal/quote" as FullSlug)
@@ -128,7 +135,7 @@ export default ((opts?: Partial<FolderContentOptions>) => {
             <span class="blog-typewriter-caret" aria-hidden="true"></span>
           </div>
         )}
-        {showFolderBackLink && !isBlogIndex && (
+        {showFolderBackLink && !isBlogIndex && !isResearchLike && (
           <a class="folder-back-link" href={backHref}>
             back
           </a>
@@ -148,7 +155,7 @@ export default ((opts?: Partial<FolderContentOptions>) => {
             </div>
           </div>
         )}
-        {showFolderBackLink && isBlogIndex && (
+        {showFolderBackLink && (isBlogIndex || isResearchLike) && (
           <a class="folder-back-link" href={backHref}>
             back
           </a>

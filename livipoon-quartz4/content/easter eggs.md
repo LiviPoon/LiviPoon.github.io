@@ -8,5 +8,6 @@ comments: false
   <p>still hunting?
 
   1) Habit Tracker
-  2) WIP</p>
+  2) Quote Journal!
+  3) WIP</p>
 </div>

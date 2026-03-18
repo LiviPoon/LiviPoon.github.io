@@ -917,7 +917,9 @@ body:is(
     [data-slug="blog"],
     [data-slug="blog/index"],
     [data-slug="research"],
-    [data-slug="research/index"]
+    [data-slug="research/index"],
+    [data-slug="publications"],
+    [data-slug="publications/index"]
   )
   .folder-back-link {
   display: inline-flex;
@@ -973,7 +975,24 @@ body:is([data-slug="blog"], [data-slug="blog/index"]) .folder-back-link {
   margin: 1rem 0 0;
 }
 
-body:is([data-slug="research"], [data-slug="research/index"]) .page > #quartz-body {
+body:is(
+    [data-slug="research"],
+    [data-slug="research/index"],
+    [data-slug="publications"],
+    [data-slug="publications/index"]
+  )
+  .folder-back-link {
+  margin: 1rem 0 0;
+}
+
+body:is(
+    [data-slug="research"],
+    [data-slug="research/index"],
+    [data-slug="publications"],
+    [data-slug="publications/index"]
+  )
+  .page
+  > #quartz-body {
   grid-template-columns: minmax(0, 1fr) !important;
   grid-template-areas:
     "grid-header"
@@ -981,21 +1000,73 @@ body:is([data-slug="research"], [data-slug="research/index"]) .page > #quartz-bo
     "grid-footer" !important;
 }
 
-body:is([data-slug="research"], [data-slug="research/index"]) .page > #quartz-body .sidebar,
-body:is([data-slug="research"], [data-slug="research/index"]) .page > #quartz-body > footer,
-body:is([data-slug="research"], [data-slug="research/index"]) .center > hr,
-body:is([data-slug="research"], [data-slug="research/index"]) .center .page-footer,
-body:is([data-slug="research"], [data-slug="research/index"]) .page-listing,
-body:is([data-slug="research"], [data-slug="research/index"]) .breadcrumb-container {
+body:is(
+    [data-slug="research"],
+    [data-slug="research/index"],
+    [data-slug="publications"],
+    [data-slug="publications/index"]
+  )
+  .page
+  > #quartz-body
+  .sidebar,
+body:is(
+    [data-slug="research"],
+    [data-slug="research/index"],
+    [data-slug="publications"],
+    [data-slug="publications/index"]
+  )
+  .page
+  > #quartz-body
+  > footer,
+body:is(
+    [data-slug="research"],
+    [data-slug="research/index"],
+    [data-slug="publications"],
+    [data-slug="publications/index"]
+  )
+  .center
+  > hr,
+body:is(
+    [data-slug="research"],
+    [data-slug="research/index"],
+    [data-slug="publications"],
+    [data-slug="publications/index"]
+  )
+  .center
+  .page-footer,
+body:is(
+    [data-slug="research"],
+    [data-slug="research/index"],
+    [data-slug="publications"],
+    [data-slug="publications/index"]
+  )
+  .page-listing,
+body:is(
+    [data-slug="research"],
+    [data-slug="research/index"],
+    [data-slug="publications"],
+    [data-slug="publications/index"]
+  )
+  .breadcrumb-container {
   display: none;
 }
 
-body:is([data-slug="research"], [data-slug="research/index"])
+body:is(
+    [data-slug="research"],
+    [data-slug="research/index"],
+    [data-slug="publications"],
+    [data-slug="publications/index"]
+  )
   .page
   > #quartz-body
   > .center
   > .page-header,
-body:is([data-slug="research"], [data-slug="research/index"])
+body:is(
+    [data-slug="research"],
+    [data-slug="research/index"],
+    [data-slug="publications"],
+    [data-slug="publications/index"]
+  )
   .page
   > #quartz-body
   > .center
@@ -1005,7 +1076,12 @@ body:is([data-slug="research"], [data-slug="research/index"])
   margin-right: auto;
 }
 
-body:is([data-slug="research"], [data-slug="research/index"])
+body:is(
+    [data-slug="research"],
+    [data-slug="research/index"],
+    [data-slug="publications"],
+    [data-slug="publications/index"]
+  )
   .page
   > #quartz-body
   > .center
@@ -1235,6 +1311,8 @@ body:is([data-slug="research"], [data-slug="research/index"])
       [data-slug="blog/index"],
       [data-slug="research"],
       [data-slug="research/index"],
+      [data-slug="publications"],
+      [data-slug="publications/index"],
       [data-slug="tracked-habits"],
       [data-slug="tracked-habits/index"]
     )
@@ -1251,6 +1329,8 @@ body:is([data-slug="research"], [data-slug="research/index"])
       [data-slug="blog/index"],
       [data-slug="research"],
       [data-slug="research/index"],
+      [data-slug="publications"],
+      [data-slug="publications/index"],
       [data-slug="tracked-habits"],
       [data-slug="tracked-habits/index"]
     )
