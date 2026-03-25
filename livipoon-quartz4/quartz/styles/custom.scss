@@ -1089,7 +1089,161 @@ body:is(
   margin-top: 2rem;
 }
 
+body:is([data-slug="cv"], [data-slug="cv/index"]) .page > #quartz-body {
+  grid-template-columns: minmax(0, 1fr) !important;
+  grid-template-areas: "grid-center" !important;
+  padding: 0 !important;
+  row-gap: 0 !important;
+}
+
+body:is([data-slug="cv"], [data-slug="cv/index"]) {
+  background: var(--light) !important;
+}
+
+body:is([data-slug="cv"], [data-slug="cv/index"]) #quartz-root,
+body:is([data-slug="cv"], [data-slug="cv/index"]) .page,
+body:is([data-slug="cv"], [data-slug="cv/index"]) .page > #quartz-body,
+body:is([data-slug="cv"], [data-slug="cv/index"]) .page > #quartz-body > .center {
+  background: var(--light) !important;
+}
+
+body:is([data-slug="cv"], [data-slug="cv/index"]) .page > #quartz-body > .sidebar,
+body:is([data-slug="cv"], [data-slug="cv/index"]) .page > #quartz-body > footer,
+body:is([data-slug="cv"], [data-slug="cv/index"]) .page > #quartz-body .page-header,
+body:is([data-slug="cv"], [data-slug="cv/index"]) .page > #quartz-body .page-footer,
+body:is([data-slug="cv"], [data-slug="cv/index"]) .page > #quartz-body .page-listing,
+body:is([data-slug="cv"], [data-slug="cv/index"]) .page > #quartz-body .folder-back-link,
+body:is([data-slug="cv"], [data-slug="cv/index"]) .page > #quartz-body .center > hr {
+  display: none !important;
+}
+
+body:is([data-slug="cv"], [data-slug="cv/index"]) .page > #quartz-body > .center {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+body:is([data-slug="cv"], [data-slug="cv/index"]) .page > #quartz-body > .center > .popover-hint,
+body:is([data-slug="cv"], [data-slug="cv/index"])
+  .page
+  > #quartz-body
+  > .center
+  > .popover-hint
+  > article {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+}
+
+body:is([data-slug="cv"], [data-slug="cv/index"]) .cv-pdf-shell {
+  width: min(96vw, 1080px);
+  height: auto;
+  min-height: 0;
+  margin: 2.75rem auto 1rem;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+body:is([data-slug="cv"], [data-slug="cv/index"]) .cv-pdf-pages {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  align-items: center;
+  background: var(--light);
+}
+
+body:is([data-slug="cv"], [data-slug="cv/index"]) .cv-pdf-page {
+  width: 100%;
+  height: auto;
+  display: block;
+  border: 0;
+  margin: 0;
+  background: var(--light);
+}
+
+body:is([data-slug="cv"], [data-slug="cv/index"]) .cv-pdf-page + .cv-pdf-page {
+  margin-top: -1px;
+}
+
+body:is([data-slug="cv"], [data-slug="cv/index"]) .cv-pdf-frame-fallback {
+  width: 100%;
+  height: calc(100dvh - 3.5rem);
+  min-height: 540px;
+  border: 0;
+  display: block;
+  background: var(--light);
+}
+
+body:is([data-slug="cv"], [data-slug="cv/index"]) .cv-pdf-loading {
+  margin: 0;
+  color: var(--darkgray);
+  font-family: var(--bodyFont);
+  font-size: 0.95rem;
+}
+
+body:is([data-slug="cv"], [data-slug="cv/index"]) .cv-pdf-open-link {
+  margin-top: 0.5rem;
+  color: #000;
+  text-decoration: underline;
+}
+
+body:is([data-slug="cv"], [data-slug="cv/index"]) .cv-back-link-wrap {
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+}
+
+body:is([data-slug="cv"], [data-slug="cv/index"]) .cv-back-link {
+  position: fixed;
+  top: max(1rem, env(safe-area-inset-top));
+  left: max(1rem, env(safe-area-inset-left));
+  transform: translateX(1cm);
+  z-index: 2200;
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: #000;
+  text-decoration: none;
+  font-family: var(--bodyFont);
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.2;
+  text-shadow: none;
+}
+
+body:is([data-slug="cv"], [data-slug="cv/index"]) .cv-back-link.internal {
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
+body:is([data-slug="cv"], [data-slug="cv/index"]) .cv-back-link:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
 @media all and (max-width: 800px) {
+  body:is([data-slug="cv"], [data-slug="cv/index"]) .cv-pdf-shell {
+    width: calc(100vw - 0.8rem);
+    height: auto;
+    min-height: 0;
+    margin: 2.65rem 0.4rem 0.4rem;
+    border-radius: 0;
+  }
+
   body:is(
       [data-slug="powerlifting"],
       [data-slug="powerlifting/index"],
@@ -1098,6 +1252,11 @@ body:is(
     )
     .masonry-back-link {
     margin: 0.48rem 0 0 0;
+  }
+
+  body:is([data-slug="cv"], [data-slug="cv/index"]) .cv-pdf-frame-fallback {
+    height: calc(100dvh - 3.2rem);
+    min-height: 0;
   }
 
   html:has(

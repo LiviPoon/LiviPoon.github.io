@@ -11,6 +11,8 @@ import siteVisitCounterScript from "./scripts/siteVisitCounter.inline"
 import habitTimelineScript from "./scripts/habitTimeline.inline"
 // @ts-ignore
 import customCursorScript from "./scripts/customCursor.inline"
+// @ts-ignore
+import cvPdfScript from "./scripts/cvPdf.inline"
 import clipboardStyle from "./styles/clipboard.scss"
 import backgroundMusicStyle from "./styles/backgroundMusic.scss"
 import siteVisitCounterStyle from "./styles/siteVisitCounter.scss"
@@ -300,6 +302,7 @@ Body.afterDOMLoaded = concatenateResources(
   backgroundMusicScript,
   siteVisitCounterScript,
   habitTimelineScript,
+  cvPdfScript,
 )
 Body.css = concatenateResources(
   clipboardStyle,

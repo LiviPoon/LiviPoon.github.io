@@ -25,4 +25,4 @@ I look forward to expanding my mind and working towards a resilient, interconnec
 
 Feel free to check out my other interests including [my thoughts](/blog/), [art](/art/), and [powerlifting](/powerlifting/).
 
-[publications.](/publications/) · [read more.](/research/) · [contact.](https://www.linkedin.com/in/livi-poon-9a93a8116/)
+[publications.](/publications/) · [cv.](/cv/) · [read more.](/research/) · [contact.](https://www.linkedin.com/in/livi-poon-9a93a8116/)
