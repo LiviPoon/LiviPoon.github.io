@@ -47,9 +47,24 @@ const REVERB_DECAY_POWER = 2.7
 const REVERB_EARLY_REFLECTION_SECONDS = 0.08
 const LICENSE_URL = "https://creativecommons.org/licenses/by-nc-nd/4.0/"
 const LICENSE_LABEL = "CC BY-NC-ND 4.0"
-const LICENSE_CREDIT_PREFIX = "covers by"
-const LICENSE_CREDIT_NAME = "mae lee"
-const LICENSE_CREDIT_URL = "https://www.youtube.com/@unemecheblanche"
+const LICENSE_CREDIT_PREFIX = "music from"
+const LICENSE_CREDITS = [
+  {
+    name: "Mae Lee",
+    url: "https://www.youtube.com/@unemecheblanche",
+    ariaLabel: "Mae Lee YouTube channel",
+  },
+  {
+    name: "Bea Laus",
+    url: "https://www.beabadoobee.com/",
+    ariaLabel: "Bea Laus official website",
+  },
+  {
+    name: "Sally Kim",
+    url: "https://www.youtube.com/@sallykimmmm",
+    ariaLabel: "Sally Kim YouTube channel",
+  },
+] as const
 
 function emitMuteChange(muted: boolean) {
   document.dispatchEvent(
@@ -349,15 +364,26 @@ function createState(playlist: string[]): BackgroundMusicState {
   creditPrefix.className = "background-music-credit"
   creditPrefix.textContent = LICENSE_CREDIT_PREFIX
 
-  const creditLink = document.createElement("a")
-  creditLink.className = "background-music-credit-link"
-  creditLink.href = LICENSE_CREDIT_URL
-  creditLink.target = "_blank"
-  creditLink.rel = "noopener noreferrer"
-  creditLink.textContent = LICENSE_CREDIT_NAME
-  creditLink.setAttribute("aria-label", "Mae Lee YouTube channel")
+  const creditLinks = document.createElement("span")
+  LICENSE_CREDITS.forEach((credit, index) => {
+    if (index > 0) {
+      const separator = document.createElement("span")
+      separator.className = "background-music-credit"
+      separator.textContent = ", "
+      creditLinks.append(separator)
+    }
 
-  licenseCluster.append(licenseLink, creditPrefix, creditLink)
+    const creditLink = document.createElement("a")
+    creditLink.className = "background-music-credit-link"
+    creditLink.href = credit.url
+    creditLink.target = "_blank"
+    creditLink.rel = "noopener noreferrer"
+    creditLink.textContent = credit.name
+    creditLink.setAttribute("aria-label", credit.ariaLabel)
+    creditLinks.append(creditLink)
+  })
+
+  licenseCluster.append(licenseLink, creditPrefix, creditLinks)
   controls.append(button)
 
   const state: BackgroundMusicState = {

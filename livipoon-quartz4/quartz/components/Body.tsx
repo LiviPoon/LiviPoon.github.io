@@ -13,10 +13,13 @@ import habitTimelineScript from "./scripts/habitTimeline.inline"
 import customCursorScript from "./scripts/customCursor.inline"
 // @ts-ignore
 import cvPdfScript from "./scripts/cvPdf.inline"
+// @ts-ignore
+import pageLoaderScript from "./scripts/pageLoader.inline"
 import clipboardStyle from "./styles/clipboard.scss"
 import backgroundMusicStyle from "./styles/backgroundMusic.scss"
 import siteVisitCounterStyle from "./styles/siteVisitCounter.scss"
 import customCursorStyle from "./styles/customCursor.scss"
+import pageLoaderStyle from "./styles/pageLoader.scss"
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 import { concatenateResources } from "../util/resources"
 import { FilePath, slugifyFilePath } from "../util/path"
@@ -296,6 +299,7 @@ const Body: QuartzComponent = ({ children }: QuartzComponentProps) => {
   )
 }
 
+Body.beforeDOMLoaded = pageLoaderScript
 Body.afterDOMLoaded = concatenateResources(
   customCursorScript,
   clipboardScript,
@@ -305,6 +309,7 @@ Body.afterDOMLoaded = concatenateResources(
   cvPdfScript,
 )
 Body.css = concatenateResources(
+  pageLoaderStyle,
   clipboardStyle,
   backgroundMusicStyle,
   siteVisitCounterStyle,

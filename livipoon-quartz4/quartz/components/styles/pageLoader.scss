@@ -1,0 +1,99 @@
+@keyframes quartz-loader-sprite {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: -80px 0;
+  }
+}
+
+body::before,
+body::after {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 240ms ease;
+}
+
+body::before {
+  content: "loading";
+  position: fixed;
+  inset: 0;
+  z-index: 4300;
+  display: grid;
+  place-items: center;
+  background: var(--light);
+  color: var(--darkgray);
+  font-family: var(--bodyFont);
+  font-size: 0.76rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  text-indent: 0.32em;
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 4301;
+  width: 20px;
+  height: 20px;
+  margin-top: -2.6rem;
+  margin-left: -10px;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  background-repeat: no-repeat;
+  background-size: 80px 20px;
+  background-image: url("static/loader-character.svg");
+  animation: quartz-loader-sprite 720ms steps(4) infinite;
+}
+
+#quartz-root {
+  transition: opacity 240ms ease;
+}
+
+html.quartz-loading,
+html.quartz-loading body {
+  overflow: hidden;
+}
+
+html.quartz-loading #quartz-root {
+  opacity: 0;
+  pointer-events: none;
+}
+
+html.quartz-loading body::before,
+html.quartz-loading body::after {
+  opacity: 1;
+}
+
+html.quartz-loading.quartz-loading-leaving #quartz-root {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+html.quartz-loading.quartz-loading-leaving body::before,
+html.quartz-loading.quartz-loading-leaving body::after {
+  opacity: 0;
+}
+
+@media all and (max-width: 800px) {
+  body::before {
+    font-size: 0.68rem;
+    letter-spacing: 0.28em;
+    text-indent: 0.28em;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  body::after,
+  #quartz-root {
+    transition: none;
+  }
+
+  body::after {
+    animation-duration: 1280ms;
+  }
+}
