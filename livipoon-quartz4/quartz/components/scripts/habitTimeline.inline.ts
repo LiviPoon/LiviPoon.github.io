@@ -694,9 +694,44 @@ function mountHabitTimelineChart() {
     return
   }
 
+  const row = container.closest(".index-profile-habit-row") as HTMLElement | null
+  const photo = row?.querySelector(".index-profile-photo") as HTMLImageElement | null
+
+  const syncHeightToPhoto = (): boolean => {
+    if (!photo) return false
+    const targetHeight = Math.round(photo.getBoundingClientRect().height)
+    if (!Number.isFinite(targetHeight) || targetHeight <= 0) {
+      return false
+    }
+
+    const targetHeightPx = `${targetHeight}px`
+    const block = container.closest(".habit-timeline-block") as HTMLElement | null
+
+    if (container.style.height !== targetHeightPx) {
+      container.style.height = targetHeightPx
+    }
+
+    if (block && block.style.height !== targetHeightPx) {
+      block.style.height = targetHeightPx
+    }
+
+    return true
+  }
+
   const timeline = getHabitTimeline()
-  const render = () => renderIndexChart(container, timeline)
+  const render = () => {
+    syncHeightToPhoto()
+    renderIndexChart(container, timeline)
+  }
   render()
+
+  if (photo && !photo.complete) {
+    const onPhotoLoad = () => {
+      render()
+    }
+    photo.addEventListener("load", onPhotoLoad, { once: true })
+    registerCleanup(() => photo.removeEventListener("load", onPhotoLoad))
+  }
 
   let lastWidth = container.clientWidth
   let lastHeight = container.clientHeight
@@ -714,6 +749,9 @@ function mountHabitTimelineChart() {
       render()
     })
     indexChartResizeObserver.observe(container)
+    if (photo) {
+      indexChartResizeObserver.observe(photo)
+    }
     registerCleanup(clearIndexResizeObserver)
   }
 }

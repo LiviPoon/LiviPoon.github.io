@@ -9,10 +9,6 @@ async function mouseEnterHandler(
   this: HTMLAnchorElement,
   { clientX, clientY }: { clientX: number; clientY: number },
 ) {
-  if (document.body.dataset.slug === "index") {
-    return
-  }
-
   const link = (activeAnchor = this)
   if (link.dataset.noPopover === "true") {
     return
@@ -20,6 +16,9 @@ async function mouseEnterHandler(
 
   const targetPath = new URL(link.href).pathname.replace(/\/+$/, "")
   if (targetPath === "/art" || targetPath.startsWith("/art/")) {
+    return
+  }
+  if (targetPath === "/cv" || targetPath.startsWith("/cv/")) {
     return
   }
 
@@ -137,11 +136,8 @@ function removeAllPopovers() {
 }
 
 document.addEventListener("nav", () => {
-  if (document.body.dataset.slug === "index") {
-    clearActivePopover()
-    removeAllPopovers()
-    return
-  }
+  clearActivePopover()
+  removeAllPopovers()
 
   const links = [...document.querySelectorAll("a.internal")] as HTMLAnchorElement[]
   for (const link of links) {

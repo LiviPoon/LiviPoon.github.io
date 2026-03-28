@@ -260,7 +260,7 @@ a {
         padding: 0;
         & > * {
           flex: 1;
-          max-height: 24rem;
+          max-height: 36rem;
         }
         & > .toc {
           display: none;
@@ -364,6 +364,10 @@ thead {
   color: var(--dark);
   font-weight: revert;
   margin-bottom: 0;
+
+  a {
+    font-weight: inherit;
+  }
 
   article > & > a[role="anchor"] {
     color: var(--dark);

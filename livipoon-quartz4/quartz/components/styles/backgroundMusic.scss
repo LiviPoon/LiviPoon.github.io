@@ -13,9 +13,9 @@
   left: 1rem;
   bottom: 1rem;
   z-index: 1300;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
+  display: block;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .background-music-mute,
@@ -42,6 +42,9 @@
   font-size: 0.8rem;
   text-transform: lowercase;
   text-decoration: none;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 0.34rem;
 }
 
 .background-music-credit {
@@ -52,6 +55,16 @@
   text-transform: lowercase;
   color: #9a9a9a;
   opacity: 0.38;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.background-music-credit-prefix {
+  margin-right: 0.18rem;
+}
+
+.background-music-credit-links {
+  display: inline;
 }
 
 .background-music-credit-link {
@@ -64,6 +77,8 @@
   opacity: 0.38;
   text-decoration: none;
   transition: opacity 120ms ease;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 .background-music-mute:hover {

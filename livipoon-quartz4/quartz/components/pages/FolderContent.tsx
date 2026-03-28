@@ -101,7 +101,9 @@ export default ((opts?: Partial<FolderContentOptions>) => {
       slug === "research" ||
       slug === "research/index" ||
       slug === "publications" ||
-      slug === "publications/index"
+      slug === "publications/index" ||
+      slug === "achievements" ||
+      slug === "achievements/index"
     const showFolderBackLink =
       isBlogIndex ||
       isResearchLike

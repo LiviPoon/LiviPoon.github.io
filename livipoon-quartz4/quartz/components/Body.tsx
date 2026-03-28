@@ -14,12 +14,16 @@ import customCursorScript from "./scripts/customCursor.inline"
 // @ts-ignore
 import cvPdfScript from "./scripts/cvPdf.inline"
 // @ts-ignore
-import pageLoaderScript from "./scripts/pageLoader.inline"
+import videoMuteSyncScript from "./scripts/videoMuteSync.inline"
+// @ts-ignore
+// import pageLoaderScript from "./scripts/pageLoader.inline"
+// @ts-ignore
+// import scrollTypewriterScript from "./scripts/scrollTypewriter.inline"
 import clipboardStyle from "./styles/clipboard.scss"
 import backgroundMusicStyle from "./styles/backgroundMusic.scss"
 import siteVisitCounterStyle from "./styles/siteVisitCounter.scss"
 import customCursorStyle from "./styles/customCursor.scss"
-import pageLoaderStyle from "./styles/pageLoader.scss"
+// import pageLoaderStyle from "./styles/pageLoader.scss"
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 import { concatenateResources } from "../util/resources"
 import { FilePath, slugifyFilePath } from "../util/path"
@@ -299,7 +303,6 @@ const Body: QuartzComponent = ({ children }: QuartzComponentProps) => {
   )
 }
 
-Body.beforeDOMLoaded = pageLoaderScript
 Body.afterDOMLoaded = concatenateResources(
   customCursorScript,
   clipboardScript,
@@ -307,9 +310,9 @@ Body.afterDOMLoaded = concatenateResources(
   siteVisitCounterScript,
   habitTimelineScript,
   cvPdfScript,
+  videoMuteSyncScript,
 )
 Body.css = concatenateResources(
-  pageLoaderStyle,
   clipboardStyle,
   backgroundMusicStyle,
   siteVisitCounterStyle,

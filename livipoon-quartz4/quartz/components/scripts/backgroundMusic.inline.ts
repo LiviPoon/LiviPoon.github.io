@@ -37,6 +37,7 @@ const backgroundWindow = window as BackgroundMusicWindow
 const MUTED_STORAGE_KEY = "backgroundMusicMuted"
 const MUTE_EVENT_NAME = "background-mute-changed"
 const DUCK_EVENT_NAME = "background-music-duck-changed"
+const FORCE_MUTE_EVENT_NAME = "background-music-force-mute"
 const BASE_VOLUME = 1
 const DUCKED_VOLUME = 0.15
 const VOLUME_RAMP_DURATION_MS = 260
@@ -356,10 +357,11 @@ function createState(playlist: string[]): BackgroundMusicState {
   licenseLink.setAttribute("aria-label", "Creative Commons BY-NC-ND 4.0 license")
 
   const creditPrefix = document.createElement("span")
-  creditPrefix.className = "background-music-credit"
+  creditPrefix.className = "background-music-credit background-music-credit-prefix"
   creditPrefix.textContent = LICENSE_CREDIT_PREFIX
 
   const creditLinks = document.createElement("span")
+  creditLinks.className = "background-music-credit-links"
   LICENSE_CREDITS.forEach((credit, index) => {
     if (index > 0) {
       const separator = document.createElement("span")
@@ -414,6 +416,19 @@ function createState(playlist: string[]): BackgroundMusicState {
     rampVolume(state)
   }
   document.addEventListener(DUCK_EVENT_NAME, onDuckChanged as EventListener)
+
+  const onForceMute = (event: Event) => {
+    const muted = (event as CustomEvent<{ muted?: boolean }>).detail?.muted === true
+    if (muted === state.audio.muted) return
+    state.audio.muted = muted
+    localStorage.setItem(MUTED_STORAGE_KEY, String(muted))
+    updateButton(state)
+    emitMuteChange(muted)
+    if (!muted) {
+      void attemptPlay(state)
+    }
+  }
+  document.addEventListener(FORCE_MUTE_EVENT_NAME, onForceMute as EventListener)
 
   button.addEventListener("click", () => {
     state.audio.muted = !state.audio.muted
