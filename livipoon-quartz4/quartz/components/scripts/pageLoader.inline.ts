@@ -160,19 +160,22 @@ function startLoadingDeferred(delayMs: number, minimumVisibleMs: number) {
 
 async function hideLoader() {
   const token = cycleToken
-  await waitForCriticalImages()
-
-  if (token !== cycleToken) return
 
   if (pendingShowTimeout !== null) {
     clearPendingShow()
+    markRootHidden(false)
     return
   }
 
   if (!loaderVisible) {
     markRootHidden(false)
+    clearFailsafe()
     return
   }
+
+  await waitForCriticalImages()
+
+  if (token !== cycleToken) return
 
   const elapsed = performance.now() - loadingStartedAt
   if (elapsed < minVisibleMs) {
@@ -220,4 +223,11 @@ document.addEventListener("prenav", () => {
 document.addEventListener("nav", () => {
   if (!initialLoadComplete) return
   void hideLoader()
+})
+
+window.addEventListener("pageshow", () => {
+  if (loaderVisible || pendingShowTimeout !== null) return
+  markRootHidden(false)
+  document.documentElement.classList.remove(LOADING_CLASS)
+  document.documentElement.classList.remove(LEAVING_CLASS)
 })

@@ -996,6 +996,10 @@ body:is(
   margin: 1rem 0 0;
 }
 
+body:is([data-slug="research"], [data-slug="research/index"]) .folder-back-link {
+  margin: 1rem 0 calc(3rem + env(safe-area-inset-bottom));
+}
+
 body:is(
     [data-slug="research"],
     [data-slug="research/index"],

@@ -10,13 +10,19 @@ export default (() => {
   const MasonryPage: QuartzComponent = ({ fileData, displayClass }: QuartzComponentProps) => {
     const images = fileData.masonryImages ?? []
     const jsonPath = fileData.masonryJsonPath
+    const embeddedImages = JSON.stringify(images)
     const classes: string[] = fileData.frontmatter?.cssclasses ?? []
     const backHref = fileData.slug ? pathToRoot(fileData.slug) : "."
     const className = classNames(displayClass, ...classes, "popover-hint", "masonry-container")
     const content =
-      images.length > 0 && jsonPath ? (
+      images.length > 0 ? (
         <>
-          <div class="masonry-grid" id="masonry-grid" data-json-path={jsonPath}></div>
+          <div
+            class="masonry-grid"
+            id="masonry-grid"
+            data-json-path={jsonPath}
+            data-images={embeddedImages}
+          ></div>
           <div class="masonry-caption-modal" id="masonry-caption-modal"></div>
         </>
       ) : (

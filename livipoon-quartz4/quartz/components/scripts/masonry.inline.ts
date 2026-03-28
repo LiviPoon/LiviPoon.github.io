@@ -98,6 +98,28 @@ function shuffleArray<T>(array: T[]): T[] {
   return array
 }
 
+function parseEmbeddedImageData(raw: string | undefined): ImageMetadata[] {
+  if (!raw) return []
+
+  try {
+    const parsed = JSON.parse(raw) as unknown
+    if (!Array.isArray(parsed)) return []
+
+    return parsed.filter((item): item is ImageMetadata => {
+      if (!item || typeof item !== "object") return false
+      const entry = item as Partial<ImageMetadata>
+      return (
+        typeof entry.src === "string" &&
+        typeof entry.alt === "string" &&
+        typeof entry.width === "number" &&
+        typeof entry.height === "number"
+      )
+    })
+  } catch {
+    return []
+  }
+}
+
 async function initMasonry() {
   document.body.classList.remove("masonry-layout")
 
@@ -107,24 +129,26 @@ async function initMasonry() {
   const modal = document.getElementById("masonry-caption-modal") as HTMLElement | null
   if (!modal) return
 
-  const jsonPath = container.dataset.jsonPath
-  if (!jsonPath) return
-
   document.body.classList.add("masonry-layout")
   window.addCleanup(() => document.body.classList.remove("masonry-layout"))
 
-  let imageData: ImageMetadata[] = []
-  try {
-    const response = await fetch(jsonPath)
-    if (!response.ok) {
-      console.error(`Unable to load masonry data from ${jsonPath}: ${response.status}`)
+  let imageData = parseEmbeddedImageData(container.dataset.images)
+  if (imageData.length === 0) {
+    const jsonPath = container.dataset.jsonPath
+    if (!jsonPath) return
+
+    try {
+      const response = await fetch(jsonPath)
+      if (!response.ok) {
+        console.error(`Unable to load masonry data from ${jsonPath}: ${response.status}`)
+        return
+      }
+
+      imageData = (await response.json()) as ImageMetadata[]
+    } catch (error) {
+      console.error(`Unable to load masonry data from ${jsonPath}`, error)
       return
     }
-
-    imageData = (await response.json()) as ImageMetadata[]
-  } catch (error) {
-    console.error(`Unable to load masonry data from ${jsonPath}`, error)
-    return
   }
 
   const shuffledData = shuffleArray([...imageData])

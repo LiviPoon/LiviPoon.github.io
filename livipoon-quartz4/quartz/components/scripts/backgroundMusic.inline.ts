@@ -50,11 +50,6 @@ const LICENSE_LABEL = "CC BY-NC-ND 4.0"
 const LICENSE_CREDIT_PREFIX = "music from"
 const LICENSE_CREDITS = [
   {
-    name: "Mae Lee",
-    url: "https://www.youtube.com/@unemecheblanche",
-    ariaLabel: "Mae Lee YouTube channel",
-  },
-  {
     name: "Bea Laus",
     url: "https://www.beabadoobee.com/",
     ariaLabel: "Bea Laus official website",
