@@ -1086,7 +1086,7 @@ body:is([data-slug="index"], [data-slug="index/index"]) .pilcrow-btn-outline:hov
 }
 
 body:is([data-slug="index"], [data-slug="index/index"]) .pilcrow-hero {
-  padding: 0 0.1rem 2.15rem;
+  padding: 0 0.1rem 1rem;
 }
 
 body:is([data-slug="index"], [data-slug="index/index"]) .pilcrow-hero::after {
@@ -1119,7 +1119,7 @@ body:is([data-slug="index"], [data-slug="index/index"]) .pilcrow-hero-main > h3 
 body:is([data-slug="index"], [data-slug="index/index"]) .pilcrow-hero-profile {
   float: right;
   width: min(100%, 380px);
-  margin: 0 0 0.95rem clamp(0.95rem, 2.3vw, 2rem);
+  margin: 1.8rem 0 0.95rem clamp(0.95rem, 2.3vw, 2rem);
   min-width: 0;
   display: block;
 }
@@ -2079,7 +2079,7 @@ body:is(
   > #quartz-body
   > .center
   > .popover-hint {
-  width: min(100%, 860px);
+  width: min(100%, 900px);
   margin: 0 auto;
 }
 
@@ -2135,7 +2135,7 @@ body:is([data-slug="blog"], [data-slug="blog/index"])
   > #quartz-body
   > .center
   > .popover-hint {
-  width: min(100%, 860px);
+  width: min(100%, 900px);
   margin: 0 auto;
 }
 
@@ -2252,12 +2252,14 @@ body:is(
     [data-slug="research"],
     [data-slug="research/index"],
     [data-slug="publications"],
-    [data-slug="publications/index"],
-    [data-slug="achievements"],
-    [data-slug="achievements/index"]
+    [data-slug="publications/index"]
   )
   .folder-back-link {
   margin: 1rem 0 0;
+}
+
+body:is([data-slug="achievements"], [data-slug="achievements/index"]) .folder-back-link {
+  margin: 1rem 0 1.5rem;
 }
 
 body:is([data-slug="research"], [data-slug="research/index"]) .folder-back-link {
@@ -2344,6 +2346,7 @@ body:is(
   display: none;
 }
 
+
 body:is(
     [data-slug="research"],
     [data-slug="research/index"],
@@ -2368,7 +2371,7 @@ body:is(
   > #quartz-body
   > .center
   > .popover-hint {
-  width: min(100%, 860px);
+  width: min(100%, 900px);
   margin-left: auto;
   margin-right: auto;
 }

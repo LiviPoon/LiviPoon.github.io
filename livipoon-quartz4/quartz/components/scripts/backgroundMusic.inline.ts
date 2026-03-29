@@ -356,31 +356,7 @@ function createState(playlist: string[]): BackgroundMusicState {
   licenseLink.textContent = LICENSE_LABEL
   licenseLink.setAttribute("aria-label", "Creative Commons BY-NC-ND 4.0 license")
 
-  const creditPrefix = document.createElement("span")
-  creditPrefix.className = "background-music-credit background-music-credit-prefix"
-  creditPrefix.textContent = LICENSE_CREDIT_PREFIX
-
-  const creditLinks = document.createElement("span")
-  creditLinks.className = "background-music-credit-links"
-  LICENSE_CREDITS.forEach((credit, index) => {
-    if (index > 0) {
-      const separator = document.createElement("span")
-      separator.className = "background-music-credit"
-      separator.textContent = ", "
-      creditLinks.append(separator)
-    }
-
-    const creditLink = document.createElement("a")
-    creditLink.className = "background-music-credit-link"
-    creditLink.href = credit.url
-    creditLink.target = "_blank"
-    creditLink.rel = "noopener noreferrer"
-    creditLink.textContent = credit.name
-    creditLink.setAttribute("aria-label", credit.ariaLabel)
-    creditLinks.append(creditLink)
-  })
-
-  licenseCluster.append(licenseLink, creditPrefix, creditLinks)
+  licenseCluster.append(licenseLink)
   controls.append(button)
 
   const state: BackgroundMusicState = {

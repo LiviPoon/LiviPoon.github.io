@@ -159,14 +159,14 @@
   <section class="pilcrow-section">
     <div class="pilcrow-section-head">
       <h2>What people say</h2>
-      <p>Collaboration notes from research, creative, and strategy partners.</p>
+      <p>A portrait of one soul, reflected in within unfiltered mirrors.</p>
     </div>
     <div class="pilcrow-testimonial-row">
       <article class="pilcrow-quote">
         <p>
-          "Livi is an enigma -- he does not fit the traditional metrics of success."
+          "Livi is a determined fellow who strives to make a difference in the world!"
         </p>
-        <span>Research collaborator</span>
+        <span>Rosie Rosebush - Director of Student Success</span>
       </article>
       <article class="pilcrow-quote">
         <p>
@@ -176,18 +176,17 @@
       </article>
       <article class="pilcrow-quote">
         <p>
-          "A rare mix of analytical depth and creative sensitivity. The final result felt truly
-          distinctive."
+          "omg you're a psychic."
         </p>
-        <span>Fellow artist</span>
+        <span>Friend</span>
       </article>
     </div>
   </section>
 
   <section class="pilcrow-section pilcrow-section-closing" id="contact">
-    <div class="pilcrow-closing-heading">Clarity starts with the communication.</div>
+    <div class="pilcrow-closing-heading">Silence never built anything. Say something!</div>
     <p>
-      The medical revolution starts now. Are you in?
+      Have an idea, a thought, a question? Don't let it collect dust — please, reach out.
     </p>
     <div class="pilcrow-hero-actions" style="justify-content: center;">
         <a class="pilcrow-btn pilcrow-btn-outline" href="https://github.com/LiviPoon">Github</a>
