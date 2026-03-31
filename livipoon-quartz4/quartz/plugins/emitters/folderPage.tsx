@@ -37,6 +37,10 @@ async function* processFolderInfo(
   ][]) {
     const slug = joinSegments(folder, "index") as FullSlug
     const [tree, file] = folderContent
+    const explicitLayout = file.data.frontmatter?.layout
+    if (explicitLayout === "masonry" || explicitLayout === "mirror-quotes") {
+      continue
+    }
     const cfg = ctx.cfg.configuration
     const externalResources = pageResources(pathToRoot(slug), resources)
     const componentData: QuartzComponentProps = {

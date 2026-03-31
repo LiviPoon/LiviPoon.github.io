@@ -35,15 +35,16 @@
       <a class="pilcrow-btn pilcrow-btn-solid" href="/cv/">Curriculum Vitae</a>
       <a class="pilcrow-btn pilcrow-btn-outline" href="/publications/">Publications</a>
       <a class="pilcrow-btn pilcrow-btn-outline" href="/achievements/">Selected Achievements</a>
+      <a class="pilcrow-btn pilcrow-btn-outline" href="/art/">Art</a>
+      <a class="pilcrow-btn pilcrow-btn-outline" href="/blog/">Thoughts</a>
       <a class="pilcrow-btn pilcrow-btn-outline" href="#contact">Contact</a>
     </div>
   </section>
 
-
   <section class="pilcrow-section pilcrow-section-video">
     <div class="pilcrow-video-embed">
       <iframe
-        src="https://www.youtube.com/embed/M-jP8FXD_lQ?autoplay=1&mute=1&loop=1&playlist=M-jP8FXD_lQ&controls=0&disablekb=1&modestbranding=1&playsinline=1&rel=0"
+        src="https://www.youtube-nocookie.com/embed/M-jP8FXD_lQ?autoplay=1&mute=1&loop=1&playlist=M-jP8FXD_lQ&controls=0&disablekb=1&modestbranding=1&playsinline=1&rel=0"
         title="Featured video"
         tabindex="-1"
         loading="eager"
@@ -53,7 +54,6 @@
       ></iframe>
     </div>
   </section>
-
 
   <section class="pilcrow-section pilcrow-section-video">
       <p class="pilcrow-video-eyebrow">My mission</p>
@@ -65,7 +65,7 @@
   <section class="pilcrow-section pilcrow-section-video">
     <div class="pilcrow-video-embed">
       <iframe
-        src="https://www.youtube.com/embed/BJNtmcr7ipw?autoplay=1&mute=1&loop=1&playlist=BJNtmcr7ipw&controls=0&disablekb=1&modestbranding=1&playsinline=1&rel=0"
+        src="https://www.youtube-nocookie.com/embed/BJNtmcr7ipw?autoplay=1&mute=1&loop=1&playlist=BJNtmcr7ipw&controls=0&disablekb=1&modestbranding=1&playsinline=1&rel=0"
         title="Featured video"
         tabindex="-1"
         loading="eager"
@@ -121,7 +121,7 @@
     <div class="pilcrow-video-embed pilcrow-video-embed--unmutable">
       <iframe
         id="pilcrow-video-iframe"
-        src="https://www.youtube.com/embed/zX2OgG-7TLA?autoplay=1&mute=1&loop=1&playlist=zX2OgG-7TLA&controls=0&disablekb=1&modestbranding=1&playsinline=1&rel=0&enablejsapi=1"
+        src="https://www.youtube-nocookie.com/embed/-YgP7gioFXA?autoplay=1&mute=1&loop=1&playlist=-YgP7gioFXA&controls=0&disablekb=1&modestbranding=1&playsinline=1&rel=0&enablejsapi=1&origin=https%3A%2F%2Fwww.livipoon.com&widget_referrer=https%3A%2F%2Fwww.livipoon.com"
         title="Featured video"
         tabindex="-1"
         loading="eager"
@@ -159,14 +159,14 @@
   <section class="pilcrow-section">
     <div class="pilcrow-section-head">
       <h2>What people say</h2>
-      <p>A portrait of one soul, reflected in within unfiltered mirrors.</p>
+      <p>A portrait of one soul, reflected within unfiltered mirrors.</p>
     </div>
     <div class="pilcrow-testimonial-row">
       <article class="pilcrow-quote">
         <p>
-          "Livi is a determined fellow who strives to make a difference in the world!"
+          "Thank you for talking to me like I was a person and not a service. That doesn't sound like much. But on a night shift, it's everything."
         </p>
-        <span>Rosie Rosebush - Director of Student Success</span>
+        <span>Waitress</span>
       </article>
       <article class="pilcrow-quote">
         <p>
@@ -176,14 +176,17 @@
       </article>
       <article class="pilcrow-quote">
         <p>
-          "omg you're a psychic."
+          "I quit smoking, drinking, and drugs because of you. I'm two months sober."
         </p>
         <span>Friend</span>
       </article>
     </div>
+    <div class="pilcrow-hero-actions" style="justify-content: center;">
+      <a class="pilcrow-btn pilcrow-btn-italic" href="/mirror/">read more</a>
+    </div>
   </section>
 
-  <section class="pilcrow-section pilcrow-section-closing" id="contact">
+  <section class="pilcrow-section pilcrow-section-closing" id="contact" data-section-label="Contact">
     <div class="pilcrow-closing-heading">Silence never built anything. Say something!</div>
     <p>
       Have an idea, a thought, a question? Don't let it collect dust — please, reach out.

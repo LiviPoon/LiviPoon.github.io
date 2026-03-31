@@ -7,7 +7,7 @@ description: Selected achievements, awards, and recognitions in research, medici
 * Started a successful art business that brought in 7x initial investment by the first month. (2024)
 <br>
 
-* Achieved 1000lbs club at 19 years old 187lbs bodyweight. (2023)
+* Entered the elusive *1000lbs club* at 19 years old 187lbs bodyweight. (2023)
 
 # Somewhere in the Murk
 

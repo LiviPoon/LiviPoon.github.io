@@ -66,6 +66,7 @@ const config: QuartzConfig = {
       Plugin.ContentPage(),
       Plugin.ContentIndex(),
       Plugin.Masonry(),
+      Plugin.MirrorQuotes(),
       Plugin.AliasRedirects(),
       Plugin.FolderPage(),
       Plugin.Assets(),

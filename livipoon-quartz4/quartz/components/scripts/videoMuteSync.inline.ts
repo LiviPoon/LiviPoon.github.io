@@ -34,16 +34,29 @@ let ytPlayer: YTPlayer | null = null
 let ytAPIReady = false
 const onAPIReadyCallbacks: Array<() => void> = []
 
+function flushAPIReadyCallbacks() {
+  for (const cb of onAPIReadyCallbacks) cb()
+  onAPIReadyCallbacks.length = 0
+}
+
 function ensureYouTubeAPI() {
-  if (document.querySelector('script[src*="youtube.com/iframe_api"]')) return
+  const existingScript = document.querySelector('script[src*="youtube.com/iframe_api"]')
+
+  // If the API is already available (e.g. after an SPA navigation), mark ready immediately.
+  if (w.YT?.Player) {
+    ytAPIReady = true
+    flushAPIReadyCallbacks()
+    return
+  }
 
   const prev = w.onYouTubeIframeAPIReady
   w.onYouTubeIframeAPIReady = () => {
     prev?.()
     ytAPIReady = true
-    for (const cb of onAPIReadyCallbacks) cb()
-    onAPIReadyCallbacks.length = 0
+    flushAPIReadyCallbacks()
   }
+
+  if (existingScript) return
 
   const tag = document.createElement("script")
   tag.src = "https://www.youtube.com/iframe_api"
@@ -58,9 +71,42 @@ function whenAPIReady(cb: () => void) {
   }
 }
 
+function ensureIframeAPIParams(iframe: HTMLIFrameElement) {
+  try {
+    const src = iframe.getAttribute("src")
+    if (!src) return
+
+    const url = new URL(src, window.location.href)
+    let changed = false
+
+    if (url.searchParams.get("enablejsapi") !== "1") {
+      url.searchParams.set("enablejsapi", "1")
+      changed = true
+    }
+
+    const origin = window.location.origin
+    if (origin && origin !== "null" && url.searchParams.get("origin") !== origin) {
+      url.searchParams.set("origin", origin)
+      changed = true
+    }
+
+    if (origin && origin !== "null" && url.searchParams.get("widget_referrer") !== origin) {
+      url.searchParams.set("widget_referrer", origin)
+      changed = true
+    }
+
+    if (changed) {
+      iframe.src = url.toString()
+    }
+  } catch {
+    // Ignore malformed URLs and fall back to current src behavior.
+  }
+}
+
 function initPlayerEarly(iframe: HTMLIFrameElement) {
   if (ytPlayer) return
 
+  ensureIframeAPIParams(iframe)
   ensureYouTubeAPI()
   whenAPIReady(() => {
     if (ytPlayer) return
@@ -84,6 +130,7 @@ function setupVideoMuteSync() {
   const btn = document.querySelector<HTMLButtonElement>(".pilcrow-video-unmute-btn")
   const iframe = document.getElementById("pilcrow-video-iframe") as HTMLIFrameElement | null
   if (!btn || !iframe) return
+  const unmuteBtn = btn
 
   // Initialize player immediately so iframe swap happens before user clicks
   initPlayerEarly(iframe)
@@ -91,24 +138,22 @@ function setupVideoMuteSync() {
   let videoMuted = true
   let bgMusicWasMutedBeforeVideo = false
 
-  const muteX1 = btn.querySelector<SVGLineElement>(".pilcrow-video-mute-x1")
-  const muteX2 = btn.querySelector<SVGLineElement>(".pilcrow-video-mute-x2")
-  const wave1 = btn.querySelector<SVGPathElement>(".pilcrow-video-sound-wave1")
-  const wave2 = btn.querySelector<SVGPathElement>(".pilcrow-video-sound-wave2")
+  const muteX1 = unmuteBtn.querySelector<SVGLineElement>(".pilcrow-video-mute-x1")
+  const muteX2 = unmuteBtn.querySelector<SVGLineElement>(".pilcrow-video-mute-x2")
+  const wave1 = unmuteBtn.querySelector<SVGPathElement>(".pilcrow-video-sound-wave1")
+  const wave2 = unmuteBtn.querySelector<SVGPathElement>(".pilcrow-video-sound-wave2")
 
   function updateIcon() {
     if (muteX1) muteX1.style.display = videoMuted ? "" : "none"
     if (muteX2) muteX2.style.display = videoMuted ? "" : "none"
     if (wave1) wave1.style.display = videoMuted ? "none" : ""
     if (wave2) wave2.style.display = videoMuted ? "none" : ""
-    btn.setAttribute("data-video-muted", String(videoMuted))
-    btn.setAttribute("aria-label", videoMuted ? "Unmute video" : "Mute video")
+    unmuteBtn.setAttribute("data-video-muted", String(videoMuted))
+    unmuteBtn.setAttribute("aria-label", videoMuted ? "Unmute video" : "Mute video")
   }
 
   function forceMuteBackgroundMusic(muted: boolean) {
-    document.dispatchEvent(
-      new CustomEvent(FORCE_MUTE_EVENT, { detail: { muted } }),
-    )
+    document.dispatchEvent(new CustomEvent(FORCE_MUTE_EVENT, { detail: { muted } }))
   }
 
   function toggleVideoMute() {
@@ -132,15 +177,19 @@ function setupVideoMuteSync() {
     }
   }
 
-  btn.addEventListener("click", toggleVideoMute, { signal })
+  unmuteBtn.addEventListener("click", toggleVideoMute, { signal })
 
   const restartBtn = document.querySelector<HTMLButtonElement>(".pilcrow-video-restart-btn")
-  restartBtn?.addEventListener("click", () => {
-    if (!ytPlayer) return
-    ytPlayer.seekTo(0, true)
-    ytPlayer.playVideo()
-    updatePlayPause(true)
-  }, { signal })
+  restartBtn?.addEventListener(
+    "click",
+    () => {
+      if (!ytPlayer) return
+      ytPlayer.seekTo(0, true)
+      ytPlayer.playVideo()
+      updatePlayPause(true)
+    },
+    { signal },
+  )
 
   const playPauseBtn = document.querySelector<HTMLButtonElement>(".pilcrow-video-playpause-btn")
   const pauseIcon = playPauseBtn?.querySelector<SVGElement>(".pilcrow-video-pause-icon")
@@ -155,15 +204,19 @@ function setupVideoMuteSync() {
     playPauseBtn?.setAttribute("aria-label", playing ? "Pause video" : "Play video")
   }
 
-  playPauseBtn?.addEventListener("click", () => {
-    if (!ytPlayer) return
-    if (playing) {
-      ytPlayer.pauseVideo()
-    } else {
-      ytPlayer.playVideo()
-    }
-    updatePlayPause(!playing)
-  }, { signal })
+  playPauseBtn?.addEventListener(
+    "click",
+    () => {
+      if (!ytPlayer) return
+      if (playing) {
+        ytPlayer.pauseVideo()
+      } else {
+        ytPlayer.playVideo()
+      }
+      updatePlayPause(!playing)
+    },
+    { signal },
+  )
 
   updateIcon()
 }
@@ -172,3 +225,5 @@ document.addEventListener("nav", () => {
   ytPlayer = null
   setupVideoMuteSync()
 })
+
+setupVideoMuteSync()

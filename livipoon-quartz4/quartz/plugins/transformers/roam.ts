@@ -84,8 +84,9 @@ function transformSpecialEmbed(node: Paragraph, opts: Options): Html | null {
             class="external-embed youtube"
             width="600px"
             height="350px"
-            src="https://www.youtube.com/embed/${videoId}${playlistId ? `?list=${playlistId}` : ""}"
+            src="https://www.youtube-nocookie.com/embed/${videoId}${playlistId ? `?list=${playlistId}` : ""}"
             frameborder="0"
+            referrerpolicy="strict-origin-when-cross-origin"
             allow="fullscreen"
           ></iframe>`,
         }

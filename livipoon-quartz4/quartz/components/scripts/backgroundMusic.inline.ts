@@ -293,10 +293,27 @@ async function attemptPlay(state: BackgroundMusicState) {
 
   await tryEnableConcertHallReverb(state)
 
+  const preferredMuted = state.audio.muted
+
   try {
     await state.audio.play()
     void tryEnableConcertHallReverb(state)
+    return
   } catch {
+    // Some browsers block autoplay when audio is audible on initial load.
+    // Retry with a temporary muted bootstrap, then restore preferred mute state.
+    if (!preferredMuted) {
+      state.audio.muted = true
+      try {
+        await state.audio.play()
+        state.audio.muted = preferredMuted
+        void tryEnableConcertHallReverb(state)
+        return
+      } catch {
+        state.audio.muted = preferredMuted
+      }
+    }
+
     addUnlockListeners(state)
   }
 }
@@ -482,4 +499,6 @@ function syncBackgroundMusicForPage() {
 }
 
 document.addEventListener("nav", syncBackgroundMusicForPage)
+window.addEventListener("load", syncBackgroundMusicForPage)
+window.addEventListener("pageshow", syncBackgroundMusicForPage)
 syncBackgroundMusicForPage()

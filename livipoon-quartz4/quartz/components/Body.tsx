@@ -16,6 +16,8 @@ import cvPdfScript from "./scripts/cvPdf.inline"
 // @ts-ignore
 import videoMuteSyncScript from "./scripts/videoMuteSync.inline"
 // @ts-ignore
+import mirrorQuotesShuffleScript from "./scripts/mirrorQuotesShuffle.inline"
+// @ts-ignore
 // import pageLoaderScript from "./scripts/pageLoader.inline"
 // @ts-ignore
 // import scrollTypewriterScript from "./scripts/scrollTypewriter.inline"
@@ -311,6 +313,7 @@ Body.afterDOMLoaded = concatenateResources(
   habitTimelineScript,
   cvPdfScript,
   videoMuteSyncScript,
+  mirrorQuotesShuffleScript,
 )
 Body.css = concatenateResources(
   clipboardStyle,
