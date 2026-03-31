@@ -65,8 +65,19 @@ function getComponentResources(ctx: BuildCtx): ComponentResources {
 }
 
 async function joinScripts(scripts: string[]): Promise<string> {
-  // wrap with iife to prevent scope collision
-  const script = scripts.map((script) => `(function () {${script}})();`).join("\n")
+  // Wrap each script in its own guarded IIFE so one runtime failure
+  // does not prevent later component scripts from initializing.
+  const script = scripts
+    .map(
+      (script, index) => `(function () {
+  try {
+${script}
+  } catch (error) {
+    console.error("Quartz component script failed at index ${index}", error);
+  }
+})();`,
+    )
+    .join("\n")
 
   // minify with esbuild
   const res = await transpile(script, {

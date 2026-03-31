@@ -11,6 +11,15 @@ import { GlobalConfiguration } from "../cfg"
 import { i18n } from "../i18n"
 import { styleText } from "util"
 
+const buildVersion =
+  process.env.GITHUB_SHA?.slice(0, 12) ??
+  process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 12) ??
+  Date.now().toString(36)
+
+function withBuildVersion(path: string): string {
+  return `${path}?v=${buildVersion}`
+}
+
 interface RenderComponents {
   head: QuartzComponent
   header: QuartzComponent[]
@@ -49,13 +58,13 @@ export function pageResources(
   const resources: StaticResources = {
     css: [
       {
-        content: joinSegments(baseDir, "index.css"),
+        content: withBuildVersion(joinSegments(baseDir, "index.css")),
       },
       ...staticResources.css,
     ],
     js: [
       {
-        src: joinSegments(baseDir, "prescript.js"),
+        src: withBuildVersion(joinSegments(baseDir, "prescript.js")),
         loadTime: "beforeDOMReady",
         contentType: "external",
       },
@@ -71,7 +80,7 @@ export function pageResources(
   }
 
   resources.js.push({
-    src: joinSegments(baseDir, "postscript.js"),
+    src: withBuildVersion(joinSegments(baseDir, "postscript.js")),
     loadTime: "afterDOMReady",
     moduleType: "module",
     contentType: "external",

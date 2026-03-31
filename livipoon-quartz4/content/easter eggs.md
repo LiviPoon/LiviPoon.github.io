@@ -9,5 +9,6 @@ comments: false
 
   1) Habit Tracker
   2) Quote Journal!
-  3) WIP</p>
+  3) Quote Mirror!
+  4) WIP</p>
 </div>
