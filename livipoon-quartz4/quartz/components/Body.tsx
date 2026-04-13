@@ -18,6 +18,8 @@ import videoMuteSyncScript from "./scripts/videoMuteSync.inline"
 // @ts-ignore
 import mirrorQuotesShuffleScript from "./scripts/mirrorQuotesShuffle.inline"
 // @ts-ignore
+import homeMirrorQuotesScript from "./scripts/homeMirrorQuotes.inline"
+// @ts-ignore
 // import pageLoaderScript from "./scripts/pageLoader.inline"
 // @ts-ignore
 // import scrollTypewriterScript from "./scripts/scrollTypewriter.inline"
@@ -292,6 +294,27 @@ const habitTrackingData = getHabitTrackingData()
 const habitTimeline = habitTrackingData.timeline
 const habitWeeklySeries = habitTrackingData.weeklySeries
 
+type MirrorQuote = {
+  text: string
+  speaker: string
+  role: string
+}
+
+function getMirrorBoldQuotes(): MirrorQuote[] {
+  const jsonPath = path.join(process.cwd(), "content", "mirror", "mirror-quotes.json")
+  if (!fs.existsSync(jsonPath)) return []
+  const raw = JSON.parse(fs.readFileSync(jsonPath, "utf8")) as Array<Record<string, unknown>>
+  return raw
+    .filter((q) => q["make-bold"] === true)
+    .map((q) => ({
+      text: String(q.text ?? ""),
+      speaker: String(q.speaker ?? ""),
+      role: String(q.role ?? ""),
+    }))
+}
+
+const mirrorBoldQuotes = getMirrorBoldQuotes()
+
 const Body: QuartzComponent = ({ children }: QuartzComponentProps) => {
   return (
     <div
@@ -299,6 +322,7 @@ const Body: QuartzComponent = ({ children }: QuartzComponentProps) => {
       data-background-songs={JSON.stringify(backgroundSongs)}
       data-habit-timeline={JSON.stringify(habitTimeline)}
       data-habit-weekly-series={JSON.stringify(habitWeeklySeries)}
+      data-mirror-bold-quotes={JSON.stringify(mirrorBoldQuotes)}
     >
       {children}
     </div>
@@ -314,6 +338,7 @@ Body.afterDOMLoaded = concatenateResources(
   cvPdfScript,
   videoMuteSyncScript,
   mirrorQuotesShuffleScript,
+  homeMirrorQuotesScript,
 )
 Body.css = concatenateResources(
   clipboardStyle,

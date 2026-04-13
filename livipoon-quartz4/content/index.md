@@ -121,7 +121,7 @@
     <div class="pilcrow-video-embed pilcrow-video-embed--unmutable">
       <iframe
         id="pilcrow-video-iframe"
-        src="https://www.youtube-nocookie.com/embed/-YgP7gioFXA?autoplay=1&mute=1&loop=1&playlist=-YgP7gioFXA&controls=0&disablekb=1&modestbranding=1&playsinline=1&rel=0&enablejsapi=1&origin=https%3A%2F%2Fwww.livipoon.com&widget_referrer=https%3A%2F%2Fwww.livipoon.com"
+        src="https://www.youtube-nocookie.com/embed/zX2OgG-7TLA?autoplay=1&mute=1&loop=1&playlist=zX2OgG-7TLA&controls=0&disablekb=1&modestbranding=1&playsinline=1&rel=0&enablejsapi=1&origin=https%3A%2F%2Fwww.livipoon.com&widget_referrer=https%3A%2F%2Fwww.livipoon.com"
         title="Featured video"
         tabindex="-1"
         loading="eager"
@@ -164,21 +164,21 @@
     <div class="pilcrow-testimonial-row">
       <article class="pilcrow-quote">
         <p>
-          "Thank you for talking to me like I was a person and not a service. That doesn't sound like much. But on a night shift, it's everything."
+          Failed to Load Quote.
         </p>
-        <span>Waitress</span>
+        <span>Lorum Epsum</span>
       </article>
       <article class="pilcrow-quote">
         <p>
-          "There was direction, ambition, and curiosity through every step of his thought process."
+          Failed to Load Quote.
         </p>
-        <span>Project lead</span>
+        <span>Lorum Epsum</span>
       </article>
       <article class="pilcrow-quote">
         <p>
-          "I quit smoking, drinking, and drugs because of you. I'm two months sober."
+          Failed to Load Quote.
         </p>
-        <span>Friend</span>
+        <span>Lorum Epsum</span>
       </article>
     </div>
     <div class="pilcrow-hero-actions" style="justify-content: center;">

@@ -4,6 +4,16 @@
   "make-bold": true,
   "role": "Friend"},
   {
+    "text": "Livi often sat on the couch at the institute (not a place where most undergraduates choose to spend their time). Choosing to be present there led to joining labs and projects and exploring new ideas. There is something special about offering yourself to a space and seeing what happens.",
+    "speaker": "Alexa Woodward",
+    "role": "UVM Executive Director of Vermont Complex Systems Institute"
+  },
+
+  {"text": "Livi exemplifies the traits I aim to inspire and cultivate in all individuals I work with: ravenous motivation to do high quality work that aligns with public good, while incorporating his unique sense of self, spirit, and lived experience throughout those efforts.",
+  "speaker": "Bryn Loftness",
+  "make-bold":true,
+  "role": "Founder, NSF Graduate Research Fellow, and Mentor"},
+  {
     "text": "Livi is a rare kind of person who’s always wanting to improve, whether its people skills, academics, or physical strength. He is also very willing to share what he’s learned throughout the improvement journey. He is very agentive, and genuinely wants to see other people succeed / is happy for you when you do. He is also unabashedly himself which is inspiring.",
     "speaker": "Garrett B.",
     "role": "Friend"
@@ -18,6 +28,7 @@
   {
     "text": "I am so grateful to have met you. Thank you for always being kind to me through our ups and downs. I have learned so much from you, and... I am really proud of you. You are such an amazing person, and it is inspiring to see your progress with the gym, your art, and your academics. I know you're going to do great things and meet cool people. I know everyone has been saying these things, but I really mean it, I really respect you and look up to you.",
     "speaker": "Leah",
+    "make-bold": true,
     "role": "Friend"
   },
 
