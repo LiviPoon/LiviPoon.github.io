@@ -22,20 +22,13 @@ import homeMirrorQuotesScript from "./scripts/homeMirrorQuotes.inline"
 // @ts-ignore
 import rollCounterScript from "./scripts/rollCounter.inline"
 // @ts-ignore
-// import scrollSnapScript from "./scripts/scrollSnap.inline"
-// @ts-ignore
 import themeInitScript from "./scripts/themeInit.inline"
 // @ts-ignore
 import sectionAnimationsScript from "./scripts/sectionAnimations.inline"
-// @ts-ignore
-// import pageLoaderScript from "./scripts/pageLoader.inline"
-// @ts-ignore
-// import scrollTypewriterScript from "./scripts/scrollTypewriter.inline"
 import clipboardStyle from "./styles/clipboard.scss"
 import backgroundMusicStyle from "./styles/backgroundMusic.scss"
 import siteVisitCounterStyle from "./styles/siteVisitCounter.scss"
 import customCursorStyle from "./styles/customCursor.scss"
-// import pageLoaderStyle from "./styles/pageLoader.scss"
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 import { concatenateResources } from "../util/resources"
 import { FilePath, slugifyFilePath } from "../util/path"

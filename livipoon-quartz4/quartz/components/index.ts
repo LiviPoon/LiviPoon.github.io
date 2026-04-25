@@ -23,7 +23,6 @@ import Breadcrumbs from "./Breadcrumbs"
 import Comments from "./Comments"
 import Flex from "./Flex"
 import ConditionalRender from "./ConditionalRender"
-import HomeSideRail from "./HomeSideRail"
 import HomeNav from "./HomeNav"
 import SectionDots from "./SectionDots"
 
@@ -53,7 +52,6 @@ export {
   Comments,
   Flex,
   ConditionalRender,
-  HomeSideRail,
   HomeNav,
   SectionDots,
 }

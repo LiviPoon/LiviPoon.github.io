@@ -8,15 +8,6 @@ const notHome = (component: QuartzComponent) =>
     condition: (page) => page.fileData.slug !== "index",
   })
 
-const homeOnly = (component: QuartzComponent) =>
-  Component.ConditionalRender({
-    component,
-    condition: (page) => {
-      const slug = page.fileData.slug
-      return slug === "index" || slug === "index/index"
-    },
-  })
-
 const notArt = (component: QuartzComponent) =>
   Component.ConditionalRender({
     component,
