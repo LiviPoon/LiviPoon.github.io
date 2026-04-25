@@ -40,3 +40,27 @@ description: Selected achievements, awards, and recognitions in research, medici
 
 * Spent a year as a Kindergarten assistant, stepping away from one of my own classes to support students with classroom jobs, play, and conflict resolution. (2014)
 <br>
+
+# Fulfilled Dreams
+
+* Send something to space
+* Run a 6:30 mile
+* Start a successful art business
+* Run a hackathon
+* Join the 1000lb club
+* Get a job in Sweden
+* Lead meaningful projects at Stanford
+* Create my own major
+* Present a solo project in a internationally recognized conference
+* Compete in Far Westerns
+
+* Save and change lives
+* Go back to swimming my senior year of HS
+* See Florence
+* See Paris
+* Reconnect with old friends
+* Learn how to scuba dive and protect our planet
+* Talk to that girl
+
+
+

@@ -91,33 +91,6 @@ function splitFlapFlip(vol = 1.0) {
   } catch {}
 }
 
-// Final landing — one heavier clack then the dialed.gg chime chord
-function splitFlapLand() {
-  splitFlapFlip(1.5)
-  try {
-    const c = getCtx()
-    if (!c) return
-    setTimeout(() => {
-      ;[1046, 1318, 1568].forEach((f, i) => {
-        const c2 = getCtx()
-        if (!c2 || c2.state !== "running") return
-        const osc = c2.createOscillator()
-        const gain = c2.createGain()
-        osc.type = "sine"
-        const startT = c2.currentTime + i * 0.03
-        osc.frequency.setValueAtTime(f, startT)
-        gain.gain.setValueAtTime(0, startT)
-        gain.gain.linearRampToValueAtTime(0.08, startT + 0.005)
-        gain.gain.exponentialRampToValueAtTime(0.001, startT + 0.22)
-        osc.connect(gain)
-        gain.connect(c2.destination)
-        osc.start(startT)
-        osc.stop(startT + 0.22)
-      })
-    }, 40)
-  } catch {}
-}
-
 function tickInterval(progress: number, slow: number, fast: number): number {
   // easeOutQuint — starts fast, decelerates more aggressively toward the end
   const t = 1 - Math.pow(1 - progress, 5)
@@ -179,7 +152,7 @@ function animateCounter(el: HTMLElement) {
     const current = Math.round(eased * endValue)
 
     if (current !== lastDisplayed) {
-      intEl.textContent = current.toLocaleString()
+      intEl!.textContent = current.toLocaleString()
       lastDisplayed = current
       if (now - lastTickAt >= tickInterval(progress, tickSlow, tickFast)) {
         splitFlapFlip()
@@ -190,7 +163,7 @@ function animateCounter(el: HTMLElement) {
     if (progress < 1) {
       requestAnimationFrame(frame)
     } else {
-      intEl.textContent = endValue.toLocaleString()
+      intEl!.textContent = endValue.toLocaleString()
     }
   }
 

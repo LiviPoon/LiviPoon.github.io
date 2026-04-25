@@ -21,19 +21,19 @@
       </div>
       <h1>Hi, I'm Livi!</h1>
       <p class="pilcrow-hero-copy">A 2026 Presidential Leadership Fellow and an Artificial Intelligence Joint Research Scholar at the Stanford School of Medicine's Center for Interdisciplinary Brain Sciences Research (CIBSR), UVM Medical Center, and Vermont Complex Systems Institute.</p>
-      <div class="pilcrow-roll-counter" data-roll-counter data-end="42">
+      <div class="pilcrow-roll-counter" data-roll-counter data-end="17">
       </br>
         <div class="pilcrow-roll-counter-number">
           <span class="roll-counter-int">0</span>
         </div>
-        <p class="pilcrow-roll-counter-caption">brains challenged</p>
+        <p class="pilcrow-roll-counter-caption">dreams fulfilled</p>
       </div>
       <div class="pilcrow-roll-counter" data-roll-counter data-base-value="195998696" data-base-date="2026-04-25" data-daily-rate="10752.6166666667">
       </br>
         <div class="pilcrow-roll-counter-number">
           <span class="roll-counter-int">0</span>
         </div>
-        <p class="pilcrow-roll-counter-caption">butterfly effects generated.</p>
+        <p class="pilcrow-roll-counter-caption">butterfly effects caused.</p>
       </div>
       <!-- <div class="pilcrow-hero-actions">
         <a class="pilcrow-btn pilcrow-btn-solid" href="/cv/">Curriculum Vitae</a>
