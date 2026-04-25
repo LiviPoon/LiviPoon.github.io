@@ -7,11 +7,7 @@ const config: QuartzConfig = {
     pageTitleSuffix: "",
     enableSPA: true,
     enablePopovers: false,
-    analytics: {
-      provider: "goatcounter",
-      websiteId: "livipoon",
-      host: "goatcounter.com",
-    },
+    analytics: null,
     locale: "en-US",
     baseUrl: "www.livipoon.com",
     ignorePatterns: ["private", "templates", ".obsidian"],

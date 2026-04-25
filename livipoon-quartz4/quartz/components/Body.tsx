@@ -6,8 +6,6 @@ import clipboardScript from "./scripts/clipboard.inline"
 // @ts-ignore
 import backgroundMusicScript from "./scripts/backgroundMusic.inline"
 // @ts-ignore
-import siteVisitCounterScript from "./scripts/siteVisitCounter.inline"
-// @ts-ignore
 import habitTimelineScript from "./scripts/habitTimeline.inline"
 // @ts-ignore
 import customCursorScript from "./scripts/customCursor.inline"
@@ -27,7 +25,6 @@ import themeInitScript from "./scripts/themeInit.inline"
 import sectionAnimationsScript from "./scripts/sectionAnimations.inline"
 import clipboardStyle from "./styles/clipboard.scss"
 import backgroundMusicStyle from "./styles/backgroundMusic.scss"
-import siteVisitCounterStyle from "./styles/siteVisitCounter.scss"
 import customCursorStyle from "./styles/customCursor.scss"
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 import { concatenateResources } from "../util/resources"
@@ -335,7 +332,6 @@ Body.afterDOMLoaded = concatenateResources(
   customCursorScript,
   clipboardScript,
   backgroundMusicScript,
-  siteVisitCounterScript,
   habitTimelineScript,
   cvPdfScript,
   videoMuteSyncScript,
@@ -347,7 +343,6 @@ Body.afterDOMLoaded = concatenateResources(
 Body.css = concatenateResources(
   clipboardStyle,
   backgroundMusicStyle,
-  siteVisitCounterStyle,
   customCursorStyle,
 )
 
