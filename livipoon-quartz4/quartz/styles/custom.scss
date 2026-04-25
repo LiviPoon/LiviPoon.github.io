@@ -1570,7 +1570,7 @@ body:is([data-slug="index"], [data-slug="index/index"]) .pilcrow-video-message {
   font-family: var(--headerFont);
   font-size: clamp(1.4rem, 4vw, 3rem);
   line-height: 1.06;
-  color: #fff;
+  color: var(--dark);
   text-wrap: balance;
   text-align: left;
 }
