@@ -46,6 +46,13 @@
   </section>
 
   <section class="pilcrow-section pilcrow-section-video">
+    <p class="pilcrow-video-eyebrow">My mission</p>
+    <p class="pilcrow-video-message">
+      keep patients out of the doctor's office by discovering and developing predictive, preventative, and precision medicine through artificial intelligence techniques.
+    </p>
+  </section>
+
+  <section class="pilcrow-section pilcrow-section-video">
     <div class="pilcrow-video-counter-layout">
       <video class="pilcrow-bg-video pilcrow-bg-video--themed" src="/images/background-dark.mp4" data-dark-src="/images/background-dark.mp4" data-light-src="/images/background-light.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
       <!-- data-end: set this to your target number -->
@@ -58,12 +65,6 @@
     </div>
   </section>
 
-  <section class="pilcrow-section pilcrow-section-video">
-    <p class="pilcrow-video-eyebrow">My mission</p>
-    <p class="pilcrow-video-message">
-      keep patients out of the doctor's office by discovering and developing predictive, preventative, and precision medicine through artificial intelligence techniques.
-    </p>
-  </section>
 
   <section class="pilcrow-section pilcrow-section-video">
     <div class="pilcrow-video-embed">
