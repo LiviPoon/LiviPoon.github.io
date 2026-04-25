@@ -4,7 +4,7 @@
     <div class="pilcrow-hero-main">
       <div class="pilcrow-hero-profile">
         <div class="index-profile-habit-layout">
-          <div class="index-profile-habit-stats" data-habit-timeline-stats></div>
+          <div class="index-profile-habit-stats" data-habit-timeline-stats style="display:none"></div>
           <div class="index-profile-habit-row">
             <div class="habit-timeline-block">
               <div class="habit-timeline-chart" data-habit-timeline-chart></div>
@@ -17,11 +17,6 @@
               />
             </div>
           </div>
-          <p class="index-profile-photo-note">
-            <a class="index-profile-photo-note-link" href="/easter-eggs"
-              >can you find all my website easter eggs?</a
-            >
-          </p>
         </div>
       </div>
       <h1>Hi, I'm Livi!</h1>
@@ -33,21 +28,20 @@
         </div>
         <p class="pilcrow-roll-counter-caption">brains challenged</p>
       </div>
-      <div class="pilcrow-roll-counter" data-roll-counter data-end="">
+      <div class="pilcrow-roll-counter" data-roll-counter data-base-value="195998696" data-base-date="2026-04-25" data-daily-rate="10752.6166666667">
       </br>
         <div class="pilcrow-roll-counter-number">
           <span class="roll-counter-int">0</span>
         </div>
         <p class="pilcrow-roll-counter-caption">butterfly effects generated.</p>
       </div>
-    </div>
-    <div class="pilcrow-hero-actions">
-      <a class="pilcrow-btn pilcrow-btn-solid" href="/cv/">Curriculum Vitae</a>
-      <a class="pilcrow-btn pilcrow-btn-outline" href="/publications/">Publications</a>
-      <a class="pilcrow-btn pilcrow-btn-outline" href="/achievements/">Selected Achievements</a>
-      <a class="pilcrow-btn pilcrow-btn-outline" href="/art/">Art</a>
-      <a class="pilcrow-btn pilcrow-btn-outline" href="/blog/">Thoughts</a>
-      <a class="pilcrow-btn pilcrow-btn-outline" href="#contact">Contact</a>
+      <!-- <div class="pilcrow-hero-actions">
+        <a class="pilcrow-btn pilcrow-btn-solid" href="/cv/">Curriculum Vitae</a>
+        <a class="pilcrow-btn pilcrow-btn-outline" href="/publications/">Publications</a>
+        <a class="pilcrow-btn pilcrow-btn-outline" href="/achievements/">Selected Achievements</a>
+        <a class="pilcrow-btn pilcrow-btn-outline" href="/art/">Art</a>
+        <a class="pilcrow-btn pilcrow-btn-outline" href="/blog/">Thoughts</a>
+      </div> -->
     </div>
   </section>
 
@@ -55,7 +49,7 @@
     <div class="pilcrow-video-counter-layout">
       <video class="pilcrow-bg-video pilcrow-bg-video--themed" src="/images/background-dark.mp4" data-dark-src="/images/background-dark.mp4" data-light-src="/images/background-light.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
       <!-- data-end: set this to your target number -->
-      <div class="pilcrow-roll-counter" data-roll-counter data-end="3600">
+      <div class="pilcrow-roll-counter" data-roll-counter data-base-value="3600" data-base-date="2026-04-25" data-daily-rate="1.971294669595394">
         <div class="pilcrow-roll-counter-number">
           <span class="roll-counter-int">0</span>
         </div>
@@ -88,7 +82,14 @@
   <section class="pilcrow-section pilcrow-section-process">
     <div class="pilcrow-process-copy">
       <h2>What I bring to the table</h2>
-      <p> My skill set is carefully crafted to understand and uncover the complexities of societal challenges, identify and inquire into their impact across multiple scales, and examine and evaluate evidence-based solutions. I have work experience spanning multiple domains including, but not limited to, pre-eclampsia, wellbeing, mental health, neuroscience, climate change, sexual dimorphism, public health, and chronic disease.
+      <p>
+      At Stanford, I focus on using deep neural networks to understand how adolescence affects sexual dimorphism within pre- and post-adolescent brains. I presented my research at the Stanford School of Medicine’s Maternal & Child Health Research Institute 2022 Symposium Moderated Poster session. At Stanford, I also completed my MRI certification and operated 3T3 & 3T2 MRI machines at the Richard m. Lucas Center for Imaging, performed functional connectivity analysis on resting-state fMRI images of Mosaic Turner Syndrome participants in the Puberty and Neurodevelopment in Adolescence (PANDA) study, and developed a Bash CLI for a Freesurfer integration with Sherlock, Stanford’s computing cluster (super-computer).
+      <br><br>
+      I received four lab offers and accepted a position as an Undergraduate Researcher in Dr. Nick Cheney’s Neurobotics Lab. During my first year, I developed machine learning models and utilized canonical correlation analysis (CCA) to identify digital phenotypes and ML models to predict preterm and term preeclampsia. I presented this work at the 2024 46th Annual International Conference of the IEEE Engineering in Medicine & Biology Society.
+      <br><br>
+      During my second year, I joined Dr.Chris Danforth's Computational Stories Lab, where I utilized CCA to identify correlates between body composition, self-compassion, and social support data through the Lived Experiences Measured Using Rings Study (LEMURS). I was named an Undergraduate Research Fellow after receiving a Summer Undergraduate Research Fellowship grant for this work.
+      <br><br>
+      Outside of these labs, I applied machine learning to U.S. Census and Department of Health & Human Services data to identify predictors of statewide chronic disease mortality, examining the relationship between socioeconomic factors and health trends. This work was accepted for presentation at the 2025 American Public Health Association Annual Meeting.
       </p>
       <div class="pilcrow-hero-actions">
         <a class="pilcrow-btn pilcrow-btn-solid" href="/research/">Read More</a>
@@ -218,10 +219,5 @@
       <a class="pilcrow-btn pilcrow-btn-outline" href="https://www.linkedin.com/in/livi-poon-9a93a8116/">LinkedIn</a>
       <a class="pilcrow-btn pilcrow-btn-outline" href="https://gitlab.com/LiviPoon">Gitlab</a>
     </div>
-  <div class="pilcrow-topline" style="margin-top: 2.5rem;">
-    <span>livipoonpublic@gmail.com</span>
-    <span>Livi Poon</span>
-    <span>San Francisco, California</span>
-  </div>
   </section>
 </div>

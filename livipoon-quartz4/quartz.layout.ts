@@ -68,7 +68,7 @@ const giscusComments = Component.Comments({
 export const sharedPageComponents: SharedLayout = {
   head: Component.Head(),
   header: [],
-  afterBody: [Component.SectionDots()],
+  afterBody: [Component.SectionDots(), Component.HomeNav()],
   footer: notPowerlifting(Component.Footer()),
 }
 

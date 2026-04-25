@@ -119,9 +119,9 @@ function splitFlapLand() {
 }
 
 function tickInterval(progress: number, slow: number, fast: number): number {
-  // easeInCubic — steeper than quad, surges hard toward the end
-  const t = progress * progress * progress
-  return slow - (slow - fast) * t
+  // easeOutQuint — starts fast, decelerates more aggressively toward the end
+  const t = 1 - Math.pow(1 - progress, 5)
+  return fast + (slow - fast) * t
 }
 
 function getHabitTotal(habitName: string): number | null {
@@ -145,6 +145,12 @@ function animateCounter(el: HTMLElement) {
     const total = getHabitTotal(el.dataset.habit)
     if (total === null || total <= 0) return
     endValue = total
+  } else if (el.dataset.baseDate && el.dataset.dailyRate) {
+    const baseValue = parseFloat(el.dataset.baseValue ?? "0")
+    const baseDate = new Date(el.dataset.baseDate + "T00:00:00Z")
+    const dailyRate = parseFloat(el.dataset.dailyRate)
+    const daysSince = Math.max(0, Math.floor((Date.now() - baseDate.getTime()) / 86400000))
+    endValue = Math.round(baseValue + daysSince * dailyRate)
   } else {
     endValue = parseInt(el.dataset.end ?? "100", 10)
     if (isNaN(endValue) || endValue <= 0) return

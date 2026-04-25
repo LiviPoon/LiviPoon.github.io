@@ -2949,6 +2949,15 @@ body:is([data-slug="cv"], [data-slug="cv/index"]) .cv-back-link:hover {
     padding-bottom: calc(0.25rem + env(safe-area-inset-bottom));
   }
 
+  body:is([data-slug="index"], [data-slug="index/index"]) .pilcrow-hero {
+    padding-top: 2.5rem;
+    padding-bottom: 3.5rem;
+  }
+
+  body:is([data-slug="index"], [data-slug="index/index"]) .pilcrow-hero-copy {
+    line-height: 2;
+  }
+
   body:is([data-slug="index"], [data-slug="index/index"]) article img {
     float: none;
     width: 100%;
@@ -2962,16 +2971,17 @@ body:is([data-slug="cv"], [data-slug="cv/index"]) .cv-back-link:hover {
     --index-photo-max-width: none;
     float: none;
     width: min(100%, 360px);
-    margin: 0 auto 0.9rem;
+    margin: 0 auto 1.5rem;
   }
 
   body:is([data-slug="index"], [data-slug="index/index"]) .habit-timeline-block {
     flex-basis: var(--index-habit-track-width);
     width: var(--index-habit-track-width);
+    overflow: hidden;
   }
 
   body:is([data-slug="index"], [data-slug="index/index"]) .habit-timeline-chart {
-    min-height: 224px;
+    min-height: 0;
   }
 
   body:is([data-slug="index"], [data-slug="index/index"]) .index-profile-photo-wrap {
