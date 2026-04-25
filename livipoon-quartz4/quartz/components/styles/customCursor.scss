@@ -1,7 +1,7 @@
 :root {
   --dot-cursor-size: 10px;
-  --dot-cursor-color: #588157;
-  --dot-cursor-heart-color: #a3b18a;
+  --dot-cursor-color: var(--dark);
+  --dot-cursor-heart-color: #f2a7b8;
 }
 
 @media (pointer: fine) and (hover: hover) {
@@ -22,7 +22,7 @@
   position: fixed;
   left: -999px;
   top: -999px;
-  z-index: 2900;
+  z-index: 10000;
   width: var(--dot-cursor-size);
   height: var(--dot-cursor-size);
   border-radius: 50%;
@@ -60,6 +60,7 @@
 .dot-heart-cursor.is-visible {
   opacity: 1;
 }
+
 
 .dot-heart-cursor.is-heart {
   width: 15px;

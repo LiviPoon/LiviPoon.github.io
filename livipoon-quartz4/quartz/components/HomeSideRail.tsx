@@ -13,7 +13,7 @@ export default (() => {
     }
 
     return (
-      <aside class={classNames(displayClass, "bryn-side-rail")} data-home-side-rail="">
+      <aside class={classNames(displayClass, "bryn-side-rail")} data-home-side-rail="" hidden>
         <div class="bryn-side-rail-inner">
           <span class="bryn-side-rail-label" data-home-side-rail-label="">
             INTRO

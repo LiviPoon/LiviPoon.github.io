@@ -20,6 +20,14 @@ import mirrorQuotesShuffleScript from "./scripts/mirrorQuotesShuffle.inline"
 // @ts-ignore
 import homeMirrorQuotesScript from "./scripts/homeMirrorQuotes.inline"
 // @ts-ignore
+import rollCounterScript from "./scripts/rollCounter.inline"
+// @ts-ignore
+// import scrollSnapScript from "./scripts/scrollSnap.inline"
+// @ts-ignore
+import themeInitScript from "./scripts/themeInit.inline"
+// @ts-ignore
+import sectionAnimationsScript from "./scripts/sectionAnimations.inline"
+// @ts-ignore
 // import pageLoaderScript from "./scripts/pageLoader.inline"
 // @ts-ignore
 // import scrollTypewriterScript from "./scripts/scrollTypewriter.inline"
@@ -329,6 +337,7 @@ const Body: QuartzComponent = ({ children }: QuartzComponentProps) => {
   )
 }
 
+Body.beforeDOMLoaded = themeInitScript
 Body.afterDOMLoaded = concatenateResources(
   customCursorScript,
   clipboardScript,
@@ -339,6 +348,8 @@ Body.afterDOMLoaded = concatenateResources(
   videoMuteSyncScript,
   mirrorQuotesShuffleScript,
   homeMirrorQuotesScript,
+  rollCounterScript,
+  sectionAnimationsScript,
 )
 Body.css = concatenateResources(
   clipboardStyle,

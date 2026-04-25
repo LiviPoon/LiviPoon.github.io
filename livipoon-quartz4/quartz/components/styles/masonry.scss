@@ -17,7 +17,7 @@
   border: none;
   border-radius: 0;
   background: transparent;
-  color: #000;
+  color: var(--dark);
   text-decoration: none;
   font-family: var(--bodyFont);
   font-size: 0.95rem;
@@ -26,7 +26,7 @@
   transition: color 120ms ease;
 
   &:hover {
-    color: #000;
+    color: var(--dark);
     text-decoration: underline;
   }
 }

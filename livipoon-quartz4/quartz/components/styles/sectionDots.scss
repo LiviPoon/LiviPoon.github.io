@@ -71,11 +71,11 @@
 }
 
 :root[saved-theme="dark"] .sdot-label {
-  color: var(--light);
+  color: var(--dark);
 }
 
 :root[saved-theme="dark"] .sdot.sdot--active .sdot-pip {
-  background: var(--light);
+  background: var(--dark);
 }
 
 @media (max-width: 1024px), (hover: none) and (pointer: coarse) {

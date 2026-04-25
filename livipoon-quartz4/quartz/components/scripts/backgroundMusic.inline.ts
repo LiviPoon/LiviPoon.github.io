@@ -113,7 +113,10 @@ function playlistsEqual(a: string[], b: string[]): boolean {
 }
 
 function updateButton(state: BackgroundMusicState) {
-  state.button.textContent = state.audio.muted ? "unmute" : "mute"
+  const volOn = state.button.querySelector<SVGElement>(".vol-on")
+  const volOff = state.button.querySelector<SVGElement>(".vol-off")
+  if (volOn) volOn.style.display = state.audio.muted ? "none" : ""
+  if (volOff) volOff.style.display = state.audio.muted ? "" : "none"
   state.button.classList.toggle("is-muted", state.audio.muted)
   state.button.setAttribute("aria-pressed", String(state.audio.muted))
 }
@@ -306,7 +309,10 @@ async function attemptPlay(state: BackgroundMusicState) {
       state.audio.muted = true
       try {
         await state.audio.play()
+        // Set volume to 0 before unmuting so there's no pop when audio becomes audible.
+        state.audio.volume = 0
         state.audio.muted = preferredMuted
+        rampVolume(state)
         void tryEnableConcertHallReverb(state)
         return
       } catch {
@@ -364,6 +370,9 @@ function createState(playlist: string[]): BackgroundMusicState {
   button.type = "button"
   button.className = "background-music-mute"
   button.setAttribute("aria-label", "Toggle background music mute")
+  button.innerHTML =
+    `<svg class="vol-on" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M19.2478 4.75181C21.1027 6.6067 22.25 9.1692 22.25 11.9997C22.25 14.8301 21.1027 17.3926 19.2478 19.2475M15.8891 8.11119C16.8844 9.10649 17.5 10.4815 17.5 12.0003C17.5 13.5191 16.8844 14.8941 15.8891 15.8894M3.75 7.74986H5.35491C5.77433 7.74986 6.18314 7.618 6.52352 7.37293L11.4578 3.82021C11.7886 3.58208 12.25 3.81843 12.25 4.22598V19.7738C12.25 20.1813 11.7886 20.4177 11.4578 20.1795L6.52352 16.6268C6.18314 16.3817 5.77433 16.2499 5.35491 16.2499H3.75C2.64543 16.2499 1.75 15.3545 1.75 14.2499V9.74987C1.75 8.6453 2.64543 7.74986 3.75 7.74986Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>` +
+    `<svg class="vol-off" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="display:none"><path fill-rule="evenodd" clip-rule="evenodd" d="M17 5.93934V4.22585C17 3.20697 15.8465 2.6161 15.0196 3.21143L10.0853 6.76415C9.87255 6.91732 9.61705 6.99973 9.35491 6.99973H7.75C6.23122 6.99973 5 8.23095 5 9.74973V14.2497C5 15.25 5.53405 16.1255 6.33257 16.6068L3.21967 19.7197C2.92678 20.0126 2.92678 20.4874 3.21967 20.7803C3.51256 21.0732 3.98744 21.0732 4.28033 20.7803L20.7803 4.28033C21.0732 3.98744 21.0732 3.51256 20.7803 3.21967C20.4874 2.92678 20.0126 2.92678 19.7197 3.21967L17 5.93934ZM7.47089 15.4685C6.91489 15.3416 6.5 14.8441 6.5 14.2497V9.74973C6.5 9.05938 7.05964 8.49973 7.75 8.49973H9.35491C9.93161 8.49973 10.4937 8.31842 10.9617 7.98145L15.5 4.71391V7.43934L7.47089 15.4685Z" fill="currentColor"/><path d="M15.5003 19.2857L11.0785 16.102L10.001 17.1795C10.0298 17.197 10.0581 17.2156 10.0856 17.2354L15.0199 20.7881C15.8468 21.3835 17.0003 20.7926 17.0003 19.7737V10.1802L15.5003 11.6802V19.2857Z" fill="currentColor"/></svg>`
 
   const licenseLink = document.createElement("a")
   licenseLink.className = "background-music-license"
@@ -375,6 +384,38 @@ function createState(playlist: string[]): BackgroundMusicState {
 
   licenseCluster.append(licenseLink)
   controls.append(button)
+
+  // Dark mode toggle button
+  const themeBtn = document.createElement("button")
+  themeBtn.type = "button"
+  themeBtn.className = "background-music-theme"
+  themeBtn.setAttribute("aria-label", "Toggle dark mode")
+  themeBtn.addEventListener("click", () => {
+    const newTheme =
+      document.documentElement.getAttribute("saved-theme") === "dark" ? "light" : "dark"
+    document.documentElement.setAttribute("saved-theme", newTheme)
+    localStorage.setItem("theme", newTheme)
+    document.dispatchEvent(new CustomEvent("themechange", { detail: { theme: newTheme } }))
+  })
+  themeBtn.innerHTML =
+    `<svg class="icon-sun" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.9982 3.29083V1.76758M5.83985 18.1586L4.76275 19.2357M11.9982 22.2327V20.7094M19.2334 4.76468L18.1562 5.84179M20.707 12.0001H22.2303M18.1562 18.1586L19.2334 19.2357M1.76562 12.0001H3.28888M4.76267 4.76462L5.83977 5.84173M15.7104 8.28781C17.7606 10.3381 17.7606 13.6622 15.7104 15.7124C13.6601 17.7627 10.336 17.7627 8.28574 15.7124C6.23548 13.6622 6.23548 10.3381 8.28574 8.28781C10.336 6.23756 13.6601 6.23756 15.7104 8.28781Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>` +
+    `<svg class="icon-moon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M21.2481 11.8112C20.1889 12.56 18.8958 13 17.5 13C13.9101 13 11 10.0899 11 6.5C11 5.10416 11.44 3.81108 12.1888 2.75189C12.126 2.75063 12.0631 2.75 12 2.75C6.89137 2.75 2.75 6.89137 2.75 12C2.75 17.1086 6.89137 21.25 12 21.25C17.1086 21.25 21.25 17.1086 21.25 12C21.25 11.9369 21.2494 11.874 21.2481 11.8112Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>`
+  controls.append(themeBtn)
+
+  // Themed background video swap
+  function applyVideoTheme() {
+    const video = document.querySelector<HTMLVideoElement>(".pilcrow-bg-video--themed")
+    if (!video) return
+    const isDark = document.documentElement.getAttribute("saved-theme") === "dark"
+    const src = isDark ? video.dataset.darkSrc : video.dataset.lightSrc
+    if (!src || video.getAttribute("src") === src) return
+    video.setAttribute("src", src)
+    video.load()
+    void video.play()
+  }
+
+  document.addEventListener("themechange", applyVideoTheme)
+  applyVideoTheme()
 
   const state: BackgroundMusicState = {
     audio,

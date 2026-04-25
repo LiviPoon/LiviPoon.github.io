@@ -34,8 +34,18 @@
 }
 
 .background-music-mute {
-  text-transform: lowercase;
   cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 120ms ease, transform 0.15s ease;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
 }
 
 .background-music-license {
@@ -83,8 +93,50 @@
 
 .background-music-mute:hover {
   opacity: 0.95;
-  text-decoration: underline;
+  transform: scale(1.12);
 }
+
+.background-music-mute:active {
+  transform: scale(0.92);
+}
+
+.background-music-theme {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #9a9a9a;
+  opacity: 0.38;
+  transition: opacity 120ms ease, transform 0.15s ease;
+  position: relative;
+
+  svg {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    inset: 0;
+  }
+
+  &:hover {
+    opacity: 0.95;
+    transform: scale(1.12);
+  }
+
+  &:active {
+    transform: scale(0.92);
+  }
+}
+
+// Show sun in dark mode (click → light), moon in light mode (click → dark)
+:root[saved-theme="dark"] .background-music-theme .icon-sun { display: block; }
+:root[saved-theme="dark"] .background-music-theme .icon-moon { display: none; }
+:root[saved-theme="light"] .background-music-theme .icon-sun { display: none; }
+:root[saved-theme="light"] .background-music-theme .icon-moon { display: block; }
 
 .background-music-license:hover {
   opacity: 0.56;
@@ -118,11 +170,7 @@
     text-overflow: ellipsis;
   }
 
-  .background-music-mute {
-    font-size: 0.86rem;
-  }
-
-  .background-music-license,
+.background-music-license,
   .background-music-credit,
   .background-music-credit-link {
     font-size: 0.72rem;

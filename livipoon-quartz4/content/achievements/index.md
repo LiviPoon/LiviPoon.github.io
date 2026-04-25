@@ -2,6 +2,12 @@
 title: Selected Achievements
 description: Selected achievements, awards, and recognitions in research, medicine, and leadership.
 ---
+<div class="pilcrow-roll-counter" data-roll-counter data-habit="go outside of my comfort zone">
+  <div class="pilcrow-roll-counter-number">
+    <span class="roll-counter-int">0</span>
+  </div>
+  <p class="pilcrow-roll-counter-caption">side quests completed.</p>
+</div>
 
 # Too Soon to Judge
 * Started a successful art business that brought in 7x initial investment by the first month. (2024)

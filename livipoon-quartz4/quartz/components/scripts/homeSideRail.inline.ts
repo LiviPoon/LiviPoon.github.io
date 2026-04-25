@@ -48,7 +48,7 @@ function setupHomeSideRail() {
   }
 
   const sections = Array.from(
-    document.querySelectorAll<HTMLElement>(".pilcrow-page > .pilcrow-section"),
+    document.querySelectorAll<HTMLElement>(".pilcrow-clone > .pilcrow-section"),
   )
   if (sections.length < 2) {
     rail.hidden = true

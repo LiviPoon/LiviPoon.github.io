@@ -24,13 +24,23 @@
           </p>
         </div>
       </div>
-      <h1>Hi, I'm Livi Poon!</h1>
+      <h1>Hi, I'm Livi!</h1>
+      <p class="pilcrow-hero-copy">A 2026 Presidential Leadership Fellow and an Artificial Intelligence Joint Research Scholar at the Stanford School of Medicine's Center for Interdisciplinary Brain Sciences Research (CIBSR), UVM Medical Center, and Vermont Complex Systems Institute.</p>
+      <div class="pilcrow-roll-counter" data-roll-counter data-end="42">
+      </br>
+        <div class="pilcrow-roll-counter-number">
+          <span class="roll-counter-int">0</span>
+        </div>
+        <p class="pilcrow-roll-counter-caption">brains challenged</p>
+      </div>
+      <div class="pilcrow-roll-counter" data-roll-counter data-end="">
+      </br>
+        <div class="pilcrow-roll-counter-number">
+          <span class="roll-counter-int">0</span>
+        </div>
+        <p class="pilcrow-roll-counter-caption">butterfly effects generated.</p>
+      </div>
     </div>
-    <p class="pilcrow-hero-copy">A 2026 Presidential Leadership Fellow and an Artificial Intelligence Joint Research Scholar at the Stanford School of Medicine’s Center for Interdisciplinary Brain Sciences Research (CIBSR), UVM Medical Center, and Vermont Complex Systems Institute. </p>
-    <p class="pilcrow-hero-copy">
-      My fight is to keep humans out of the hospital before the sickness ever comes. I mean to hunt disease the way a trapper reads sign on the trail, catching it early, catching it before it catches you, through the hard, patient work of prediction and precision, with machines built to see what the naked eye cannot.
-      We are the dust of stars, flung together into this brief, fierce thing called life — a snarl of <a href="/powerlifting/">muscle and nerve</a>, hot with blood, driven by hunger, and yoked to the great iron laws that govern all things. If the odds of my <a href="/art/">drawing</a> breath are one against a hundred and eight billion, then by God I will not waste it. I will not sit by the fire when there is <a href="/blog/">trail to be blazed</a>.
-    </p>
     <div class="pilcrow-hero-actions">
       <a class="pilcrow-btn pilcrow-btn-solid" href="/cv/">Curriculum Vitae</a>
       <a class="pilcrow-btn pilcrow-btn-outline" href="/publications/">Publications</a>
@@ -39,6 +49,26 @@
       <a class="pilcrow-btn pilcrow-btn-outline" href="/blog/">Thoughts</a>
       <a class="pilcrow-btn pilcrow-btn-outline" href="#contact">Contact</a>
     </div>
+  </section>
+
+  <section class="pilcrow-section pilcrow-section-video">
+    <div class="pilcrow-video-counter-layout">
+      <video class="pilcrow-bg-video pilcrow-bg-video--themed" src="/images/background-dark.mp4" data-dark-src="/images/background-dark.mp4" data-light-src="/images/background-light.mp4" autoplay muted loop playsinline aria-hidden="true"></video>
+      <!-- data-end: set this to your target number -->
+      <div class="pilcrow-roll-counter" data-roll-counter data-end="3600">
+        <div class="pilcrow-roll-counter-number">
+          <span class="roll-counter-int">0</span>
+        </div>
+        <p class="pilcrow-roll-counter-caption">hours approx. dedicated to research</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="pilcrow-section pilcrow-section-video">
+    <p class="pilcrow-video-eyebrow">My mission</p>
+    <p class="pilcrow-video-message">
+      keep patients out of the doctor's office by discovering and developing predictive, preventative, and precision medicine through artificial intelligence techniques.
+    </p>
   </section>
 
   <section class="pilcrow-section pilcrow-section-video">
@@ -55,11 +85,18 @@
     </div>
   </section>
 
-  <section class="pilcrow-section pilcrow-section-video">
-      <p class="pilcrow-video-eyebrow">My mission</p>
-      <p class="pilcrow-video-message">
-        keep patients out of the doctor's office by discovering and developing predictive, preventative, and precision medicine through artificial intelligence techniques.
+  <section class="pilcrow-section pilcrow-section-process">
+    <div class="pilcrow-process-copy">
+      <h2>What I bring to the table</h2>
+      <p> My skill set is carefully crafted to understand and uncover the complexities of societal challenges, identify and inquire into their impact across multiple scales, and examine and evaluate evidence-based solutions. I have work experience spanning multiple domains including, but not limited to, pre-eclampsia, wellbeing, mental health, neuroscience, climate change, sexual dimorphism, public health, and chronic disease.
       </p>
+      <div class="pilcrow-hero-actions">
+        <a class="pilcrow-btn pilcrow-btn-solid" href="/research/">Read More</a>
+      </div>
+    </div>
+    <div class="pilcrow-process-media">
+      <img src="/images/liviforest1.png" alt="Process visual" />
+    </div>
   </section>
 
   <section class="pilcrow-section pilcrow-section-video">
@@ -73,20 +110,6 @@
         allow="autoplay; encrypted-media; picture-in-picture"
         allowfullscreen
       ></iframe>
-    </div>
-  </section>
-
-  <section class="pilcrow-section pilcrow-section-process">
-    <div class="pilcrow-process-copy">
-      <h2>What I bring to the table</h2>
-      <p> My skill set is carefully crafted to understand and uncover the complexities of societal challenges, identify and inquire into their impact across multiple scales, and examine and evaluate evidence-based solutions. I have work experience spanning multiple domains including, but not limited to, preeclampsia, neuroscience, climate change, sexual dimorphism, public health, and chronic disease.
-      </p>
-      <div class="pilcrow-hero-actions">
-        <a class="pilcrow-btn pilcrow-btn-solid" href="/research/">Read More</a>
-      </div>
-    </div>
-    <div class="pilcrow-process-media">
-      <img src="/images/liviforest1.png" alt="Process visual" />
     </div>
   </section>
 
@@ -159,7 +182,6 @@
   <section class="pilcrow-section">
     <div class="pilcrow-section-head">
       <h2>What people say</h2>
-      <p>A portrait of one soul, reflected within unfiltered mirrors.</p>
     </div>
     <div class="pilcrow-testimonial-row">
       <article class="pilcrow-quote">
@@ -192,15 +214,14 @@
       Have an idea, a thought, a question? Don't let it collect dust — please, reach out.
     </p>
     <div class="pilcrow-hero-actions" style="justify-content: center;">
-        <a class="pilcrow-btn pilcrow-btn-outline" href="https://github.com/LiviPoon">Github</a>
-        <a class="pilcrow-btn pilcrow-btn-outline" href="https://www.linkedin.com/in/livi-poon-9a93a8116/">Linked In</a>
-        <a class="pilcrow-btn pilcrow-btn-outline" href="https://gitlab.com/LiviPoon">Gitlab</a>
-      </div>
-  </section>
-
-   <div class="pilcrow-topline">
+      <a class="pilcrow-btn pilcrow-btn-outline" href="https://github.com/LiviPoon">Github</a>
+      <a class="pilcrow-btn pilcrow-btn-outline" href="https://www.linkedin.com/in/livi-poon-9a93a8116/">LinkedIn</a>
+      <a class="pilcrow-btn pilcrow-btn-outline" href="https://gitlab.com/LiviPoon">Gitlab</a>
+    </div>
+  <div class="pilcrow-topline" style="margin-top: 2.5rem;">
     <span>livipoonpublic@gmail.com</span>
     <span>Livi Poon</span>
     <span>San Francisco, California</span>
   </div>
+  </section>
 </div>
