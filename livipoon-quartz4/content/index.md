@@ -32,7 +32,7 @@
           <div class="pilcrow-roll-counter-number">
             <span class="roll-counter-int">0</span>
           </div>
-          <p class="pilcrow-roll-counter-caption">butterfly effects caused.</p>
+          <p class="pilcrow-roll-counter-caption">butterfly effects SET IN MOTION</p>
         </div>
       </div>
     </div>
