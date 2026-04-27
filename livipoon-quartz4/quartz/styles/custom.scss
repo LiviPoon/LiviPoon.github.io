@@ -1767,6 +1767,25 @@ body:is([data-slug="index"], [data-slug="index/index"]) .pilcrow-section-closing
     font-size: clamp(0.95rem, 5.5vw, 1.5rem);
     line-height: 1.16;
   }
+
+  body:is([data-slug="index"], [data-slug="index/index"]) #quartz-body .center > article,
+  body:is([data-slug="index"], [data-slug="index/index"]) #quartz-body .center > .popover-hint {
+    padding-top: 0.25rem;
+  }
+
+  body:is([data-slug="index"], [data-slug="index/index"]) .pilcrow-hero-profile {
+    margin-top: 0.25rem;
+    margin-bottom: 1.8rem;
+  }
+
+  body:is([data-slug="index"], [data-slug="index/index"]) .pilcrow-hero {
+    padding-bottom: 1.2rem;
+  }
+
+  body:is([data-slug="index"], [data-slug="index/index"]) .pilcrow-hero-stats {
+    margin-top: 1rem;
+    padding-top: 0.5rem;
+  }
 }
 
 @keyframes habit-timeline-point-in {
@@ -3025,10 +3044,13 @@ body:is([data-slug="cv"], [data-slug="cv/index"]) .cv-back-link:hover {
     flex-basis: var(--index-habit-track-width);
     width: var(--index-habit-track-width);
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
   }
 
   body:is([data-slug="index"], [data-slug="index/index"]) .habit-timeline-chart {
     min-height: 0;
+    flex: 1;
   }
 
   body:is([data-slug="index"], [data-slug="index/index"]) .index-profile-photo-wrap {
