@@ -494,9 +494,9 @@ function createState(playlist: string[]): BackgroundMusicState {
   return state
 }
 
-function isLandingPage(): boolean {
+function isMusicPage(): boolean {
   const path = window.location.pathname.replace(/\/$/, "") || "/"
-  return path === "/" || path === "/index"
+  return path === "/" || path === "/index" || path === "/art"
 }
 
 function syncBackgroundMusicForPage() {
@@ -508,7 +508,7 @@ function syncBackgroundMusicForPage() {
     state = createState(playlist)
     backgroundWindow.__backgroundMusicState = state
     queueNextTrack(state)
-    if (isLandingPage()) {
+    if (isMusicPage()) {
       void attemptPlay(state)
     } else {
       state.audio.muted = true
@@ -543,7 +543,7 @@ function syncBackgroundMusicForPage() {
     }
   }
 
-  if (!isLandingPage()) {
+  if (!isMusicPage()) {
     state.audio.muted = true
     updateButton(state)
     emitMuteChange(true)
