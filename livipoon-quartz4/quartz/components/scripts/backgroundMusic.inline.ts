@@ -494,6 +494,11 @@ function createState(playlist: string[]): BackgroundMusicState {
   return state
 }
 
+function isLandingPage(): boolean {
+  const path = window.location.pathname.replace(/\/$/, "") || "/"
+  return path === "/" || path === "/index"
+}
+
 function syncBackgroundMusicForPage() {
   const playlist = parsePlaylist()
   if (playlist.length === 0) return
@@ -503,7 +508,12 @@ function syncBackgroundMusicForPage() {
     state = createState(playlist)
     backgroundWindow.__backgroundMusicState = state
     queueNextTrack(state)
-    void attemptPlay(state)
+    if (isLandingPage()) {
+      void attemptPlay(state)
+    } else {
+      state.audio.muted = true
+      updateButton(state)
+    }
     return
   }
 
@@ -533,6 +543,17 @@ function syncBackgroundMusicForPage() {
     }
   }
 
+  if (!isLandingPage()) {
+    state.audio.muted = true
+    updateButton(state)
+    emitMuteChange(true)
+    state.audio.pause()
+    return
+  }
+
+  // Restore user's stored mute preference on landing page
+  const storedMuted = localStorage.getItem(MUTED_STORAGE_KEY) === "true"
+  state.audio.muted = storedMuted
   updateButton(state)
   emitMuteChange(state.audio.muted)
   rampVolume(state)
