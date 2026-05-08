@@ -53,7 +53,7 @@ description: Selected achievements, awards, and recognitions in research, medici
 * Create my own major
 * Present a solo project in a internationally recognized conference
 * Compete in Far Westerns
-
+* Teach Kindergarteners
 * Save and change lives
 * Go back to swimming my senior year of HS
 * See Florence

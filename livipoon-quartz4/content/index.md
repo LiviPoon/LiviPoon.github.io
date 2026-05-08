@@ -22,7 +22,7 @@
       <h1>Hi, I'm Livi!</h1>
       <p class="pilcrow-hero-copy">A 2026 Presidential Leadership Fellow and an Artificial Intelligence Joint Research Scholar at the Stanford School of Medicine's Center for Interdisciplinary Brain Sciences Research (CIBSR), UVM Medical Center, and Vermont Complex Systems Institute.</p>
       <div class="pilcrow-hero-stats">
-        <div class="pilcrow-roll-counter" data-roll-counter data-end="17">
+        <div class="pilcrow-roll-counter" data-roll-counter data-end="18">
           <div class="pilcrow-roll-counter-number">
             <span class="roll-counter-int">0</span>
           </div>
