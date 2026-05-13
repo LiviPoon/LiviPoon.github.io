@@ -24,6 +24,9 @@ const isSamePage = (url: URL): boolean => {
   return sameOrigin && samePath
 }
 
+const isPortfolioRoot = (url: Pick<URL | Location, "pathname">): boolean =>
+  url.pathname === "/" || url.pathname === "/index.html"
+
 const getOpts = ({ target }: Event): { url: URL; scroll?: boolean } | undefined => {
   if (!isElement(target)) return
   if (target.attributes.getNamedItem("target")?.value === "_blank") return
@@ -151,6 +154,10 @@ function createRouter() {
       const { url } = getOpts(event) ?? {}
       // dont hijack behaviour, just let browser act normally
       if (!url || event.ctrlKey || event.metaKey) return
+      if (isPortfolioRoot(url) || isPortfolioRoot(window.location)) {
+        sessionStorage.setItem("skipPortfolioLoader", "true")
+        return
+      }
       event.preventDefault()
 
       if (isSamePage(url) && url.hash) {
@@ -166,6 +173,11 @@ function createRouter() {
     window.addEventListener("popstate", (event) => {
       const { url } = getOpts(event) ?? {}
       if (window.location.hash && window.location.pathname === url?.pathname) return
+      if (isPortfolioRoot(window.location)) {
+        sessionStorage.setItem("skipPortfolioLoader", "true")
+        window.location.reload()
+        return
+      }
       navigate(new URL(window.location.toString()), true)
       return
     })

@@ -23,9 +23,12 @@ import rollCounterScript from "./scripts/rollCounter.inline"
 import themeInitScript from "./scripts/themeInit.inline"
 // @ts-ignore
 import sectionAnimationsScript from "./scripts/sectionAnimations.inline"
+// @ts-ignore
+import researchPortfolioScript from "./scripts/researchPortfolio.inline"
 import clipboardStyle from "./styles/clipboard.scss"
 import backgroundMusicStyle from "./styles/backgroundMusic.scss"
 import customCursorStyle from "./styles/customCursor.scss"
+import researchPortfolioStyle from "./styles/researchPortfolio.scss"
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 import { concatenateResources } from "../util/resources"
 import { FilePath, slugifyFilePath } from "../util/path"
@@ -339,11 +342,13 @@ Body.afterDOMLoaded = concatenateResources(
   homeMirrorQuotesScript,
   rollCounterScript,
   sectionAnimationsScript,
+  researchPortfolioScript,
 )
 Body.css = concatenateResources(
   clipboardStyle,
   backgroundMusicStyle,
   customCursorStyle,
+  researchPortfolioStyle,
 )
 
 export default (() => Body) satisfies QuartzComponentConstructor

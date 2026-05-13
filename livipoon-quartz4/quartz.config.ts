@@ -23,7 +23,7 @@ const config: QuartzConfig = {
       },
       colors: {
         lightMode: {
-          light: "#ffffff",
+          light: "#eae0ce",
           lightgray: "#e0e0e0",
           gray: "#888888",
           darkgray: "#333333",
@@ -34,7 +34,7 @@ const config: QuartzConfig = {
           textHighlight: "rgba(0, 0, 0, 0.12)",
         },
         darkMode: {
-          light: "#000000",
+          light: "#181818",
           lightgray: "#262626",
           gray: "#7a7a7a",
           darkgray: "#d4d4d4",
@@ -56,7 +56,7 @@ const config: QuartzConfig = {
       Plugin.CrawlLinks({ markdownLinkResolution: "shortest" }),
       Plugin.Description(),
     ],
-    filters: [],
+    filters: [Plugin.RemoveDrafts()],
     emitters: [
       Plugin.ComponentResources(),
       Plugin.ContentPage(),
@@ -68,6 +68,7 @@ const config: QuartzConfig = {
       Plugin.Assets(),
       Plugin.Static(),
       Plugin.NotFoundPage(),
+      Plugin.PortfolioRoot(),
     ],
   },
 }

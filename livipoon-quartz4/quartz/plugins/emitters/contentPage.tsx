@@ -75,6 +75,9 @@ export const ContentPage: QuartzEmitterPlugin<Partial<FullPageLayout>> = (userOp
     },
     async *emit(ctx, content, resources) {
       const allFiles = content.map((c) => c[1].data)
+      const usesPortfolioRoot = ctx.cfg.plugins.emitters.some(
+        (emitter) => emitter.name === "PortfolioRoot",
+      )
       let containsIndex = false
 
       for (const [tree, file] of content) {
@@ -82,6 +85,8 @@ export const ContentPage: QuartzEmitterPlugin<Partial<FullPageLayout>> = (userOp
         if (slug === "index") {
           containsIndex = true
         }
+
+        if (usesPortfolioRoot && slug === "index") continue
 
         // only process home page, non-tag pages, and non-index pages
         if (slug.endsWith("/index") || slug.startsWith("tags/")) continue
@@ -99,6 +104,9 @@ export const ContentPage: QuartzEmitterPlugin<Partial<FullPageLayout>> = (userOp
     },
     async *partialEmit(ctx, content, resources, changeEvents) {
       const allFiles = content.map((c) => c[1].data)
+      const usesPortfolioRoot = ctx.cfg.plugins.emitters.some(
+        (emitter) => emitter.name === "PortfolioRoot",
+      )
 
       // find all slugs that changed or were added
       const changedSlugs = new Set<string>()
@@ -112,6 +120,7 @@ export const ContentPage: QuartzEmitterPlugin<Partial<FullPageLayout>> = (userOp
       for (const [tree, file] of content) {
         const slug = file.data.slug!
         if (!changedSlugs.has(slug)) continue
+        if (usesPortfolioRoot && slug === "index") continue
         if (slug.endsWith("/index") || slug.startsWith("tags/")) continue
 
         yield processContent(ctx, tree, file.data, allFiles, opts, resources)

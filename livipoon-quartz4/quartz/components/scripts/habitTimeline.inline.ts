@@ -313,6 +313,7 @@ function wireTrackedHabitsLink(root: ParentNode) {
 
 function renderIndexChart(container: HTMLElement, timeline: HabitTimelinePoint[]) {
   const statsContainer = document.querySelector(statsSelector) as HTMLElement | null
+  const isPortfolioHabit = container.closest(".portfolio-habit") !== null
 
   if (timeline.length === 0) {
     container.innerHTML = `<p class="habit-timeline-empty">No habits tracked yet.</p>`
@@ -327,8 +328,10 @@ function renderIndexChart(container: HTMLElement, timeline: HabitTimelinePoint[]
   const hasRenderableArea = measuredWidth > 0 && measuredHeight > 0
 
   const width = Math.max(measuredWidth, 42)
-  const height = Math.max(measuredHeight, 220)
-  const padding = { top: 0, right: 2, bottom: 0, left: 0.5 }
+  const height = Math.max(measuredHeight, isPortfolioHabit ? 120 : 220)
+  const padding = isPortfolioHabit
+    ? { top: 10, right: 4, bottom: 10, left: 4 }
+    : { top: 0, right: 2, bottom: 0, left: 0.5 }
   const axisX = padding.left
   const chartDepth = Math.max(1, width - padding.right - axisX)
   const chartHeight = Math.max(1, height - padding.top - padding.bottom)
@@ -343,10 +346,14 @@ function renderIndexChart(container: HTMLElement, timeline: HabitTimelinePoint[]
 
   const points = timeline.map((point, index) => {
     const pointTime = times[index] ?? minTime
-    const y = hasTimeSpan
-      ? padding.top + ((pointTime - minTime) / timeSpan) * chartHeight
-      : padding.top + chartHeight / 2
-    const x = axisX + (point.count / maxCount) * chartDepth
+    const x = isPortfolioHabit
+      ? axisX + (hasTimeSpan ? ((pointTime - minTime) / timeSpan) * chartDepth : chartDepth / 2)
+      : axisX + (point.count / maxCount) * chartDepth
+    const y = isPortfolioHabit
+      ? padding.top + (1 - point.count / maxCount) * chartHeight
+      : hasTimeSpan
+        ? padding.top + ((pointTime - minTime) / timeSpan) * chartHeight
+        : padding.top + chartHeight / 2
     return { x, y, count: point.count }
   })
 
@@ -360,8 +367,10 @@ function renderIndexChart(container: HTMLElement, timeline: HabitTimelinePoint[]
   const singlePoint = points.length === 1 ? firstPoint : null
   const statsMarkup = renderStats(timeline)
   if (statsContainer) {
-    statsContainer.innerHTML = statsMarkup
-    wireTrackedHabitsLink(statsContainer)
+    statsContainer.innerHTML = isPortfolioHabit ? "" : statsMarkup
+    if (!isPortfolioHabit) {
+      wireTrackedHabitsLink(statsContainer)
+    }
   }
 
   container.innerHTML = `
