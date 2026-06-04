@@ -193,34 +193,6 @@ img {
   opacity: 0;
   pointer-events: none;
 }
-#loader-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  pointer-events: none;
-  animation: loader-bg-drift 10s ease-in-out infinite;
-  mask-image: radial-gradient(
-    ellipse 78% 78% at 50% 50%,
-    black 18%,
-    rgba(0, 0, 0, 0.88) 40%,
-    rgba(0, 0, 0, 0.35) 64%,
-    transparent 82%
-  );
-  -webkit-mask-image: radial-gradient(
-    ellipse 78% 78% at 50% 50%,
-    black 18%,
-    rgba(0, 0, 0, 0.88) 40%,
-    rgba(0, 0, 0, 0.35) 64%,
-    transparent 82%
-  );
-}
-@keyframes loader-bg-drift {
-  0%, 100% { transform: scale(1.03) translateY(0px); }
-  50%       { transform: scale(1.07) translateY(-8px); }
-}
 #loader-line {
   position: absolute;
   inset: 0;
