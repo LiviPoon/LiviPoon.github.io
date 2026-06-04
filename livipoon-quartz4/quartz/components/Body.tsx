@@ -25,10 +25,13 @@ import themeInitScript from "./scripts/themeInit.inline"
 import sectionAnimationsScript from "./scripts/sectionAnimations.inline"
 // @ts-ignore
 import researchPortfolioScript from "./scripts/researchPortfolio.inline"
+// @ts-ignore
+import pageLoaderScript from "./scripts/pageLoader.inline"
 import clipboardStyle from "./styles/clipboard.scss"
 import backgroundMusicStyle from "./styles/backgroundMusic.scss"
 import customCursorStyle from "./styles/customCursor.scss"
 import researchPortfolioStyle from "./styles/researchPortfolio.scss"
+import pageLoaderStyle from "./styles/pageLoader.scss"
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "./types"
 import { concatenateResources } from "../util/resources"
 import { FilePath, slugifyFilePath } from "../util/path"
@@ -332,6 +335,7 @@ const Body: QuartzComponent = ({ children }: QuartzComponentProps) => {
 
 Body.beforeDOMLoaded = themeInitScript
 Body.afterDOMLoaded = concatenateResources(
+  pageLoaderScript,
   customCursorScript,
   clipboardScript,
   backgroundMusicScript,
@@ -345,6 +349,7 @@ Body.afterDOMLoaded = concatenateResources(
   researchPortfolioScript,
 )
 Body.css = concatenateResources(
+  pageLoaderStyle,
   clipboardStyle,
   backgroundMusicStyle,
   customCursorStyle,
