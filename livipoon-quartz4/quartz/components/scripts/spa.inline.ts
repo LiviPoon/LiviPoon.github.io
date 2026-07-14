@@ -155,7 +155,6 @@ function createRouter() {
       // dont hijack behaviour, just let browser act normally
       if (!url || event.ctrlKey || event.metaKey) return
       if (isPortfolioRoot(url) || isPortfolioRoot(window.location)) {
-        sessionStorage.setItem("skipPortfolioLoader", "true")
         return
       }
       event.preventDefault()
@@ -174,7 +173,6 @@ function createRouter() {
       const { url } = getOpts(event) ?? {}
       if (window.location.hash && window.location.pathname === url?.pathname) return
       if (isPortfolioRoot(window.location)) {
-        sessionStorage.setItem("skipPortfolioLoader", "true")
         window.location.reload()
         return
       }

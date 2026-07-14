@@ -1,5 +1,5 @@
 /* ===========================================================
-   app.js — loader, cursor, reveals, theme
+   app.js — cursor, reveals, theme
 =========================================================== */
 ;(function () {
   "use strict"
@@ -86,148 +86,11 @@
     setTimeout(renderMirrorQuotes, 0)
   }
 
-  /* =========================================================
-     LOADER
-  ========================================================= */
-  const loader = $("#loader")
-  const loaderLine = $("#loader-line")
-  const loaderCircle = $("#loader-circle")
-  const loaderFinal = $("#loader-final")
-  const loaderFinalText = $("#loader-final-text")
-  const loaderMetaR = $("#loader-meta-r")
-  const crackPath = $("#crack-path")
-  const navEntries = performance.getEntriesByType("navigation")
-  const navType = navEntries[0] && navEntries[0].type
-  let sameSiteReferrer = false
-
-  try {
-    if (document.referrer) {
-      const referrerUrl = new URL(document.referrer)
-      sameSiteReferrer =
-        referrerUrl.origin === window.location.origin && referrerUrl.pathname !== "/"
-    }
-  } catch (e) {}
-
-  const skipLoader =
-    navType === "back_forward" ||
-    sameSiteReferrer ||
-    sessionStorage.getItem("skipPortfolioLoader") === "true"
-
   function revealHero() {
     const hero = $(".hero")
     if (hero) hero.classList.add("in-view")
   }
-
-  if (skipLoader) {
-    sessionStorage.removeItem("skipPortfolioLoader")
-    if (loader) loader.remove()
-    document.body.classList.remove("no-scroll")
-    setTimeout(revealHero, 60)
-  }
-
-  if (!skipLoader) document.body.classList.add("no-scroll")
-
-  const STEPS = 28
-  function buildPath() {
-    const W = innerWidth,
-      H = innerHeight
-    const x0 = W * 0.5,
-      sy = H * 0.18,
-      ey = H * 0.82
-    const sh = (ey - sy) / STEPS
-    let d = `M ${x0} ${sy}`
-    for (let i = 1; i <= STEPS; i++) {
-      const y = sy + i * sh
-      const j = Math.sin(i * 2.3) * 3.5 + Math.cos(i * 1.7) * 2.8
-      d += ` L ${(x0 + j).toFixed(1)} ${y.toFixed(1)}`
-    }
-    crackPath.setAttribute("d", d)
-    const len = crackPath.getTotalLength()
-    crackPath.style.strokeDasharray = len
-    crackPath.style.strokeDashoffset = len
-    return len
-  }
-  let pathLen = skipLoader ? 0 : buildPath()
-  if (!skipLoader)
-    window.addEventListener("resize", () => {
-      pathLen = buildPath()
-    })
-
-  let target = 0,
-    display = 0,
-    done = false
-  function chunk() {
-    if (target >= 1) return
-    setTimeout(
-      () => {
-        target = Math.min(1, target + 0.02 + Math.random() * 0.1)
-        if (target < 1) chunk()
-      },
-      160 + Math.random() * 360,
-    )
-  }
-  if (!skipLoader) setTimeout(chunk, 400)
-  ;(function tick() {
-    if (skipLoader) return
-    display += (target - display) * 0.045
-    crackPath.style.strokeDashoffset = pathLen * (1 - display)
-    if (loaderMetaR)
-      loaderMetaR.textContent = String(Math.floor(display * 100)).padStart(3, "0") + " / 100"
-    if (display >= 0.999 && !done) {
-      done = true
-      onCrackComplete()
-      return
-    }
-    requestAnimationFrame(tick)
-  })()
-
-  function onCrackComplete() {
-    setTimeout(() => {
-      loaderLine.classList.add("is-gone")
-      setTimeout(() => loaderCircle.classList.add("is-open"), 280)
-    }, 320)
-  }
-
-  loaderCircle.addEventListener("click", () => {
-    if (!loaderCircle.classList.contains("is-open")) return
-    cursorEl.classList.remove("is-view", "on-loader")
-    cursorEl.textContent = ""
-    loaderCircle.style.opacity = "0"
-    loaderCircle.style.transform = "scale(1.18)"
-    setTimeout(() => {
-      loaderFinal.classList.add("is-on")
-      const phrase = "making dreams come true, one step at a time…"
-      let i = 0
-      ;(function type() {
-        if (i <= phrase.length) {
-          loaderFinalText.textContent = phrase.slice(0, i++)
-          setTimeout(type, i === 1 ? 280 : 55 + Math.random() * 25)
-        } else {
-          setTimeout(dismissLoader, 1100)
-        }
-      })()
-    }, 600)
-  })
-
-  function dismissLoader() {
-    loader.classList.add("is-gone")
-    document.body.classList.remove("no-scroll")
-    setTimeout(() => {
-      loader.remove()
-    }, 950)
-    // begin staggered hero load
-    setTimeout(revealHero, 120)
-  }
-
-  /* cursor enter/leave on circle */
-  loaderCircle.addEventListener("mouseenter", () => {
-    cursorEl.classList.add("is-view", "on-loader")
-    cursorEl.textContent = "enter"
-  })
-  loaderCircle.addEventListener("mouseleave", () => {
-    cursorEl.classList.remove("is-view", "on-loader")
-    cursorEl.textContent = ""
-  })
+  requestAnimationFrame(revealHero)
 
   /* =========================================================
      CUSTOM CURSOR

@@ -23,7 +23,7 @@
   --accent-hue: 37;
 }
 
-/* ===== Muted black primary (matches loader) ===== */
+/* ===== Muted black primary ===== */
 :root[data-theme="dark"] {
   --color-bg: #181818;
   --color-surface: #202020;
@@ -71,10 +71,6 @@ body {
 body {
   min-height: 100vh;
   overflow-x: hidden;
-}
-body.no-scroll {
-  overflow: hidden;
-  height: 100vh;
 }
 @media (pointer: fine) {
   body {
@@ -156,17 +152,6 @@ img {
   color: var(--color-text-primary);
   letter-spacing: 0.02em;
 }
-#cursor.on-loader {
-  background: #1a1814;
-  border-color: #1a1814;
-  color: #1a1814;
-}
-#cursor.on-loader.is-hover,
-#cursor.on-loader.is-view {
-  background: transparent;
-  border-color: #1a1814;
-  color: #1a1814;
-}
 #cursor.is-hidden {
   opacity: 0;
 }
@@ -174,119 +159,6 @@ img {
   #cursor {
     display: none;
   }
-}
-
-/* ===========================================================
-   LOADER (muted black + parchment)
-=========================================================== */
-#loader {
-  position: fixed;
-  inset: 0;
-  z-index: 8000;
-  background: #181818;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.9s var(--reveal-ease);
-}
-#loader.is-gone {
-  opacity: 0;
-  pointer-events: none;
-}
-#loader-line {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-  transition: opacity 0.6s ease;
-}
-#loader-line path {
-  fill: none;
-  stroke: #f0ece4;
-  stroke-width: 1.1;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-#loader-line.is-gone {
-  opacity: 0;
-}
-#loader-circle {
-  position: absolute;
-  width: min(82vw, 82vh);
-  height: min(82vw, 82vh);
-  border-radius: 50%;
-  background: radial-gradient(ellipse at 44% 36%, #f2e9d8 0%, #e8ddc8 55%, #ddd0b6 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transform: scale(0.04);
-  transition:
-    opacity 0.9s var(--reveal-ease),
-    transform 1s var(--reveal-ease);
-  box-shadow:
-    inset 0 0 100px rgba(100, 88, 60, 0.09),
-    0 0 0 1px rgba(170, 155, 128, 0.18);
-  user-select: none;
-}
-#loader-circle.is-open {
-  opacity: 1;
-  pointer-events: auto;
-  transform: scale(1);
-}
-#loader-name {
-  font-family: var(--font-display);
-  font-size: clamp(28px, 5.4vw, 72px);
-  font-weight: 700;
-  letter-spacing: -0.035em;
-  color: #181818;
-  text-align: center;
-  line-height: 0.92;
-  pointer-events: none;
-}
-#loader-meta {
-  position: absolute;
-  top: 32px;
-  left: 32px;
-  font-family: var(--font-label);
-  font-size: 10.5px;
-  letter-spacing: 0.06em;
-  color: #f0ece4;
-  opacity: 0.7;
-}
-#loader-meta-r {
-  position: absolute;
-  top: 32px;
-  right: 32px;
-  font-family: var(--font-label);
-  font-size: 10.5px;
-  letter-spacing: 0.06em;
-  color: #f0ece4;
-  opacity: 0.7;
-  font-variant-numeric: tabular-nums;
-}
-#loader-final {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.6s ease;
-}
-#loader-final.is-on {
-  opacity: 1;
-}
-#loader-final p {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 700;
-  font-size: clamp(22px, 3.5vw, 42px);
-  color: #f0ece4;
-  letter-spacing: 0.02em;
 }
 
 /* ===========================================================
