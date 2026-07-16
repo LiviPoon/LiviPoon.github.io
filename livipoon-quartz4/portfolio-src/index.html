@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="dark" class="is-preloading">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -21,6 +21,10 @@
     <link rel="stylesheet" href="./styles.css" />
   </head>
   <body>
+    <div class="world-preloader" aria-live="polite" aria-label="Loading Livi Poon's world">
+      <span>building dreams, one step at a time.</span>
+      <i aria-hidden="true"></i>
+    </div>
     <div class="world-cursor" data-world-cursor aria-hidden="true"></div>
     <nav class="world-nav" aria-label="Primary">
       <div class="world-nav__actions">
@@ -96,12 +100,28 @@
             <div class="world__title" data-world-title>
               <h1 id="world-title">
                 <span class="world__title-word" data-world-title-word="first">Livi</span>
-                <span class="world__title-word" data-world-title-word="second">Poon.</span>
+                <span class="world__title-word" data-world-title-word="second">Poon</span>
               </h1>
+              <figure class="world__portrait">
+                <img
+                  src="/images/livi-poon-portrait.png"
+                  alt="Livi Poon"
+                  width="1254"
+                  height="1254"
+                  fetchpriority="high"
+                />
+              </figure>
             </div>
 
             <header class="world__opening" data-world-opening>
-              <p>A map of research, art, questions, and a life in progress.</p>
+              <p>
+                My mission is to keep patients out of the doctor's office by discovering and
+                developing predictive, preventative, and precision medicine through artificial
+                intelligence techniques. I have sent things into space, started businesses, led
+                teams to accomplish dreams, taught life skills, and contributed to saving our reefs.
+                What's next? livipoon.com
+              </p>
+              <a class="world__opening-cv" href="/cv/">Read CV</a>
             </header>
 
             <div
@@ -110,41 +130,84 @@
               aria-label="Map of Livi Poon's world"
               style="visibility: hidden"
             >
-              <svg
-                class="world__lines"
-                viewBox="0 0 1440 960"
-                aria-hidden="true"
-                data-world-lines
-              ></svg>
-              <div class="world__nodes" data-world-nodes></div>
+              <div class="world__camera-drift">
+                <svg
+                  class="world__lines"
+                  viewBox="0 0 1440 960"
+                  aria-hidden="true"
+                  data-world-lines
+                ></svg>
+                <div class="world__nodes" data-world-nodes></div>
+              </div>
             </div>
 
-            <aside class="world-card" data-world-card hidden aria-live="polite">
+            <aside class="world-paper" data-world-paper hidden>
               <button
-                class="world-card__close"
+                class="world-paper__backdrop"
                 type="button"
-                data-world-card-close
+                data-world-paper-close
                 aria-label="Close details"
+              ></button>
+              <section
+                class="world-paper__sheet"
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby="world-paper-title"
               >
-                ×
-              </button>
-              <p class="world-card__eyebrow" data-world-card-eyebrow></p>
-              <h2 data-world-card-title></h2>
-              <p data-world-card-summary></p>
-              <a class="world-card__link" data-world-card-link href="/"
-                >Go there <span aria-hidden="true">↗</span></a
-              >
+                <button
+                  class="world-paper__close"
+                  type="button"
+                  data-world-paper-close
+                  aria-label="Close details"
+                >
+                  ×
+                </button>
+                <div class="world-paper__media" data-world-paper-media></div>
+                <div class="world-paper__content">
+                  <p class="world-paper__eyebrow" data-world-paper-eyebrow></p>
+                  <h2 id="world-paper-title" data-world-paper-title></h2>
+                  <p data-world-paper-summary></p>
+                  <a class="world-paper__link" data-world-paper-link href="/"
+                    >Go there <span aria-hidden="true">↗</span></a
+                  >
+                </div>
+              </section>
             </aside>
 
-            <button class="world__scroll-cue" type="button" data-world-enter>
+            <div class="world__scroll-cue" aria-hidden="true">
               Scroll <span aria-hidden="true">↓</span>
-            </button>
+            </div>
           </div>
         </div>
       </section>
 
-      <nav class="world-fallback" aria-label="Explore Livi's world">
-        <p>Explore Livi's world</p>
+      <nav class="world-fallback" aria-label="Site sections">
+        <section class="world-bottom-bar" data-world-bottom-bar aria-label="Life in numbers">
+          <div class="world-flip-counter" data-world-counter data-end="18">
+            <span class="world-flip-counter__value">0</span>
+            <span class="world-flip-counter__label">dreams fulfilled</span>
+          </div>
+          <div
+            class="world-flip-counter"
+            data-world-counter
+            data-base-value="195998696"
+            data-base-date="2026-04-25"
+            data-daily-rate="10752.6166666667"
+          >
+            <span class="world-flip-counter__value">0</span>
+            <span class="world-flip-counter__label">butterfly effects</span>
+          </div>
+          <div
+            class="world-flip-counter"
+            data-world-counter
+            data-base-value="3600"
+            data-base-date="2026-04-25"
+            data-daily-rate="1.971294669595394"
+          >
+            <span class="world-flip-counter__value">0</span>
+            <span class="world-flip-counter__label">research hours</span>
+          </div>
+        </section>
         <ul>
           <li><a href="/research/">Research</a></li>
           <li><a href="/achievements/">Selected achievements</a></li>

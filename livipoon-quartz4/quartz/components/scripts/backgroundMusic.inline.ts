@@ -40,11 +40,11 @@ const PLAYBACK_STORAGE_KEY = "backgroundMusicPlaybackState"
 const MUTE_EVENT_NAME = "background-mute-changed"
 const DUCK_EVENT_NAME = "background-music-duck-changed"
 const FORCE_MUTE_EVENT_NAME = "background-music-force-mute"
-const BASE_VOLUME = 1
+const BASE_VOLUME = 0.35
 const DUCKED_VOLUME = 0.15
 const VOLUME_RAMP_DURATION_MS = 260
-const REVERB_DRY_MIX = 0.72
-const REVERB_WET_MIX = 0.58
+const REVERB_DRY_MIX = 1
+const REVERB_WET_MIX = 0
 const REVERB_DURATION_SECONDS = 4.6
 const REVERB_DECAY_POWER = 2.7
 const REVERB_EARLY_REFLECTION_SECONDS = 0.08
@@ -445,7 +445,7 @@ function createState(playlist: string[]): BackgroundMusicState {
   audio.autoplay = true
   audio.preload = "auto"
   audio.setAttribute("playsinline", "")
-  audio.volume = BASE_VOLUME
+  audio.volume = 0
 
   const muted = localStorage.getItem(MUTED_STORAGE_KEY) === "true"
   audio.muted = muted
@@ -586,7 +586,7 @@ function createState(playlist: string[]): BackgroundMusicState {
 
   document.body.appendChild(controls)
   document.body.appendChild(licenseCluster)
-  state.audio.volume = getTargetVolume(state)
+  state.audio.volume = 0
   updateButton(state)
   emitMuteChange(state.audio.muted)
   addVisibilityListeners(state)
@@ -596,8 +596,9 @@ function createState(playlist: string[]): BackgroundMusicState {
 }
 
 function isMusicPage(): boolean {
-  const path = window.location.pathname.replace(/\/$/, "") || "/"
-  return path === "/" || path === "/index" || path === "/art"
+  // Music is a site-wide player. Keeping it active on every route lets Quartz's SPA
+  // navigation retain the same Audio element instead of pausing between screens.
+  return true
 }
 
 function syncBackgroundMusicForPage() {
@@ -613,6 +614,7 @@ function syncBackgroundMusicForPage() {
       queueNextTrack(state)
     }
     if (isMusicPage()) {
+      rampVolume(state)
       void attemptPlay(state)
     } else {
       state.audio.muted = true
@@ -663,6 +665,41 @@ function syncBackgroundMusicForPage() {
   rampVolume(state)
   syncVisibilityPlayback(state)
 }
+
+// The map homepage is emitted as a standalone document rather than a Quartz SPA route.
+// Fade across that one unavoidable document boundary while preserving the exact playback state.
+document.addEventListener(
+  "click",
+  (event) => {
+    if (
+      event.defaultPrevented ||
+      !(event instanceof MouseEvent) ||
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      !(event.target instanceof Element)
+    ) {
+      return
+    }
+
+    const link = event.target.closest<HTMLAnchorElement>("a[href]")
+    if (!link || link.target === "_blank" || link.hasAttribute("download")) return
+
+    const destination = new URL(link.href, window.location.href)
+    if (destination.origin !== window.location.origin || destination.pathname !== "/") return
+
+    const state = backgroundWindow.__backgroundMusicState
+    if (!state) return
+
+    event.preventDefault()
+    event.stopImmediatePropagation()
+    savePlaybackState(state)
+    state.baseVolume = 0
+    rampVolume(state)
+    window.setTimeout(() => window.location.assign(destination.href), VOLUME_RAMP_DURATION_MS)
+  },
+  { capture: true },
+)
 
 document.addEventListener("nav", syncBackgroundMusicForPage)
 window.addEventListener("load", syncBackgroundMusicForPage)

@@ -1,11 +1,15 @@
 import fs from "fs"
 import path from "path"
+import sharp from "sharp"
 import { FilePath, joinSegments, slugifyFilePath } from "../../util/path"
 import { QuartzEmitterPlugin } from "../types"
 
 const portfolioSource = "portfolio-src"
 const staticFiles = ["styles.css", "world-data.js", "app.js"] as const
 const audioExtensions = new Set([".mp3", ".m4a", ".aac", ".wav", ".ogg", ".flac"])
+const imageExtensions = new Set([".jpg", ".jpeg", ".png"])
+const defaultImageWidth = 800
+const defaultImageHeight = 600
 
 type TrackerDay = {
   count: number
@@ -60,6 +64,53 @@ function getTrackerSummary(): TrackerSummary {
   return { habitCount: files.length, days }
 }
 
+type ImageDimensions = { width: number; height: number }
+
+async function imageSizeFromFile(filePath: string): Promise<ImageDimensions> {
+  try {
+    const metadata = await sharp(filePath).metadata()
+    return {
+      width: metadata.width ?? defaultImageWidth,
+      height: metadata.height ?? defaultImageHeight,
+    }
+  } catch {
+    return { width: defaultImageWidth, height: defaultImageHeight }
+  }
+}
+
+async function collectImageFiles(directory: string): Promise<string[]> {
+  const entries = await fs.promises.readdir(directory, { withFileTypes: true })
+  const files: string[] = []
+  for (const entry of entries) {
+    const entryPath = path.join(directory, entry.name)
+    if (entry.isDirectory()) {
+      files.push(...(await collectImageFiles(entryPath)))
+    } else if (entry.isFile() && imageExtensions.has(path.extname(entry.name).toLowerCase())) {
+      files.push(entryPath)
+    }
+  }
+  return files
+}
+
+/** Maps every local image under content/images/ to its real pixel dimensions, keyed by the
+ * same slugified `/images/...` path used for the `image` field in world-data.js, so the client
+ * can size portfolio map nodes to their true aspect ratio instead of a fixed square crop. */
+async function getImageDimensions(): Promise<Record<string, ImageDimensions>> {
+  const imagesDirectory = path.join(process.cwd(), "content", "images")
+  if (!fs.existsSync(imagesDirectory)) return {}
+
+  const files = await collectImageFiles(imagesDirectory)
+  const pairs = await Promise.all(
+    files.map(async (filePath) => {
+      const relativeToImages = path.relative(imagesDirectory, filePath)
+      const key = `/${slugifyFilePath(joinSegments("images", relativeToImages) as FilePath)}`
+      return [key, await imageSizeFromFile(filePath)] as const
+    }),
+  )
+
+  return Object.fromEntries(pairs)
+}
+
 /** Emits the standalone, map-based portfolio homepage at the site root. */
 export const PortfolioRoot: QuartzEmitterPlugin = () => ({
   name: "PortfolioRoot",
@@ -76,9 +127,10 @@ export const PortfolioRoot: QuartzEmitterPlugin = () => ({
     const sourceHtml = await fs.promises.readFile(source, "utf-8")
     const songData = JSON.stringify(getBackgroundSongs()).replaceAll("'", "&#39;")
     const trackerData = JSON.stringify(getTrackerSummary()).replaceAll("'", "&#39;")
+    const imageData = JSON.stringify(await getImageDimensions()).replaceAll("'", "&#39;")
     const html = sourceHtml.replace(
       "<body>",
-      `<body data-background-songs='${songData}' data-tracker-summary='${trackerData}'>`,
+      `<body data-background-songs='${songData}' data-tracker-summary='${trackerData}' data-image-dimensions='${imageData}'>`,
     )
     await fs.promises.writeFile(destination, html, "utf-8")
     yield destination
