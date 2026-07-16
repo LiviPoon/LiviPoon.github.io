@@ -3,52 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Livi Poon — Research Portfolio</title>
+    <meta name="theme-color" content="#181818" />
+    <script>
+      if ("scrollRestoration" in history) history.scrollRestoration = "manual"
+    </script>
+    <title>Livi Poon</title>
     <meta
       name="description"
-      content="Personal research portfolio. AI for brains, birth, bodies, and public health."
+      content="Livi Poon's world: research, art, writing, achievements, and public life."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,700&family=Anton&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,700&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
   </head>
-  <body data-slug="index">
-    <!-- ====================== PAPER GRAIN OVERLAY ====================== -->
-    <svg id="grain" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <filter
-        id="paper-noise"
-        x="0%"
-        y="0%"
-        width="100%"
-        height="100%"
-        color-interpolation-filters="sRGB"
-      >
-        <feTurbulence
-          type="fractalNoise"
-          baseFrequency="0.65 0.62"
-          numOctaves="4"
-          seed="7"
-          stitchTiles="stitch"
-          result="noise"
-        />
-        <feColorMatrix type="saturate" values="0" in="noise" />
-      </filter>
-      <rect width="100%" height="100%" filter="url(#paper-noise)" fill="white" />
-    </svg>
-
-    <!-- ====================== CUSTOM CURSOR ====================== -->
-    <div id="cursor"></div>
-
-    <!-- ====================== TOP NAV (adcker-style) ====================== -->
-    <nav class="nav" aria-label="Primary">
-      <a class="nav-brand" href="#top">Livi Poon.</a>
-      <div class="nav-tools">
-        <button class="nav-btn" id="btn-mute" type="button" aria-label="Toggle audio">
-          <span class="ico" aria-hidden="true">
+  <body>
+    <div class="world-cursor" data-world-cursor aria-hidden="true"></div>
+    <nav class="world-nav" aria-label="Primary">
+      <div class="world-nav__actions">
+        <button class="world-nav__button" id="btn-mute" type="button" aria-label="Toggle audio">
+          <span class="world-nav__icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
               <path d="M4 9v6h4l5 4V5L8 9H4z" />
               <path id="mute-x" d="M17 9l4 6M21 9l-4 6" />
@@ -56,8 +33,8 @@
           </span>
           <span id="mute-label">mute</span>
         </button>
-        <button class="nav-btn" id="btn-theme" type="button" aria-label="Toggle theme">
-          <span class="ico" aria-hidden="true">
+        <button class="world-nav__button" id="btn-theme" type="button" aria-label="Toggle theme">
+          <span class="world-nav__icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="6" />
               <path
@@ -68,14 +45,13 @@
           <span>theme</span>
         </button>
         <a
-          class="nav-btn"
-          id="btn-cc"
+          class="world-nav__button"
           href="https://creativecommons.org/licenses/by-nc/4.0/"
           target="_blank"
           rel="noopener"
-          aria-label="Creative Commons license"
+          aria-label="Creative Commons Attribution-NonCommercial license"
         >
-          <span class="ico" aria-hidden="true">
+          <span class="world-nav__icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="9" />
               <path d="M9.5 10.5a2.5 2.5 0 1 1 0 3M14.5 10.5a2.5 2.5 0 1 1 0 3" />
@@ -83,483 +59,103 @@
           </span>
           <span>CC BY-NC</span>
         </a>
-        <button class="nav-btn" id="btn-menu" type="button" aria-label="Open menu">Menu</button>
+        <button
+          class="world-nav__button"
+          id="btn-menu"
+          type="button"
+          aria-expanded="false"
+          aria-controls="world-menu"
+        >
+          Menu
+        </button>
       </div>
     </nav>
 
-    <!-- ====================== MENU OVERLAY ====================== -->
-    <aside class="menu-panel" id="menu-panel" aria-hidden="true">
-      <div class="menu-col">
-        <p class="menu-label">( Index )</p>
+    <aside class="world-menu" id="world-menu" aria-hidden="true" aria-label="Site index">
+      <div>
+        <p class="world-menu__label">( Index )</p>
         <ul>
-          <li><a href="/">Home</a></li>
           <li><a href="/research/">Research</a></li>
-          <li><a href="/achievements/">Selected Achievements</a></li>
+          <li><a href="/achievements/">Selected achievements</a></li>
           <li><a href="/art/">Art</a></li>
           <li><a href="/blog/">Thoughts</a></li>
-          <li><a href="#mirror" data-menu-close>What People Say</a></li>
-          <li><a href="/cv/" target="_blank" rel="noopener">CV ↗</a></li>
+          <li><a href="/mirror/">Mirror</a></li>
+          <li><a href="/cv/">CV</a></li>
         </ul>
       </div>
-      <div class="menu-col">
-        <p class="menu-label">( Reach out )</p>
-        <ul>
-          <li><a href="mailto:livipoonpublic@gmail.com">Email</a></li>
-          <li><a href="https://www.linkedin.com/in/livi-poon-9a93a8116/" target="_blank" rel="noopener">LinkedIn</a></li>
-          <li>
-            <a href="https://github.com/LiviPoon" target="_blank" rel="noopener"
-              >Gitlab</a
-            >
-          </li>
-          <li><a href="https://github.com/LiviPoon" target="_blank" rel="noopener">Github</a></li>
-        </ul>
-      </div>
-      <div class="menu-foot">
-        <span>( Menu )</span>
-        <span>By Livi Poon · est. 2004</span>
-      </div>
-      <div class="menu-wordmark" aria-hidden="true">livi.</div>
+      <button class="world-menu__close" type="button" data-menu-close>Close</button>
+      <p class="world-menu__foot">By Livi Poon · est. 2004</p>
     </aside>
 
-    <!-- ====================== HERO ====================== -->
-    <section class="hero" id="top" data-reveal data-screen-label="01 Hero">
-      <img class="hero-portrait fade" src="/images/liviforest2.png" alt="Livi Poon" loading="eager" />
-      <div class="hero-title-row">
-        <div class="hero-text">
-          <h1 class="hero-title" aria-label="I'm Livi Poon.">
-            <span class="reveal-wrap"
-              ><span class="reveal-text" id="hero-line-1"></span>I'm</span
-            >
-            <span class="reveal-wrap"
-              ><span class="reveal-text" id="hero-line-2"></span>Livi Poon.</span>
-          </h1>
-          <p class="hero-sub fade" id="hero-sub">
-             A Presidential Leadership Fellow and <em>Joint Research Scholar</em>.
-          </p>
-          <br>
-          <div class="hero-inline-links fade">
-            <a href="/cv/">Curriculum Vitae</a>
-            <a href="/achievements/">Selected Achievements</a>
-            <a href="/blog/">Thoughts</a>
-            <a href="/art/">Art</a>
-          </div>
-        </div>
-      </div>
-      <div class="hero-foot">
-        <a class="scroll fade" href="#research" data-view="scroll">
-          <span>explore.</span>
-          <span class="bar" aria-hidden="true"></span>
-        </a>
-      </div>
-    </section>
+    <main>
+      <section class="world-scroll-host" data-world-scroll-host>
+        <div class="world" id="top" data-world aria-labelledby="world-title">
+          <div class="world__stage" data-world-stage>
+            <div class="world__wash" aria-hidden="true"></div>
 
-    <!-- ====================== FLIP COUNTERS ====================== -->
-    <section
-      class="counters"
-      id="counters"
-      data-reveal
-      data-screen-label="05 Counters"
-      aria-label="Old flip counters"
-    >
-      <div class="counters-head">
-        <p class="label fade">Let's quantify my life</p>
-        <h2>
-          <span class="reveal-wrap"><span class="reveal-text">In</span></span>
-          <span class="reveal-wrap"><span class="reveal-text">Numbers.</span></span>
-        </h2>
-      </div>
-      <div class="counter-grid">
-        <div class="pilcrow-roll-counter counter-card" data-roll-counter data-end="18">
-          <div class="pilcrow-roll-counter-number">
-            <span class="roll-counter-int">0</span>
-          </div>
-          <p class="pilcrow-roll-counter-caption">dreams fulfilled</p>
-        </div>
-        <div
-          class="pilcrow-roll-counter counter-card"
-          data-roll-counter
-          data-base-value="195998696"
-          data-base-date="2026-04-25"
-          data-daily-rate="10752.6166666667"
-        >
-          <div class="pilcrow-roll-counter-number">
-            <span class="roll-counter-int">0</span>
-          </div>
-          <p class="pilcrow-roll-counter-caption">butterfly effects set in motion</p>
-        </div>
-        <div
-          class="pilcrow-roll-counter counter-card"
-          data-roll-counter
-          data-base-value="3600"
-          data-base-date="2026-04-25"
-          data-daily-rate="1.971294669595394"
-        >
-          <div class="pilcrow-roll-counter-number">
-            <span class="roll-counter-int">0</span>
-          </div>
-          <p class="pilcrow-roll-counter-caption">hours approx. dedicated to research</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================== RESEARCH ====================== -->
-    <section class="research" id="research" data-screen-label="02 Research">
-      <section class="about" id="about" data-reveal data-screen-label="05 About">
-        <p class="about-cta" id="about-cta">
-          <span class="about-cta-line"
-            >My mission is to keep patients out of the doctor's office by discovering and developing
-            <em>predictive, preventative, and precision medicine</em> through
-            <b>artificial intelligence</b> techniques.</span
-          >
-        </p>
-      </section>
-
-      <!-- 01 -->
-      <a
-        class="scene is-flip is-wide"
-        href="#"
-        data-reveal
-        data-screen-label="Research · Preeclampsia"
-      >
-        <div class="scene-index" aria-hidden="true">01</div>
-        <figure class="scene-visual" data-parallax="0.22">
-          <img src="/images/liviforest1.png" alt="Wide research scene" loading="lazy" style="object-position: center top;" />
-        </figure>
-        <div class="scene-copy">
-          <p class="label fade">Skill Set</p>
-          <h2 class="scene-title">
-            <span class="reveal-wrap"><span class="reveal-text">What I</span></span>
-            <span class="reveal-wrap"><span class="reveal-text">bring.</span></span>
-          </h2>
-          <p class="scene-desc fade">
-            A diverse set of skills in leadership, systematic thinking, holistic problem solving,
-            and never-ending curiosity.
-          </p>
-          <p class="scene-note">Python · Coursework in C++, Java, Ruby, R, and JS/HTML.</p>
-        </div>
-      </a>
-
-      <!-- VIDEO INSERT -->
-      <section class="portfolio-video" data-reveal data-screen-label="Research · Video">
-        <div class="portfolio-video-stack" aria-label="Featured video">
-          <article class="portfolio-video-card">
-            <div class="portfolio-video-embed">
-              <iframe
-                src="https://www.youtube-nocookie.com/embed/BJNtmcr7ipw?autoplay=1&mute=1&loop=1&playlist=BJNtmcr7ipw&controls=0&disablekb=1&modestbranding=1&playsinline=1&rel=0&enablejsapi=1"
-                title="Research video"
-                tabindex="-1"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowfullscreen
-              ></iframe>
+            <div class="world__title" data-world-title>
+              <h1 id="world-title">
+                <span class="world__title-word" data-world-title-word="first">Livi</span>
+                <span class="world__title-word" data-world-title-word="second">Poon.</span>
+              </h1>
             </div>
-            <div class="portfolio-video-caption">
-              <span>I · Emotions 2</span>
-            </div>
-            <div class="portfolio-video-controls">
-              <button
-                class="portfolio-video-ctrl portfolio-video-restart"
-                type="button"
-                aria-label="Play video from beginning"
-                data-view="replay"
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M11 18V6l-8.5 6L11 18Zm.5-6 8.5 6V6l-8.5 6Z" />
-                </svg>
-              </button>
-              <button
-                class="portfolio-video-ctrl portfolio-video-playpause"
-                type="button"
-                aria-label="Pause video"
-                data-playing="true"
-                data-view="pause"
-              >
-                <svg class="portfolio-video-pause-icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <rect x="6" y="4" width="4" height="16"></rect>
-                  <rect x="14" y="4" width="4" height="16"></rect>
-                </svg>
-                <svg
-                  class="portfolio-video-play-icon"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                  style="display: none"
-                >
-                  <path d="M8 5v14l11-7Z"></path>
-                </svg>
-              </button>
-              <button
-                class="portfolio-video-ctrl portfolio-video-sound"
-                type="button"
-                aria-label="Unmute video"
-                data-video-muted="true"
-                data-view="sound"
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                  <line class="portfolio-video-mute-x1" x1="23" y1="9" x2="17" y2="15"></line>
-                  <line class="portfolio-video-mute-x2" x1="17" y1="9" x2="23" y2="15"></line>
-                  <path class="portfolio-video-wave1" d="M15.54 8.46a5 5 0 0 1 0 7.07" style="display: none"></path>
-                  <path class="portfolio-video-wave2" d="M19.07 4.93a10 10 0 0 1 0 14.14" style="display: none"></path>
-                </svg>
-              </button>
-            </div>
-          </article>
-        </div>
-      </section>
 
-      <!-- 02 -->
-      <a
-        class="scene is-flip is-wide"
-        href="#"
-        data-reveal
-        data-screen-label="Research · Preeclampsia"
-      >
-        <div class="scene-index" aria-hidden="true">02</div>
-        <figure class="scene-visual" data-parallax="0.22">
-          <img src="/images/PXL_20251009_161419927~4.jpg" alt="Wide research scene" loading="lazy" style="object-position: center 65%;" />
-        </figure>
-        <div class="scene-copy">
-          <p class="label fade">Accomplishments</p>
-          <h2 class="scene-title">
-            <span class="reveal-wrap"><span class="reveal-text">What I have</span></span>
-            <span class="reveal-wrap"><span class="reveal-text">done.</span></span>
-          </h2>
-          <p class="scene-desc fade">
-            I have sent things into space, started businesses, taught students life skills, led teams to accomplish dreams, and contributed to saving our reefs.
-          </p>
-          <p class="scene-note">Stanford · Karolinska Institutet · University of Vermont · International Space Station</p>
-        </div>
-      </a>
-    </section>
-    <!-- ====================== VIDEO ====================== -->
-    <section class="portfolio-video" id="video" data-reveal data-screen-label="04 Video">
-      <div class="portfolio-video-stack" aria-label="Featured videos">
-        <article class="portfolio-video-card">
-          <div class="portfolio-video-embed">
-            <iframe
-              src="https://www.youtube-nocookie.com/embed/M-jP8FXD_lQ?autoplay=1&mute=1&loop=1&playlist=M-jP8FXD_lQ&controls=0&disablekb=1&modestbranding=1&playsinline=1&rel=0&enablejsapi=1"
-              title="Featured video study one"
-              tabindex="-1"
-              loading="lazy"
-              referrerpolicy="strict-origin-when-cross-origin"
-              allow="autoplay; encrypted-media; picture-in-picture"
-              allowfullscreen
-            ></iframe>
-          </div>
-          <div class="portfolio-video-caption">
-            <span>II · Emotions 1</span>
-          </div>
-          <div class="portfolio-video-controls">
-            <button
-              class="portfolio-video-ctrl portfolio-video-restart"
-              type="button"
-              aria-label="Play video from beginning"
-              data-view="replay"
+            <header class="world__opening" data-world-opening>
+              <p>A map of research, art, questions, and a life in progress.</p>
+            </header>
+
+            <div
+              class="world__camera"
+              data-world-camera
+              aria-label="Map of Livi Poon's world"
+              style="visibility: hidden"
             >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M11 18V6l-8.5 6L11 18Zm.5-6 8.5 6V6l-8.5 6Z" />
-              </svg>
-            </button>
-            <button
-              class="portfolio-video-ctrl portfolio-video-playpause"
-              type="button"
-              aria-label="Pause video"
-              data-playing="true"
-              data-view="pause"
-            >
-              <svg class="portfolio-video-pause-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <rect x="6" y="4" width="4" height="16"></rect>
-                <rect x="14" y="4" width="4" height="16"></rect>
-              </svg>
               <svg
-                class="portfolio-video-play-icon"
-                viewBox="0 0 24 24"
+                class="world__lines"
+                viewBox="0 0 1440 960"
                 aria-hidden="true"
-                style="display: none"
+                data-world-lines
+              ></svg>
+              <div class="world__nodes" data-world-nodes></div>
+            </div>
+
+            <aside class="world-card" data-world-card hidden aria-live="polite">
+              <button
+                class="world-card__close"
+                type="button"
+                data-world-card-close
+                aria-label="Close details"
               >
-                <path d="M8 5v14l11-7Z"></path>
-              </svg>
-            </button>
-            <button
-              class="portfolio-video-ctrl portfolio-video-sound"
-              type="button"
-              aria-label="Unmute video"
-              data-video-muted="true"
-              data-view="sound"
-            >
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                <line class="portfolio-video-mute-x1" x1="23" y1="9" x2="17" y2="15"></line>
-                <line class="portfolio-video-mute-x2" x1="17" y1="9" x2="23" y2="15"></line>
-                <path
-                  class="portfolio-video-wave1"
-                  d="M15.54 8.46a5 5 0 0 1 0 7.07"
-                  style="display: none"
-                ></path>
-                <path
-                  class="portfolio-video-wave2"
-                  d="M19.07 4.93a10 10 0 0 1 0 14.14"
-                  style="display: none"
-                ></path>
-              </svg>
+                ×
+              </button>
+              <p class="world-card__eyebrow" data-world-card-eyebrow></p>
+              <h2 data-world-card-title></h2>
+              <p data-world-card-summary></p>
+              <a class="world-card__link" data-world-card-link href="/"
+                >Go there <span aria-hidden="true">↗</span></a
+              >
+            </aside>
+
+            <button class="world__scroll-cue" type="button" data-world-enter>
+              Scroll <span aria-hidden="true">↓</span>
             </button>
           </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- ====================== MIRROR QUOTES ====================== -->
-    <section
-      class="mirror-quotes"
-      id="mirror"
-      data-reveal
-      data-screen-label="06 Mirror"
-      aria-label="Mirror quotes"
-    >
-      <div class="mirror-quotes-head">
-        <p class="label fade">quote mirror</p>
-        <h2>
-          <span class="reveal-wrap"><span class="reveal-text">What</span></span>
-          <span class="reveal-wrap"><span class="reveal-text">people say.</span></span>
-        </h2>
-      </div>
-      <div class="mirror-quote-grid" data-mirror-quote-grid>
-        <article class="mirror-quote-card">
-          <p>
-            "Livi is a very observant person, and he uses what he observes to be as kind and
-            thoughtful as possible."
-          </p>
-          <span>Friend</span>
-        </article>
-        <article class="mirror-quote-card">
-          <p>
-            "Livi exemplifies ravenous motivation to do high quality work that aligns with public
-            good."
-          </p>
-          <span>Founder, NSF Graduate Research Fellow, and Mentor</span>
-        </article>
-        <article class="mirror-quote-card">
-          <p>"Livi is a kind and thoughtful old soul in search of meaning."</p>
-          <span>Director of the Vermont Advanced Computing Center</span>
-        </article>
-        <article class="mirror-quote-card">
-          <p>"You are a determined fellow who strives to make a difference in the world!"</p>
-          <span>UVM Director of Student Success</span>
-        </article>
-        <article class="mirror-quote-card">
-          <p>"Continue living your life to the fullest and keep going."</p>
-          <span>Teacher</span>
-        </article>
-        <article class="mirror-quote-card is-long">
-          <p>"Livi is a rare kind of person who's always wanting to improve, whether its people skills, academics, or physical strength. He is also very willing to share what he's learned throughout the improvement journey. He is very agentive, and genuinely wants to see other people succeed."</p>
-          <span>Friend</span>
-        </article>
-      </div>
-      <a class="mirror-link" href="/mirror/" data-view="read">explore the mirror</a>
-    </section>
-
-    <!-- ====================== VIDEO ====================== -->
-      <section class="portfolio-video" id="video" data-reveal data-screen-label="04 Video">
-        <div class="portfolio-video-stack" aria-label="Featured videos">
-          <article class="portfolio-video-card">
-            <div class="portfolio-video-embed">
-              <iframe
-                src="https://www.youtube-nocookie.com/embed/zX2OgG-7TLA?autoplay=1&mute=1&loop=1&playlist=zX2OgG-7TLA&controls=0&disablekb=1&modestbranding=1&playsinline=1&rel=0&enablejsapi=1"
-                title="Featured video study two"
-                tabindex="-1"
-                loading="lazy"
-                referrerpolicy="strict-origin-when-cross-origin"
-                allow="autoplay; encrypted-media; picture-in-picture"
-                allowfullscreen
-              ></iframe>
-            </div>
-            <div class="portfolio-video-caption">
-              <span>III · A Letter to Our Future Selves</span>
-            </div>
-            <div class="portfolio-video-controls">
-              <button
-                class="portfolio-video-ctrl portfolio-video-restart"
-                type="button"
-                aria-label="Play video from beginning"
-                data-view="replay"
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M11 18V6l-8.5 6L11 18Zm.5-6 8.5 6V6l-8.5 6Z" />
-                </svg>
-              </button>
-              <button
-                class="portfolio-video-ctrl portfolio-video-playpause"
-                type="button"
-                aria-label="Pause video"
-                data-playing="true"
-                data-view="pause"
-              >
-                <svg class="portfolio-video-pause-icon" viewBox="0 0 24 24" aria-hidden="true">
-                  <rect x="6" y="4" width="4" height="16"></rect>
-                  <rect x="14" y="4" width="4" height="16"></rect>
-                </svg>
-                <svg
-                  class="portfolio-video-play-icon"
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                  style="display: none"
-                >
-                  <path d="M8 5v14l11-7Z"></path>
-                </svg>
-              </button>
-              <button
-                class="portfolio-video-ctrl portfolio-video-sound"
-                type="button"
-                aria-label="Unmute video"
-                data-video-muted="true"
-                data-view="sound"
-              >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                  <line class="portfolio-video-mute-x1" x1="23" y1="9" x2="17" y2="15"></line>
-                  <line class="portfolio-video-mute-x2" x1="17" y1="9" x2="23" y2="15"></line>
-                  <path
-                    class="portfolio-video-wave1"
-                    d="M15.54 8.46a5 5 0 0 1 0 7.07"
-                    style="display: none"
-                  ></path>
-                  <path
-                    class="portfolio-video-wave2"
-                    d="M19.07 4.93a10 10 0 0 1 0 14.14"
-                    style="display: none"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-          </article>
         </div>
       </section>
-    <!-- ====================== ABOUT — CTA + LIVI. ====================== -->
-    <section class="about" id="about" data-reveal data-screen-label="05 About">
-      <p class="about-cta" id="about-cta">
-        <span class="about-cta-line">Let us work together to uncover the unknown.</span>
-      </p>
-      <a class="about-link" href="https://www.linkedin.com/in/livi-poon-9a93a8116/" target="_blank" rel="noopener">Don't be shy, contact me now</a
-      >
-      <div class="about-mark" aria-hidden="true"><span>livi</span></div>
 
-      <!-- ====================== HABIT TRACKER ====================== -->
-      <div class="portfolio-habit" id="habits" data-screen-label="07 Habits">
-        <div class="portfolio-habit-chart-container">
-          <div data-habit-timeline-chart></div>
-        </div>
-        <div data-habit-timeline-stats class="portfolio-habit-stats"></div>
-      </div>
-    </section>
+      <nav class="world-fallback" aria-label="Explore Livi's world">
+        <p>Explore Livi's world</p>
+        <ul>
+          <li><a href="/research/">Research</a></li>
+          <li><a href="/achievements/">Selected achievements</a></li>
+          <li><a href="/art/">Art</a></li>
+          <li><a href="/blog/">Thoughts</a></li>
+          <li><a href="/mirror/">Mirror</a></li>
+          <li><a href="/cv/">CV</a></li>
+        </ul>
+      </nav>
+    </main>
 
-    <!-- ====================== FOOTER ====================== -->
-    <footer class="footer" data-screen-label="06 Footer">
-      <span>est. 2004 · Livi Poon</span>
-      <a href="https://github.com/LiviPoon" target="_blank" rel="noopener">Github ↗</a>
-    </footer>
-
-    <script src="./app.js" defer></script>
-    <script src="./portfolio-extensions.js" defer></script>
+    <script type="module" src="./app.js"></script>
   </body>
 </html>
