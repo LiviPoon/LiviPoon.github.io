@@ -12,8 +12,12 @@
     "url": "https://github.com/jackyzha0/quartz.git"
   },
   "scripts": {
+    "build": "node scripts/build-hybrid.mjs",
+    "dev": "node scripts/serve-hybrid.mjs",
+    "create:native-pages": "node scripts/create-native-pages.mjs",
+    "archive:native-markdown": "node scripts/archive-native-markdown.mjs",
     "quartz": "./quartz/bootstrap-cli.mjs",
-    "docs": "npx quartz build --serve -d docs",
+    "docs": "node scripts/serve-hybrid.mjs",
     "check": "tsc --noEmit && npx prettier . --check",
     "format": "npx prettier . --write",
     "test": "tsx --test",

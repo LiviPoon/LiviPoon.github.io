@@ -36,9 +36,9 @@ jobs:
         working-directory: livipoon-quartz4
         run: npm ci
 
-      - name: Build Quartz
+      - name: Build hybrid site
         working-directory: livipoon-quartz4
-        run: npx quartz build
+        run: npm run build
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5

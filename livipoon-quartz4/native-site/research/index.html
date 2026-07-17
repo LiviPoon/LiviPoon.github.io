@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A little bit more about Livi Poon: curiosity, community, and research for healthier futures." />
+    <meta name="theme-color" content="#181818" />
+    <title>A Little Bit More About Me :) · Livi Poon</title>
+    <link rel="icon" href="/static/logo.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/native.css" />
+    <link rel="stylesheet" href="/research/research.css" />
+    <script type="module" src="/native.js"></script>
+    <script type="module" src="/research/research.js"></script>
+  </head>
+  <body class="livi-story" data-native-route="/research/">
+    <nav class="native-nav story-nav" aria-label="Primary navigation">
+      <a class="native-brand" href="/">Livi Poon</a>
+      <div class="native-actions">
+        <button class="native-button" type="button" data-theme-toggle>theme</button>
+        <button class="native-button" type="button" data-menu-open aria-expanded="false">menu</button>
+      </div>
+    </nav>
+
+    <aside class="native-menu" data-native-menu aria-hidden="true" aria-label="Site index">
+      <div><p class="native-menu__label">( Index )</p><ul>
+        <li><a href="/research/">Research</a></li><li><a href="/achievements/">Achievements</a></li>
+        <li><a href="/art/">Art</a></li><li><a href="/blog/">Thoughts</a></li>
+        <li><a href="/mirror/">Mirror</a></li><li><a href="/cv/">CV</a></li>
+      </ul></div>
+      <button class="native-menu__close" type="button" data-menu-close>Close</button>
+      <p class="native-menu__foot">By Livi Poon · est. 2004</p>
+    </aside>
+
+    <main class="story-shell" id="story">
+      <div class="story-track" data-story-track>
+        <section class="story-panel story-opening" aria-labelledby="story-title">
+          <div class="story-opening__inner">
+            <h1 id="story-title">Every question<br />has a story<br />behind it.</h1>
+            <p class="story-opening__prompt"><button class="story-listen" type="button" data-story-listen aria-pressed="false"><i aria-hidden="true"></i><span data-listen-label>Listen</span></button> to the audio experience.</p>
+          </div>
+        </section>
+
+        <section class="story-panel story-placeholder story-placeholder--portrait" aria-label="Portrait placeholder">
+          <p class="story-placeholder__name">Your name</p>
+          <div class="story-placeholder__portrait"><span>Portrait image</span></div>
+          <p class="story-placeholder__caption">A short introduction belongs here.</p>
+        </section>
+
+        <section class="story-panel story-placeholder story-placeholder--question" aria-label="Question placeholder">
+          <p class="story-placeholder__quote">“Place the first big question here?”</p>
+          <div class="story-placeholder__image story-placeholder__image--square"><span>Environmental image</span></div>
+        </section>
+
+        <section class="story-panel story-placeholder story-placeholder--response" aria-label="Response placeholder">
+          <div class="story-placeholder__image story-placeholder__image--landscape"><span>Documentary image</span></div>
+          <p class="story-placeholder__quote">“A personal response can move continuously into view here.”</p>
+        </section>
+
+        <section class="story-panel story-placeholder story-placeholder--portrait" aria-label="Second portrait placeholder">
+          <p class="story-placeholder__name">Next voice</p>
+          <div class="story-placeholder__portrait"><span>Portrait image</span></div>
+          <p class="story-placeholder__caption">A second short introduction belongs here.</p>
+        </section>
+
+        <section class="story-panel story-placeholder story-placeholder--question" aria-label="Second question placeholder">
+          <p class="story-placeholder__quote">“Place another hard question here?”</p>
+          <div class="story-placeholder__image story-placeholder__image--square"><span>Environmental image</span></div>
+        </section>
+
+        <section class="story-panel story-placeholder story-placeholder--end" aria-label="Closing placeholder">
+          <p class="story-kicker">Keep listening.</p>
+          <h2>The next voice<br />starts here.</h2>
+          <p class="story-placeholder__caption">Closing content placeholder.</p>
+        </section>
+      </div>
+    </main>
+
+    <button class="story-scroll" type="button" data-story-next aria-label="Continue through the story"><span data-scroll-label>Scroll</span><span aria-hidden="true">→</span></button>
+    <div class="story-audio-rail" data-audio-rail>
+      <canvas class="story-wave" data-story-wave aria-hidden="true"></canvas>
+      <button class="story-audio-control" type="button" data-audio-control aria-label="Play" aria-pressed="false"><span data-audio-symbol>▷</span></button>
+    </div>
+    <div class="story-progress" aria-hidden="true"><i data-story-progress></i></div>
+    <audio data-story-audio preload="metadata" src="/research/audio/story.m4a"></audio>
+  </body>
+</html>

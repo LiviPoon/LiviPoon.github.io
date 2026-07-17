@@ -56,7 +56,8 @@ const config: QuartzConfig = {
       Plugin.CrawlLinks({ markdownLinkResolution: "shortest" }),
       Plugin.Description(),
     ],
-    filters: [Plugin.RemoveDrafts()],
+    // Quartz owns the homepage shell, Art, Thoughts, and Thoughts' supporting tag pages.
+    filters: [Plugin.RemoveDrafts(), Plugin.QuartzPages()],
     emitters: [
       Plugin.ComponentResources(),
       Plugin.ContentPage(),
@@ -65,6 +66,7 @@ const config: QuartzConfig = {
       Plugin.MirrorQuotes(),
       Plugin.AliasRedirects(),
       Plugin.FolderPage(),
+      Plugin.TagPage(),
       Plugin.Assets(),
       Plugin.Static(),
       Plugin.NotFoundPage(),

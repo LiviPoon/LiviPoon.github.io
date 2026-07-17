@@ -1,0 +1,60 @@
+html,
+body {
+  width: 100%;
+  min-height: 100%;
+  margin: 0;
+  background: #fff;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+.cv-back {
+  position: fixed;
+  z-index: 10;
+  top: 16px;
+  left: 16px;
+  padding: 9px 13px;
+  border-radius: 999px;
+  color: #111;
+  background: rgb(255 255 255 / 88%);
+  box-shadow: 0 1px 8px rgb(0 0 0 / 12%);
+  font: 600 13px/1 system-ui, sans-serif;
+  text-decoration: none;
+  backdrop-filter: blur(8px);
+}
+
+.cv-back:hover,
+.cv-back:focus-visible {
+  background: #fff;
+}
+
+.cv-pages {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.cv-page {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 0;
+  padding: 0;
+}
+
+.cv-status {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  margin: 0;
+  color: #222;
+  background: #fff;
+  font: 14px/1.4 system-ui, sans-serif;
+}
+
+.cv-status a {
+  color: inherit;
+}

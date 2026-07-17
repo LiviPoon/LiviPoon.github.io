@@ -5,7 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#181818" />
     <script>
+      const initialTheme = localStorage.getItem("theme")
+      if (initialTheme === "light" || initialTheme === "dark") {
+        document.documentElement.dataset.theme = initialTheme
+        document.documentElement.setAttribute("saved-theme", initialTheme)
+      }
+
       if ("scrollRestoration" in history) history.scrollRestoration = "manual"
+
+      const navigationEntry = performance.getEntriesByType?.("navigation")[0]
+      const isHardRefresh = navigationEntry
+        ? navigationEntry.type === "reload"
+        : performance.navigation?.type === 1
+
+      if (!isHardRefresh) document.documentElement.classList.remove("is-preloading")
     </script>
     <title>Livi Poon</title>
     <meta

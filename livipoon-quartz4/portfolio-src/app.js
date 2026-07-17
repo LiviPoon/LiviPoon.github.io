@@ -252,19 +252,30 @@ function initCursor() {
 function initTheme() {
   const button = document.querySelector("#btn-theme")
   const themeColor = document.querySelector('meta[name="theme-color"]')
-  const stored = localStorage.getItem("livi-theme")
-  const preferred = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"
+  const themePreference = window.matchMedia("(prefers-color-scheme: light)")
+  const stored = localStorage.getItem("theme")
+  const preferred = themePreference.matches ? "light" : "dark"
 
   function setTheme(theme) {
     document.documentElement.dataset.theme = theme
-    themeColor?.setAttribute("content", theme === "dark" ? "#141413" : "#faf9f5")
+    document.documentElement.setAttribute("saved-theme", theme)
+    themeColor?.setAttribute("content", theme === "dark" ? "#181818" : "#eae0ce")
+    document.dispatchEvent(new CustomEvent("themechange", { detail: { theme } }))
   }
 
   setTheme(stored === "light" || stored === "dark" ? stored : preferred)
   button?.addEventListener("click", () => {
     const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark"
-    localStorage.setItem("livi-theme", next)
+    localStorage.setItem("theme", next)
     setTheme(next)
+  })
+  themePreference.addEventListener("change", (event) => {
+    if (localStorage.getItem("theme") === null) setTheme(event.matches ? "light" : "dark")
+  })
+  window.addEventListener("storage", (event) => {
+    if (event.key === "theme" && (event.newValue === "light" || event.newValue === "dark")) {
+      setTheme(event.newValue)
+    }
   })
 }
 
@@ -662,10 +673,6 @@ async function initWorld() {
       <span class="world-node__copy"><span>${node.label}</span><small>${node.summary}</small></span>
     `
     link.classList.add("is-alive")
-    link.style.setProperty("--drift-x", `${((node.x % 7) - 3) * 1.1}px`)
-    link.style.setProperty("--drift-y", `${-2 - (node.y % 5)}px`)
-    link.style.setProperty("--drift-duration", `${5.2 + (node.x % 4) * 0.55}s`)
-    link.style.setProperty("--drift-delay", `${-(node.y % 6) * 0.45}s`)
     nodeLayer.append(link)
     nodeElements.set(node.id, link)
   }
@@ -702,10 +709,6 @@ async function initWorld() {
       openItem(satellite.id, button)
     })
     button.classList.add("is-alive")
-    button.style.setProperty("--drift-x", `${((satellite.x % 5) - 2) * 1.35}px`)
-    button.style.setProperty("--drift-y", `${-2 - (satellite.y % 4)}px`)
-    button.style.setProperty("--drift-duration", `${4.4 + (satellite.y % 5) * 0.48}s`)
-    button.style.setProperty("--drift-delay", `${-(satellite.x % 7) * 0.31}s`)
     nodeLayer.append(button)
     satelliteElements.set(satellite.id, button)
   }
@@ -880,8 +883,9 @@ async function initWorld() {
       }
     } else if (item.image) {
       const image = document.createElement("img")
-      image.src = item.image
+      image.src = item.fullImage ?? item.image
       image.alt = item.label
+      image.decoding = "async"
       paperMedia.replaceChildren(image)
     }
 
