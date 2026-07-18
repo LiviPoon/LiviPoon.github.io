@@ -482,8 +482,7 @@ a:focus-visible {
   width: 100%;
   height: 100%;
   object-fit: contain;
-  filter: saturate(0.82) contrast(0.98) blur(0.25px)
-    drop-shadow(0 18px 24px rgb(0 0 0 / 0.12));
+  filter: saturate(0.82) contrast(0.98) blur(0.25px) drop-shadow(0 18px 24px rgb(0 0 0 / 0.12));
   -webkit-mask-image: linear-gradient(
     to bottom,
     #000 0%,
@@ -510,11 +509,17 @@ a:focus-visible {
   line-height: 1.55;
 }
 
-.world__opening-cv {
+.world__opening-actions {
+  display: flex;
+  justify-content: center;
+  gap: clamp(20px, 2.5vw, 36px);
+  margin-top: 20px;
+}
+
+.world__opening-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  margin-top: 20px;
   padding: 4px 0;
   color: var(--muted);
   pointer-events: auto;
@@ -531,7 +536,7 @@ a:focus-visible {
     opacity 160ms ease;
 }
 
-.world__opening-cv:hover {
+.world__opening-link:hover {
   color: var(--text);
 }
 
@@ -1064,6 +1069,57 @@ a:focus-visible {
   color: var(--accent);
 }
 
+/*
+ * Desktop displays with limited vertical space (common 16:9 monitors) need a
+ * more compact opening composition. The default artwork sizes from vw while
+ * its positions size from vh, which otherwise crowds the title, portrait,
+ * introduction, and scroll cue together on a short viewport.
+ */
+@media (min-width: 721px) and (max-height: 820px) {
+  .world-nav {
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+
+  .world__portrait {
+    top: 31%;
+    width: clamp(280px, 31vw, 400px);
+  }
+
+  .world__title-word {
+    font-size: clamp(96px, 14vw, 190px);
+  }
+
+  .world__title-word:first-child,
+  .world__title-word:last-child {
+    --title-word-y: 44vh;
+  }
+
+  .world__opening {
+    top: 58vh;
+    width: min(680px, calc(100vw - 72px));
+  }
+
+  .world__opening p {
+    max-width: 64ch;
+    margin-top: 14px;
+    font-size: clamp(12px, 1vw, 14px);
+    line-height: 1.45;
+  }
+
+  .world__opening-actions {
+    margin-top: 12px;
+  }
+
+  .world__opening-link {
+    font-size: clamp(20px, 1.6vw, 24px);
+  }
+
+  .world__scroll-cue {
+    bottom: 28px;
+  }
+}
+
 @media (max-width: 720px) {
   .world-nav {
     padding: 16px 17px;
@@ -1131,8 +1187,9 @@ a:focus-visible {
     line-height: 1.45;
   }
 
-  .world__opening-cv {
+  .world__opening-actions {
     margin-top: 14px;
+    gap: 20px;
   }
 
   .world-paper {

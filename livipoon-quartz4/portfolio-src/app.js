@@ -326,7 +326,7 @@ function initAudio() {
 
   audio.src = songs[track]
 
-  function savePlayback() {
+  function savePlayback(paused = audio.paused) {
     if (!audio.src) return
     try {
       localStorage.setItem(
@@ -336,7 +336,7 @@ function initAudio() {
           currentTime: Number.isFinite(audio.currentTime) ? audio.currentTime : 0,
           savedAt: Date.now(),
           muted,
-          paused: false,
+          paused,
         }),
       )
     } catch {}
@@ -392,9 +392,9 @@ function initAudio() {
     updateButton()
     void play()
   })
-  audio.addEventListener("timeupdate", savePlayback)
-  window.addEventListener("pagehide", savePlayback)
-  window.addEventListener("beforeunload", savePlayback)
+  audio.addEventListener("timeupdate", () => savePlayback())
+  window.addEventListener("pagehide", () => savePlayback())
+  window.addEventListener("beforeunload", () => savePlayback())
   document.addEventListener(
     "click",
     (event) => {
@@ -411,7 +411,11 @@ function initAudio() {
       }
 
       event.preventDefault()
-      savePlayback()
+      const destination = new URL(link.href, window.location.href)
+      const enteringResearch =
+        destination.pathname === "/research" || destination.pathname.startsWith("/research/")
+      if (enteringResearch) audio.pause()
+      savePlayback(enteringResearch || audio.paused)
       rampVolume(0)
       window.setTimeout(() => window.location.assign(link.href), PAGE_FADE_MS)
     },
@@ -758,7 +762,8 @@ async function initWorld() {
 
     const titleSeparation = smoothstep((renderedProgress - 0.18) / 0.3)
     const titleGap = Math.min(viewportWidth * 0.15, 188)
-    const initialY = viewportHeight * 0.47
+    const compactDesktop = viewportWidth > 720 && viewportHeight <= 820
+    const initialY = viewportHeight * (compactDesktop ? 0.44 : 0.47)
     const titleCenterCorrection = (firstTitleWidth - secondTitleWidth) / 4
     const firstStart = {
       x: viewportWidth / 2 - titleGap + titleCenterCorrection,

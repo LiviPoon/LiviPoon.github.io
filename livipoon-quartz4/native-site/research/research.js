@@ -15,6 +15,7 @@ const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)")
 const maxPosition = Math.max(0, panels.length - 1)
 let position = 0
 let target = 0
+const panelRevealItems = new Map()
 let autoPlaying = false
 let audioPlaying = false
 let frame
@@ -33,6 +34,65 @@ let visualizerFrame
 let visualizerLevels = new Array(28).fill(0)
 
 const clamp = (value) => Math.max(0, Math.min(maxPosition, value))
+const clampUnit = (value) => Math.max(0, Math.min(1, value))
+const smoothstep = (value) => {
+  const progress = clampUnit(value)
+  return progress * progress * (3 - 2 * progress)
+}
+const revealMovements = [
+  { x: -0.12, y: 0.16, rotate: -7, scale: 0.86, origin: "0% 100%" },
+  { x: 0.14, y: -0.12, rotate: 6, scale: 1.12, origin: "100% 0%" },
+  { x: -0.07, y: 0.22, rotate: 4, scale: 0.9, origin: "20% 100%" },
+  { x: 0.1, y: 0.08, rotate: -5, scale: 1.08, origin: "100% 80%" },
+]
+
+const preparePanelReveals = () => {
+  if (!track || mobile.matches || reducedMotion.matches) return
+
+  track.classList.add("is-reveal-ready")
+  panels.forEach((panel, panelIndex) => {
+    const items = [...panel.querySelectorAll(
+      ":scope > :not(.story-opening__inner), :scope > .story-opening__inner > *",
+    )].map((item, itemIndex) => ({
+      item,
+      movement: revealMovements[(panelIndex * 2 + itemIndex) % revealMovements.length],
+    }))
+    panelRevealItems.set(panel, items)
+  })
+}
+
+const updatePanelReveals = () => {
+  if (!track?.classList.contains("is-reveal-ready")) return
+
+  panels.forEach((panel, panelIndex) => {
+    const panelProgress = 1 - Math.min(Math.abs(panelIndex - position), 1)
+    const items = panelRevealItems.get(panel) ?? []
+    const finalItemDelay = Math.min(0.48, Math.max(0, items.length - 1) * 0.12)
+
+    items.forEach(({ item, movement }, itemIndex) => {
+      const itemDelay = items.length > 1 ? (itemIndex / (items.length - 1)) * finalItemDelay : 0
+      const itemProgress = smoothstep((panelProgress - itemDelay) / (1 - itemDelay))
+      const remaining = 1 - itemProgress
+
+      item.style.setProperty("--story-item-progress", itemProgress.toFixed(3))
+      item.style.setProperty(
+        "--story-item-translate-x",
+        `${(window.innerWidth * movement.x * remaining).toFixed(1)}px`,
+      )
+      item.style.setProperty(
+        "--story-item-translate-y",
+        `${(window.innerHeight * movement.y * remaining).toFixed(1)}px`,
+      )
+      item.style.setProperty("--story-item-rotate", `${(movement.rotate * remaining).toFixed(2)}deg`)
+      item.style.setProperty(
+        "--story-item-scale",
+        (1 - (1 - movement.scale) * remaining).toFixed(3),
+      )
+      item.style.setProperty("--story-item-blur", `${(remaining * 7).toFixed(2)}px`)
+      item.style.setProperty("--story-item-origin", movement.origin)
+    })
+  })
+}
 
 const hasAudioTimeline = () => Boolean(
   storyAudio
@@ -234,11 +294,16 @@ const render = (time) => {
     position = target
   }
 
-  track.style.transform = `translate3d(${-position * 100}vw, 0, 0)`
+  // Keep every panel boundary on a physical pixel. Fractional transforms can
+  // expose a one-pixel antialiasing seam between otherwise identical panels.
+  const pixelRatio = Math.max(1, window.devicePixelRatio || 1)
+  const trackOffset = Math.round(-position * window.innerWidth * pixelRatio) / pixelRatio
+  track.style.transform = `translate3d(${trackOffset}px, 0, 0)`
   panels.forEach((panel, index) => {
     const distance = Math.min(Math.abs(index - position), 1)
     panel.style.setProperty("--panel-distance", String(distance))
   })
+  updatePanelReveals()
   if (progress) progress.style.width = `${maxPosition ? (position / maxPosition) * 100 : 0}%`
   frame = requestAnimationFrame(render)
 }
@@ -343,6 +408,8 @@ storyAudio?.addEventListener("loadedmetadata", () => {
   void finishManualNavigation(position, seekRequestId)
 })
 
+preparePanelReveals()
+updatePanelReveals()
 cancelAnimationFrame(frame)
 frame = requestAnimationFrame(render)
 cancelAnimationFrame(visualizerFrame)

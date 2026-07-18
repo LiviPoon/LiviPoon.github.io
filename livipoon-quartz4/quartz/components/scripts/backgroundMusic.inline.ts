@@ -245,7 +245,7 @@ function loadTrack(state: BackgroundMusicState, src: string) {
   state.audio.load()
 }
 
-function savePlaybackState(state: BackgroundMusicState) {
+function savePlaybackState(state: BackgroundMusicState, paused = false) {
   if (!state.currentTrackSrc) return
 
   try {
@@ -254,7 +254,7 @@ function savePlaybackState(state: BackgroundMusicState) {
       currentTime: Number.isFinite(state.audio.currentTime) ? state.audio.currentTime : 0,
       savedAt: Date.now(),
       muted: localStorage.getItem(MUTED_STORAGE_KEY) === "true",
-      paused: false,
+      paused,
     }
     localStorage.setItem(PLAYBACK_STORAGE_KEY, JSON.stringify(playbackState))
   } catch {}
@@ -596,9 +596,8 @@ function createState(playlist: string[]): BackgroundMusicState {
 }
 
 function isMusicPage(): boolean {
-  // Music is a site-wide player. Keeping it active on every route lets Quartz's SPA
-  // navigation retain the same Audio element instead of pausing between screens.
-  return true
+  const slug = document.body.dataset.slug?.replace(/^\/+|\/+$/g, "") ?? ""
+  return slug !== "research" && slug !== "research/index" && !slug.startsWith("research/")
 }
 
 function syncBackgroundMusicForPage() {
@@ -650,10 +649,10 @@ function syncBackgroundMusicForPage() {
   }
 
   if (!isMusicPage()) {
-    state.audio.muted = true
-    updateButton(state)
-    emitMuteChange(true)
+    // Pause without changing the visitor's mute preference. The same Audio element
+    // remains alive and resumes at the exact position after the next SPA navigation.
     state.audio.pause()
+    savePlaybackState(state, true)
     return
   }
 

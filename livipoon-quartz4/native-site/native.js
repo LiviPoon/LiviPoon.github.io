@@ -107,14 +107,19 @@ function initPersistentMusic() {
     // Ignore stale playback data and start the playlist normally.
   }
 
+  const isBlockedRoute = () => {
+    const route = document.body.dataset.nativeRoute || window.location.pathname
+    return route === "/research" || route.startsWith("/research/")
+  }
   const play = async () => {
+    if (isBlockedRoute()) return
     try {
       await audio.play()
     } catch {
       // Browsers that require interaction get another attempt on the first pointer press.
     }
   }
-  const save = () => {
+  const save = (paused = audio.paused) => {
     try {
       localStorage.setItem(
         PLAYBACK_STORAGE_KEY,
@@ -123,7 +128,7 @@ function initPersistentMusic() {
           currentTime: Number.isFinite(audio.currentTime) ? audio.currentTime : 0,
           savedAt: Date.now(),
           muted: audio.muted,
-          paused: audio.paused,
+          paused,
         }),
       )
     } catch {}
@@ -134,14 +139,22 @@ function initPersistentMusic() {
     audio.src = playlist[track]
     void play()
   })
-  audio.addEventListener("timeupdate", save)
-  window.addEventListener("pagehide", save)
-  window.addEventListener("beforeunload", save)
+  audio.addEventListener("timeupdate", () => save())
+  window.addEventListener("pagehide", () => save())
+  window.addEventListener("beforeunload", () => save())
   window.addEventListener("pointerdown", () => void play(), { once: true, passive: true })
   audio.src = playlist[track]
-  void play()
+  const syncForRoute = () => {
+    if (isBlockedRoute()) {
+      audio.pause()
+      save(true)
+      return
+    }
+    void play()
+  }
+  syncForRoute()
 
-  return { audio, save }
+  return { audio, save, syncForRoute }
 }
 
 const music = initPersistentMusic()
@@ -161,6 +174,7 @@ async function navigateNative(url, { push = true } = {}) {
   document.querySelector(".native-page")?.replaceWith(nextPage)
   document.title = nextDocument.title
   document.body.dataset.nativeRoute = nextDocument.body.dataset.nativeRoute || url.pathname
+  music.syncForRoute()
   closeMenu()
   hydrateMirror()
   if (push) history.pushState({ native: true }, "", url)
@@ -188,6 +202,10 @@ document.addEventListener("click", async (event) => {
   if (destination.origin !== window.location.origin || destination.pathname === "/") return
 
   event.preventDefault()
+  if (destination.pathname === "/research" || destination.pathname.startsWith("/research/")) {
+    music.audio.pause()
+    music.save(true)
+  }
   try {
     if (!(await navigateNative(destination))) {
       music.save()

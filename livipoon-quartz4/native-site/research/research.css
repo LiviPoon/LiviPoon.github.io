@@ -16,7 +16,7 @@
 .livi-story .native-menu { --bg: var(--story-paper); --text: var(--story-ink); --muted: var(--story-soft); }
 
 .story-shell { width: 100vw; height: 100svh; }
-.story-track { display: flex; width: max-content; height: 100%; will-change: transform; }
+.story-track { display: flex; width: max-content; height: 100%; background: var(--story-paper); backface-visibility: hidden; will-change: transform; }
 .story-panel { position: relative; flex: 0 0 100vw; width: 100vw; height: 100svh; padding: clamp(7rem, 13vh, 9rem) clamp(2rem, 6.25vw, 6rem) clamp(4rem, 8vh, 6rem); overflow: hidden; }
 .story-panel h1, .story-panel h2, .story-panel h3 { margin: 0; font-family: "Cormorant Garamond", Georgia, serif; font-weight: 400; letter-spacing: -.045em; line-height: .88; }
 .story-panel h1 { font-size: clamp(4rem, 10.7vw, 10rem); }
@@ -109,7 +109,7 @@
 .story-placeholder__image--square { position: absolute; top: 12vh; right: 6vw; width: 31vw; aspect-ratio: 1; }
 .story-placeholder__image--landscape { position: absolute; top: 10vh; left: 7vw; width: 62vw; height: 62vh; }
 .story-placeholder--question .story-placeholder__quote { bottom: 16vh; left: 5vw; }
-.story-placeholder--response .story-placeholder__quote { top: 18vh; left: 76vw; }
+.story-placeholder--response .story-placeholder__quote { top: 18vh; right: 6vw; left: auto; width: min(42vw, 52rem); }
 .story-placeholder--end { display: flex; flex-direction: column; justify-content: center; padding-left: 12vw; }
 .story-placeholder--end h2 { max-width: 9ch; font-size: clamp(5rem, 10vw, 10rem); }
 .story-placeholder--end .story-placeholder__caption { right: 8vw; bottom: 10vh; left: auto; transform: none; }
@@ -120,6 +120,20 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .story-panel > * { opacity: calc(1 - var(--panel-distance, 1) * .58); transition: opacity .18s linear; }
+
+  @media (min-width: 761px) {
+    .story-track.is-reveal-ready .story-panel > :not(.story-opening__inner),
+    .story-track.is-reveal-ready .story-opening__inner > * {
+      opacity: var(--story-item-progress, 0);
+      translate: var(--story-item-translate-x, 0) var(--story-item-translate-y, 1.5rem);
+      rotate: var(--story-item-rotate, 0deg);
+      scale: var(--story-item-scale, 1);
+      filter: blur(var(--story-item-blur, 0));
+      transform-origin: var(--story-item-origin, center);
+      transition: none;
+      will-change: opacity, translate, rotate, scale, filter;
+    }
+  }
 }
 
 @media (max-width: 760px) {

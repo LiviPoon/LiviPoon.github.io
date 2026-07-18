@@ -6,3 +6,7 @@ CLAUDE.md
 .claude
 .env
 garmin_session.json
+livipoon-quartz4/node_modules/
+livipoon-quartz4/public/
+livipoon-quartz4/quartz/.quartz-cache/
+livipoon-quartz4/tsconfig.tsbuildinfo
