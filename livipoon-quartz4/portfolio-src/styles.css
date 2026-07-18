@@ -1,6 +1,6 @@
 :root {
   --font-display: "Cormorant Garamond", Georgia, serif;
-  --font-body: "Bricolage Grotesque", system-ui, sans-serif;
+  --font-body: "Geist", "Helvetica Neue", system-ui, sans-serif;
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --satellite-max-small: 112px;
   --satellite-max-medium: 168px;
@@ -189,7 +189,7 @@ a:focus-visible {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 22px clamp(22px, 4vw, 62px);
+  padding: clamp(18px, 2.4vw, 30px) clamp(22px, 4.5vw, 72px);
   font-family: var(--font-body);
   opacity: var(--navigation-visibility, 1);
   pointer-events: none;
@@ -213,22 +213,22 @@ a:focus-visible {
 .world-nav__actions {
   display: flex;
   align-items: center;
-  gap: 3px;
+  gap: clamp(2px, 0.35vw, 7px);
 }
 
 .world-nav__button {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 9px;
+  padding: 8px 10px;
   color: var(--text);
   cursor: pointer;
   border: 0;
   background: transparent;
   font-family: var(--font-body);
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 500;
-  letter-spacing: -0.01em;
+  letter-spacing: 0.045em;
   line-height: 1;
   text-decoration: none;
   text-transform: none;
@@ -390,9 +390,9 @@ a:focus-visible {
 .world__opening {
   position: absolute;
   z-index: 4;
-  top: clamp(390px, 62vh, 560px);
+  top: clamp(400px, 64vh, 590px);
   left: 50%;
-  width: min(720px, calc(100vw - 56px));
+  width: min(760px, calc(100vw - 64px));
   opacity: var(--opening-visibility, 1);
   pointer-events: none;
   text-align: center;
@@ -418,10 +418,10 @@ a:focus-visible {
   display: block;
   color: var(--text);
   font-family: var(--font-display);
-  font-size: clamp(112px, 18vw, 290px);
+  font-size: clamp(108px, 17vw, 274px);
   font-weight: 400;
-  line-height: 0.68;
-  letter-spacing: -0.075em;
+  line-height: 0.72;
+  letter-spacing: -0.068em;
   transform: translate3d(var(--title-word-x, 50vw), var(--title-word-y, 50vh), 0)
     translate3d(-50%, -50%, 0) scale(var(--title-word-scale, 1));
   transform-origin: center;
@@ -429,21 +429,21 @@ a:focus-visible {
 }
 
 .world__title-word:first-child {
-  --title-word-x: 35vw;
-  --title-word-y: 47vh;
+  --title-word-x: 31.5vw;
+  --title-word-y: 46vh;
 }
 
 .world__title-word:last-child {
-  --title-word-x: 65vw;
-  --title-word-y: 47vh;
+  --title-word-x: 68.5vw;
+  --title-word-y: 46vh;
 }
 
 .world__portrait {
   position: absolute;
   z-index: 1;
-  top: 35%;
+  top: 34%;
   left: 50%;
-  width: clamp(330px, 38vw, 500px);
+  width: clamp(320px, 35vw, 470px);
   aspect-ratio: 1;
   margin: 0;
   opacity: var(--portrait-opacity, 1);
@@ -502,18 +502,19 @@ a:focus-visible {
 }
 
 .world__opening p {
-  max-width: 72ch;
+  max-width: 68ch;
   margin: clamp(22px, 3.5vh, 38px) auto 0;
   color: var(--muted);
-  font-size: clamp(13px, 1.05vw, 16px);
-  line-height: 1.55;
+  font-size: clamp(13px, 0.96vw, 15px);
+  letter-spacing: -0.012em;
+  line-height: 1.62;
 }
 
 .world__opening-actions {
   display: flex;
   justify-content: center;
   gap: clamp(20px, 2.5vw, 36px);
-  margin-top: 20px;
+  margin-top: 22px;
 }
 
 .world__opening-link {
@@ -526,9 +527,9 @@ a:focus-visible {
   border: 0;
   background: transparent;
   font-family: var(--font-display);
-  font-size: clamp(22px, 1.8vw, 28px);
+  font-size: clamp(22px, 1.65vw, 27px);
   font-weight: 500;
-  letter-spacing: -0.015em;
+  letter-spacing: -0.025em;
   line-height: 1;
   text-decoration: none;
   transition:
@@ -648,7 +649,7 @@ a:focus-visible {
   font-size: 34px;
   font-weight: 400;
   line-height: 0.82;
-  letter-spacing: -0.055em;
+  letter-spacing: -0.045em;
 }
 
 .world-node__copy small {
@@ -656,8 +657,8 @@ a:focus-visible {
   color: var(--muted);
   font-size: 13px;
   font-weight: 400;
-  letter-spacing: -0.015em;
-  line-height: 1.42;
+  letter-spacing: -0.01em;
+  line-height: 1.48;
   text-transform: none;
   transition: color 180ms ease;
 }
@@ -1034,8 +1035,10 @@ a:focus-visible {
   border: 0;
   outline: 0;
   background: transparent;
-  font-size: 12px;
-  letter-spacing: -0.01em;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
   transform: translateX(-50%);
 }
 
@@ -1159,17 +1162,27 @@ a:focus-visible {
   }
 
   .world__opening {
-    top: 59vh;
+    top: 57.5vh;
     width: calc(100vw - 46px);
   }
 
   .world__portrait {
-    top: 35%;
-    width: clamp(290px, 86vw, 360px);
+    top: 32%;
+    width: clamp(270px, 80vw, 340px);
   }
 
   .world__title-word {
-    font-size: clamp(78px, 22vw, 128px);
+    font-size: clamp(74px, 21vw, 118px);
+  }
+
+  .world__title-word:first-child {
+    --title-word-x: 28vw;
+    --title-word-y: 44vh;
+  }
+
+  .world__title-word:last-child {
+    --title-word-x: 72vw;
+    --title-word-y: 44vh;
   }
 
   .world-node--question .world-node__copy > span {
@@ -1183,8 +1196,8 @@ a:focus-visible {
   .world__opening p {
     max-width: 48ch;
     margin-top: 24px;
-    font-size: 12px;
-    line-height: 1.45;
+    font-size: 11.5px;
+    line-height: 1.52;
   }
 
   .world__opening-actions {

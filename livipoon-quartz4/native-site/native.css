@@ -366,3 +366,658 @@ a:focus-visible {
     scroll-behavior: auto;
   }
 }
+
+/* Mirror: an unfolding memory capsule */
+.mirror-route {
+  overflow-x: clip;
+}
+.mirror-route::before {
+  z-index: 0;
+  background:
+    radial-gradient(circle at 78% 9%, color-mix(in srgb, var(--text) 10%, transparent), transparent 28rem),
+    repeating-radial-gradient(circle at 50% 50%, transparent 0 3px, color-mix(in srgb, var(--text) 1.5%, transparent) 4px);
+}
+.mirror-route .native-nav,
+.mirror-page {
+  position: relative;
+  z-index: 1;
+}
+.mirror-route .native-nav {
+  position: fixed;
+}
+.mirror-route .native-menu {
+  position: fixed;
+  z-index: 40;
+}
+.mirror-nav__center {
+  position: absolute;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--dim);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transform: translateX(-50%);
+}
+.mirror-nav__center span {
+  width: 24px;
+  height: 1px;
+  background: var(--line);
+}
+.mirror-sound {
+  gap: 7px;
+}
+.mirror-sound__bars {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  height: 10px;
+}
+.mirror-sound__bars i {
+  display: block;
+  width: 1px;
+  height: 3px;
+  background: currentColor;
+}
+.mirror-sound[aria-pressed="true"] .mirror-sound__bars i {
+  animation: mirror-sound 700ms ease-in-out infinite alternate;
+}
+.mirror-sound[aria-pressed="true"] .mirror-sound__bars i:nth-child(2) { animation-delay: -350ms; }
+.mirror-sound[aria-pressed="true"] .mirror-sound__bars i:nth-child(3) { animation-delay: -150ms; }
+@keyframes mirror-sound { to { height: 10px; } }
+
+.mirror-page {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+.mirror-hero {
+  position: relative;
+  display: grid;
+  min-height: 100svh;
+  align-content: center;
+  padding: 140px clamp(22px, 6vw, 92px) 56px;
+  isolation: isolate;
+}
+.mirror-kicker {
+  width: min(23rem, 70vw);
+  margin: 0 0 clamp(30px, 5vw, 72px);
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: clamp(10px, 1vw, 13px);
+  letter-spacing: 0.08em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+.mirror-hero h1 {
+  position: relative;
+  z-index: 2;
+  max-width: 78rem;
+  margin: 0;
+  font-size: clamp(4.1rem, 10.7vw, 10.5rem);
+  font-weight: 400;
+  letter-spacing: -0.065em;
+  line-height: 0.76;
+}
+.mirror-hero h1 span,
+.mirror-hero h1 em {
+  display: block;
+}
+.mirror-hero h1 em {
+  margin-left: clamp(0px, 9vw, 140px);
+  font-weight: 400;
+  white-space: nowrap;
+}
+.mirror-hero__bottom {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 30px;
+  margin-top: clamp(70px, 13vh, 150px);
+  font-family: "Bricolage Grotesque", sans-serif;
+}
+.mirror-hero__bottom p {
+  max-width: 28rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: clamp(13px, 1.2vw, 16px);
+  line-height: 1.55;
+}
+.mirror-enter {
+  display: flex;
+  min-width: 188px;
+  justify-content: space-between;
+  padding: 15px 17px;
+  border: 1px solid var(--text);
+  background: var(--text);
+  color: var(--bg);
+  font-size: 12px;
+  text-decoration: none;
+  transition: transform 300ms ease, box-shadow 300ms ease;
+}
+.mirror-enter:hover {
+  color: var(--bg);
+  box-shadow: 7px 7px 0 color-mix(in srgb, var(--text) 25%, transparent);
+  transform: translate(-3px, -3px);
+}
+.mirror-orbit {
+  position: absolute;
+  z-index: -1;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.mirror-orbit--one {
+  top: 17%;
+  right: 6%;
+  width: clamp(240px, 35vw, 560px);
+  aspect-ratio: 1;
+}
+.mirror-orbit--two {
+  top: 27%;
+  right: 13%;
+  width: clamp(160px, 23vw, 360px);
+  aspect-ratio: 1;
+  border-style: dashed;
+}
+.mirror-hero__figure {
+  position: absolute;
+  z-index: 1;
+  top: 22%;
+  right: clamp(8%, 17vw, 21%);
+  width: clamp(115px, 15vw, 230px);
+  height: 48%;
+  filter: drop-shadow(14px 18px 0 color-mix(in srgb, var(--text) 6%, transparent));
+  pointer-events: none;
+}
+.mirror-figure__head,
+.mirror-figure__body,
+.mirror-figure__reflection { position: absolute; display: block; background: var(--text); }
+.mirror-figure__head { top: 0; left: 31%; width: 38%; aspect-ratio: .82; border-radius: 49% 51% 46% 54%; }
+.mirror-figure__body { top: 24%; left: 7%; width: 86%; height: 42%; border-radius: 48% 52% 5% 5%; clip-path: polygon(21% 0, 80% 0, 100% 100%, 0 100%); }
+.mirror-figure__reflection { top: 69%; left: 0; width: 100%; height: 25%; opacity: .14; clip-path: polygon(0 0, 100% 0, 76% 100%, 21% 100%); }
+
+.mirror-keepsakes,
+.mirror-passage,
+.mirror-refrain,
+.mirror-action {
+  padding: clamp(120px, 18vw, 260px) clamp(22px, 6vw, 92px);
+}
+.mirror-keepsakes {
+  color: var(--bg);
+  background: var(--text);
+}
+.mirror-keepsakes__intro {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(240px, 1fr);
+  gap: 8vw;
+  align-items: end;
+  margin-bottom: clamp(70px, 11vw, 150px);
+}
+.mirror-keepsakes__intro h2 {
+  max-width: 17ch;
+  margin: 0;
+  font-size: clamp(3.6rem, 8vw, 8rem);
+  font-weight: 400;
+  letter-spacing: -0.055em;
+  line-height: .86;
+}
+.mirror-keepsakes__intro p {
+  margin: 0;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: clamp(13px, 1.3vw, 17px);
+  line-height: 1.6;
+}
+.mirror-bento {
+  display: grid;
+  grid-auto-flow: dense;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(330px, auto));
+  gap: 0;
+  border: 1px solid currentColor;
+}
+.memory-card {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  overflow: hidden;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(28px, 4vw, 62px);
+  border: .5px solid currentColor;
+  transition: flex 700ms cubic-bezier(.2,.8,.2,1), transform 700ms cubic-bezier(.2,.8,.2,1);
+}
+.memory-card--wide { grid-column: span 8; }
+.memory-card--small { grid-column: span 4; }
+.memory-card p {
+  position: relative;
+  z-index: 1;
+  max-width: 18ch;
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 4.5rem);
+  letter-spacing: -.035em;
+  line-height: .95;
+}
+.memory-card footer {
+  position: relative;
+  z-index: 1;
+  margin-top: 4rem;
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 12px;
+}
+.memory-card footer span { display: block; max-width: 23rem; margin-top: 5px; opacity: .6; }
+.memory-card--ink { color: var(--text); background: var(--bg); }
+.memory-card--paper { color: var(--bg); background: color-mix(in srgb, var(--bg) 14%, var(--text)); }
+.memory-card--line { background: repeating-linear-gradient(-45deg, transparent 0 12px, color-mix(in srgb, var(--bg) 8%, transparent) 13px 14px); }
+.memory-card--portrait { padding-left: 44%; background: color-mix(in srgb, var(--bg) 8%, var(--text)); }
+.memory-card__rings { position: absolute; right: -13%; bottom: -45%; width: 70%; aspect-ratio: 1; border: 1px solid currentColor; border-radius: 50%; opacity: .2; box-shadow: 0 0 0 50px transparent, 0 0 0 51px currentColor, 0 0 0 100px transparent, 0 0 0 101px currentColor; }
+.memory-card__sketch { position: absolute; inset: 10% 59% 10% 8%; }
+.memory-card__sketch i { position: absolute; display: block; border: 2px solid currentColor; border-radius: 50%; }
+.memory-card__sketch i:nth-child(1) { top: 5%; left: 24%; width: 48%; aspect-ratio: .8; }
+.memory-card__sketch i:nth-child(2) { top: 39%; left: 3%; width: 93%; height: 57%; border-radius: 48% 52% 4% 4%; }
+.memory-card__sketch i:nth-child(3) { top: 24%; left: 15%; width: 66%; height: 1px; border-width: 1px 0 0; border-radius: 0; transform: rotate(-12deg); }
+.memory-card:hover { transform: scale(.985); }
+
+.mirror-passage {
+  display: grid;
+  grid-template-columns: minmax(280px, .8fr) minmax(0, 1.2fr);
+  gap: clamp(70px, 12vw, 180px);
+  align-items: start;
+}
+.mirror-passage__title { position: sticky; top: 23vh; }
+.mirror-passage__title > p {
+  margin: 0 0 34px;
+  color: var(--dim);
+  font-family: "Bricolage Grotesque", sans-serif;
+  font-size: 10px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.mirror-passage h2 {
+  margin: 0;
+  font-size: clamp(4rem, 7vw, 8rem);
+  font-weight: 400;
+  letter-spacing: -.06em;
+  line-height: .78;
+}
+.mirror-passage h2 em { font-weight: 400; }
+.mirror-progress { width: min(100%, 320px); height: 1px; margin-top: 70px; overflow: hidden; background: var(--line); }
+.mirror-progress span { display: block; width: 100%; height: 100%; background: var(--text); transform: scaleX(.08); transform-origin: left; }
+.mirror-archive { display: grid; }
+.mirror-memory {
+  min-height: min(68vh, 650px);
+  padding: clamp(42px, 7vw, 86px) 0;
+  border-top: 1px solid var(--line);
+}
+.mirror-memory blockquote {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(2rem, 4.5vw, 5rem);
+  letter-spacing: -.035em;
+  line-height: .96;
+}
+.mirror-memory p { margin-top: 44px; color: var(--text); font-family: "Bricolage Grotesque", sans-serif; font-size: 13px; }
+.mirror-memory p span { display: block; margin-top: 5px; color: var(--dim); }
+.mirror-refrain { display: grid; min-height: 100vh; place-items: center; color: var(--bg); background: var(--text); }
+.mirror-refrain p { max-width: 20ch; margin: 0; font-size: clamp(3rem, 7.8vw, 8.5rem); letter-spacing: -.05em; line-height: .91; text-align: center; }
+.mirror-refrain .mirror-word { opacity: .13; }
+.mirror-action { position: relative; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.mirror-action h2 { position: relative; margin: 0; font-size: clamp(5rem, 13vw, 14rem); font-weight: 400; letter-spacing: -.07em; line-height: .7; }
+.mirror-action h2 em { font-weight: 400; }
+.mirror-action > p { max-width: 31rem; margin: 70px auto 35px; color: var(--muted); font-family: "Bricolage Grotesque", sans-serif; line-height: 1.55; }
+.mirror-action__link { display: inline-flex; gap: 70px; padding: 16px 18px; border: 1px solid var(--text); background: var(--text); color: var(--bg); font-family: "Bricolage Grotesque", sans-serif; font-size: 12px; text-decoration: none; transition: transform 300ms ease; }
+.mirror-action__link:hover { color: var(--bg); transform: rotate(-2deg) scale(1.04); }
+.mirror-action__mark { position: absolute; width: min(52vw, 640px); aspect-ratio: 1; border: 1px solid var(--line); border-radius: 50%; }
+.mirror-action__mark::before, .mirror-action__mark::after, .mirror-action__mark span { position: absolute; content: ""; background: var(--line); }
+.mirror-action__mark::before { top: 50%; left: -15%; width: 130%; height: 1px; }
+.mirror-action__mark::after { top: -15%; left: 50%; width: 1px; height: 130%; }
+.mirror-action__mark span { inset: 22%; border: 1px dashed var(--line); border-radius: 50%; background: transparent; }
+.mirror-footer { margin: 0 clamp(22px, 6vw, 92px); font-family: "Bricolage Grotesque", sans-serif; }
+
+@media (max-width: 800px) {
+  .mirror-nav__center { display: none; }
+  .mirror-hero { min-height: 920px; }
+  .mirror-hero h1 em { margin: .12em 0 0; white-space: normal; }
+  .mirror-hero__figure { top: 42%; right: 12%; height: 31%; }
+  .mirror-hero__bottom { align-items: stretch; flex-direction: column; margin-top: 300px; }
+  .mirror-enter { width: 100%; }
+  .mirror-keepsakes__intro, .mirror-passage { grid-template-columns: 1fr; }
+  .mirror-bento { grid-template-columns: 1fr; grid-template-rows: none; }
+  .memory-card--wide, .memory-card--small { grid-column: span 1; min-height: 390px; }
+  .memory-card--portrait { padding-left: 42%; }
+  .mirror-passage__title { position: relative; top: auto; }
+  .mirror-memory { min-height: 70svh; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mirror-sound__bars i { animation: none !important; }
+  .mirror-word { opacity: 1 !important; }
+}
+
+/* Mirror scrapbook edition */
+.mirror-scrapbook {
+  --scrap-paper: #eae0ce;
+  --scrap-paper-2: #f4ecd9;
+  --scrap-ink: #171713;
+  --scrap-blue: #657f96;
+  --scrap-red: #9b5547;
+  --scrap-green: #657765;
+  --scrap-yellow: #d8ad58;
+  color: var(--scrap-ink);
+  background: var(--scrap-paper);
+  font-family: "Geist", sans-serif;
+}
+.mirror-scrapbook::before {
+  z-index: 0;
+  opacity: .55;
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140' viewBox='0 0 140 140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.12'/%3E%3C/svg%3E"),
+    radial-gradient(circle at 18% 10%, #fff7e6, transparent 36rem),
+    var(--scrap-paper);
+}
+.mirror-scrapbook .native-nav {
+  color: var(--scrap-ink);
+  background: linear-gradient(var(--scrap-paper), transparent);
+}
+.mirror-scrapbook .native-brand,
+.mirror-scrapbook .native-button {
+  color: var(--scrap-ink);
+  font-family: "Geist", sans-serif;
+}
+.mirror-nav__scribble {
+  position: absolute;
+  left: 50%;
+  font-family: "Caveat", cursive;
+  font-size: 18px;
+  transform: translateX(-50%) rotate(-2deg);
+}
+.mirror-scrapbook .native-menu {
+  color: var(--scrap-ink);
+  background: var(--scrap-paper-2);
+}
+.mirror-scrapbook .native-menu a,
+.mirror-scrapbook .native-menu__close,
+.mirror-scrapbook .native-menu__foot { color: var(--scrap-ink); }
+.mirror-scrapbook .mirror-page {
+  overflow: clip;
+  color: var(--scrap-ink);
+  background: transparent;
+}
+
+.scrap-hero {
+  position: relative;
+  min-height: 1120px;
+  padding: 150px clamp(22px, 5vw, 76px) 90px;
+}
+.scrap-hero h1 {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  max-width: 82rem;
+  flex-direction: column;
+  margin: 5vh 0 0;
+  font-family: "Geist", sans-serif;
+  font-size: clamp(7rem, 20vw, 19rem);
+  font-weight: 800;
+  letter-spacing: -.09em;
+  line-height: .61;
+}
+.scrap-hero h1 span:nth-child(2) { margin-left: 18%; }
+.scrap-hero__note {
+  position: absolute;
+  z-index: 4;
+  top: 19%;
+  right: 8%;
+  width: 18rem;
+  margin: 0;
+  font-family: "Caveat", cursive;
+  font-size: clamp(1.5rem, 2.6vw, 2.7rem);
+  line-height: .9;
+  transform: rotate(5deg);
+}
+.scrap-hero__caption {
+  position: absolute;
+  right: 8%;
+  bottom: 12%;
+  width: 22rem;
+  margin: 0;
+  font-family: "Special Elite", monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  transform: rotate(-2deg);
+}
+.scrap-enter {
+  position: absolute;
+  bottom: 11%;
+  left: 7%;
+  display: flex;
+  width: 190px;
+  justify-content: space-between;
+  padding: 12px 3px;
+  border-bottom: 2px solid var(--scrap-ink);
+  color: var(--scrap-ink);
+  font-family: "Caveat", cursive;
+  font-size: 1.5rem;
+  text-decoration: none;
+  transform: rotate(-3deg);
+  transition: letter-spacing 300ms ease;
+}
+.scrap-enter:hover { color: var(--scrap-ink); letter-spacing: .05em; }
+.art-placeholder {
+  position: relative;
+  color: var(--scrap-ink);
+  background: #d6ccb9;
+  box-shadow: 4px 8px 18px rgb(40 30 20 / .13);
+}
+.art-placeholder::after {
+  position: absolute;
+  inset: 8px;
+  border: 1px dashed rgb(23 23 19 / .3);
+  content: "";
+  pointer-events: none;
+}
+.art-placeholder--hero {
+  position: absolute;
+  z-index: 3;
+  top: 38%;
+  right: 7%;
+  width: min(42vw, 560px);
+  aspect-ratio: 1.45;
+  overflow: hidden;
+  border: 12px solid var(--scrap-paper-2);
+  background: var(--scrap-blue);
+  transform: rotate(-5deg);
+}
+.art-placeholder--hero > p {
+  position: absolute;
+  z-index: 3;
+  right: 16px;
+  bottom: 11px;
+  margin: 0;
+  color: #f4ecd9;
+  font-family: "Special Elite", monospace;
+  font-size: 10px;
+}
+.art-placeholder__sky { position: absolute; inset: 0; background: linear-gradient(#667e96 0 55%, #c0a675 55%); }
+.art-placeholder__hill { position: absolute; right: -8%; bottom: -28%; width: 80%; aspect-ratio: 1; border-radius: 50%; background: #344b48; }
+.art-placeholder__person { position: absolute; z-index: 2; bottom: 0; left: 22%; width: 25%; height: 60%; }
+.art-placeholder__person i { position: absolute; top: 0; left: 28%; width: 42%; aspect-ratio: .8; border-radius: 50%; background: var(--scrap-yellow); }
+.art-placeholder__person b { position: absolute; right: 0; bottom: 0; left: 0; height: 76%; clip-path: polygon(24% 0, 76% 0, 100% 100%, 0 100%); background: var(--scrap-red); }
+.scrap-star { position: absolute; z-index: 4; font-family: "Caveat", cursive; font-size: 6rem; }
+.scrap-star--one { top: 14%; left: 47%; transform: rotate(16deg); }
+.scrap-star--two { right: 40%; bottom: 17%; color: var(--scrap-red); transform: rotate(-18deg); }
+
+.scrap-opening {
+  position: relative;
+  min-height: 1300px;
+  padding: 180px clamp(22px, 7vw, 110px);
+}
+.scrap-opening::before {
+  position: absolute;
+  top: 4%;
+  left: -10%;
+  width: 90%;
+  height: 85%;
+  border: 2px solid rgb(23 23 19 / .17);
+  border-radius: 49% 40% 44% 53%;
+  content: "";
+  transform: rotate(-8deg);
+}
+.scrap-opening__line {
+  position: relative;
+  z-index: 2;
+  max-width: 21ch;
+  margin: 0 0 0 28%;
+  font-family: "Caveat", cursive;
+  font-size: clamp(3.4rem, 7.5vw, 8rem);
+  letter-spacing: -.03em;
+  line-height: .82;
+  transform: rotate(-2deg);
+}
+.art-placeholder__tape {
+  position: absolute;
+  z-index: 5;
+  top: -15px;
+  left: 50%;
+  width: 90px;
+  height: 30px;
+  background: rgb(216 173 88 / .68);
+  transform: translateX(-50%) rotate(-3deg);
+}
+.art-placeholder--portrait {
+  position: absolute;
+  z-index: 3;
+  top: 43%;
+  left: 8%;
+  width: min(34vw, 420px);
+  aspect-ratio: .82;
+  padding: 9%;
+  background: #bec0b4;
+  transform: rotate(6deg);
+}
+.art-placeholder--portrait > p { position: absolute; right: 22px; bottom: 14px; margin: 0; font-family: "Caveat", cursive; font-size: 1.2rem; }
+.art-placeholder__face { position: absolute; inset: 18% 22% 25%; border: 3px solid var(--scrap-ink); border-radius: 51% 46% 48% 44%; }
+.art-placeholder__face i { position: absolute; top: 43%; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.art-placeholder__face i:first-child { left: 28%; }.art-placeholder__face i:nth-child(2) { right: 28%; }
+.art-placeholder__face b { position: absolute; bottom: 22%; left: 32%; width: 36%; height: 12%; border-bottom: 3px solid; border-radius: 50%; }
+.scrap-note { position: absolute; z-index: 4; padding: 30px 34px; box-shadow: 3px 7px 15px rgb(30 24 15 / .14); }
+.scrap-note blockquote { margin: 0; font-family: "Caveat", cursive; font-size: clamp(1.9rem, 3vw, 3rem); line-height: .92; }
+.scrap-note p { margin: 20px 0 0; font-family: "Special Elite", monospace; font-size: 10px; text-transform: uppercase; }
+.scrap-note--blue { top: 50%; right: 8%; width: min(42vw, 520px); background: #9bb2bd; transform: rotate(-4deg); }
+.scrap-note--tiny { right: 29%; bottom: 9%; width: min(28vw, 330px); background: #e8d393; transform: rotate(7deg); }
+.scrap-arrow { position: absolute; right: 8%; bottom: 2%; font-family: "Caveat", cursive; font-size: 1.35rem; transform: rotate(-8deg); }
+.scrap-arrow i { display: block; width: 110px; height: 50px; border-right: 2px solid; border-bottom: 2px solid; border-radius: 0 0 80% 0; transform: rotate(17deg); }
+
+.scrap-wall {
+  position: relative;
+  padding: 170px clamp(22px, 6vw, 92px) 250px;
+}
+.scrap-wall__intro { position: relative; z-index: 3; display: flex; align-items: end; justify-content: space-between; gap: 40px; margin-bottom: 160px; }
+.scrap-wall__intro h2 { margin: 0; font-family: "Special Elite", monospace; font-size: clamp(4rem, 10vw, 10rem); font-weight: 400; letter-spacing: -.08em; line-height: .7; text-transform: uppercase; transform: rotate(-2deg); }
+.scrap-wall__intro p { max-width: 23rem; margin: 0; font-family: "Caveat", cursive; font-size: 1.8rem; line-height: .95; transform: rotate(3deg); }
+.scrap-art-cluster {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-auto-flow: dense;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(230px, 26vw));
+  max-width: 1180px;
+  margin: 0 auto 220px;
+  gap: 0;
+}
+.scrap-art { margin: 0; padding: 18px 18px 44px; transition: transform 700ms cubic-bezier(.2,.8,.2,1); }
+.scrap-art:hover { z-index: 10; transform: rotate(0) scale(1.05); }
+.scrap-art__scene { display: grid; width: 100%; height: 100%; place-items: center; border: 2px solid; font-family: "Special Elite", monospace; font-size: clamp(1.5rem, 4vw, 4rem); background: repeating-linear-gradient(135deg, transparent 0 15px, rgb(23 23 19 / .05) 16px 17px); }
+.scrap-art figcaption { position: absolute; bottom: 13px; left: 20px; font-family: "Caveat", cursive; font-size: 1rem; }
+.scrap-art--a { z-index: 2; grid-column: span 7; background: #b8c4c3; transform: rotate(-4deg) translate(4%, 5%); }
+.scrap-art--b { grid-column: span 5; background: #d6bd89; transform: rotate(6deg) translate(-8%, 12%); }
+.scrap-art--c { z-index: 3; grid-column: span 5; background: #b2766a; transform: rotate(5deg) translate(8%, -9%); }
+.scrap-art--d { grid-column: span 7; background: #a9b29e; transform: rotate(-3deg) translate(-3%, 3%); }
+.scrap-messages {
+  position: relative;
+  z-index: 3;
+  max-width: 1220px;
+  margin: 0 auto;
+  columns: 3 280px;
+  column-gap: clamp(28px, 5vw, 76px);
+}
+.mirror-scrapbook .mirror-memory {
+  position: relative;
+  display: inline-block;
+  min-height: 0;
+  width: 100%;
+  margin: 0 0 clamp(60px, 9vw, 130px);
+  padding: clamp(23px, 3vw, 42px);
+  border: 0;
+  break-inside: avoid;
+  background: color-mix(in srgb, var(--scrap-paper-2) 80%, white);
+  box-shadow: 2px 5px 13px rgb(40 30 20 / .1);
+  transform: rotate(var(--note-rotate, -2deg)) translateY(var(--note-shift, 0));
+}
+.mirror-scrapbook .mirror-memory::before { position: absolute; top: -13px; left: 50%; width: 70px; height: 24px; content: ""; background: rgb(203 184 137 / .6); transform: translateX(-50%) rotate(var(--tape-rotate, 2deg)); }
+.mirror-scrapbook .mirror-memory:nth-child(4n + 2) { background: #c2cfca; }
+.mirror-scrapbook .mirror-memory:nth-child(4n + 3) { background: #dec99c; }
+.mirror-scrapbook .mirror-memory:nth-child(4n) { background: #c8b1a6; }
+.mirror-scrapbook .mirror-memory blockquote { margin: 0; font-family: "Caveat", cursive; font-size: clamp(1.7rem, 2.6vw, 2.7rem); font-weight: 500; letter-spacing: 0; line-height: .98; }
+.mirror-scrapbook .mirror-memory p { margin: 25px 0 0; color: var(--scrap-ink); font-family: "Special Elite", monospace; font-size: 10px; text-transform: uppercase; }
+.mirror-scrapbook .mirror-memory p span { display: block; margin-top: 5px; color: var(--scrap-ink); opacity: .55; text-transform: none; }
+
+.scrap-interlude {
+  position: relative;
+  display: grid;
+  min-height: 1100px;
+  place-items: center;
+  padding: 180px 6vw;
+}
+.scrap-interlude > p { position: relative; z-index: 2; max-width: 17ch; margin: 0; font-family: "Caveat", cursive; font-size: clamp(4rem, 9vw, 10rem); letter-spacing: -.04em; line-height: .77; text-align: center; transform: rotate(-2deg); }
+.scrap-interlude .mirror-word { opacity: .12; }
+.scrap-interlude small { position: absolute; right: 12%; bottom: 18%; font-family: "Special Elite", monospace; transform: rotate(5deg); }
+.scrap-interlude__drawing { position: absolute; width: min(78vw, 850px); aspect-ratio: 1; border: 2px solid rgb(23 23 19 / .18); border-radius: 47% 53% 46% 54%; transform: rotate(13deg); }
+.scrap-interlude__drawing span { position: absolute; border: 1px solid rgb(23 23 19 / .18); border-radius: 50%; }
+.scrap-interlude__drawing span:nth-child(1) { inset: 9%; }.scrap-interlude__drawing span:nth-child(2) { inset: 20%; }.scrap-interlude__drawing span:nth-child(3) { inset: 34%; }
+.scrap-interlude__drawing i { position: absolute; top: -5%; left: 48%; width: 2px; height: 110%; background: rgb(23 23 19 / .15); transform: rotate(27deg); }
+
+.scrap-ending { position: relative; min-height: 1100px; padding: 240px 6vw 160px; }
+.scrap-ending h2 { position: relative; z-index: 3; margin: 0; font-family: "Geist", sans-serif; font-size: clamp(6rem, 17vw, 17rem); font-weight: 800; letter-spacing: -.09em; line-height: .62; text-transform: uppercase; }
+.scrap-ending h2 span { display: block; margin-left: 10%; font-family: "Caveat", cursive; font-weight: 500; text-transform: none; transform: rotate(-3deg); }
+.scrap-ending__photo { position: absolute; z-index: 4; top: 20%; right: 8%; display: grid; width: min(31vw, 390px); aspect-ratio: .8; place-items: center; border: 13px solid var(--scrap-paper-2); background: var(--scrap-green); transform: rotate(7deg); }
+.scrap-ending__photo b { color: var(--scrap-paper-2); font-family: "Special Elite", monospace; font-size: clamp(1rem, 2vw, 2rem); line-height: 1.4; text-align: center; }
+.scrap-ending__aside { position: absolute; right: 12%; bottom: 24%; font-family: "Caveat", cursive; font-size: 1.8rem; transform: rotate(5deg); }
+.scrap-ending > a { position: absolute; bottom: 12%; left: 7%; display: flex; width: 180px; justify-content: space-between; padding-bottom: 8px; border-bottom: 2px solid; color: var(--scrap-ink); font-family: "Special Elite", monospace; text-decoration: none; }
+.mirror-scrapbook .mirror-footer { color: var(--scrap-ink); border-color: rgb(23 23 19 / .25); }
+.mirror-scrapbook .mirror-footer a { color: var(--scrap-ink); }
+
+@media (max-width: 760px) {
+  .mirror-nav__scribble { display: none; }
+  .scrap-hero { min-height: 920px; padding-top: 160px; }
+  .scrap-hero h1 { margin-top: 10vh; font-size: clamp(6.7rem, 36vw, 9rem); }
+  .scrap-hero h1 span:nth-child(2) { margin-left: 4%; }
+  .scrap-hero__note { top: 13%; right: 7%; width: 11rem; font-size: 1.5rem; }
+  .art-placeholder--hero { top: 45%; right: -6%; width: 82vw; }
+  .scrap-hero__caption { right: auto; bottom: 12%; left: 7%; width: 80%; }
+  .scrap-enter { bottom: 5%; }
+  .scrap-star--one { display: none; }
+  .scrap-opening { min-height: 1280px; padding-top: 120px; }
+  .scrap-opening__line { margin-left: 4%; font-size: 4rem; }
+  .art-placeholder--portrait { top: 34%; left: 5%; width: 72vw; }
+  .scrap-note--blue { top: 62%; right: 3%; width: 78vw; }
+  .scrap-note--tiny { right: auto; bottom: 5%; left: 4%; width: 66vw; }
+  .scrap-wall { padding-top: 100px; }
+  .scrap-wall__intro { align-items: start; flex-direction: column; margin-bottom: 100px; }
+  .scrap-wall__intro h2 { font-size: 4.5rem; }
+  .scrap-art-cluster { grid-template-columns: repeat(12, minmax(0, 1fr)); grid-template-rows: repeat(2, 220px); margin-bottom: 150px; }
+  .scrap-art { padding: 10px 10px 35px; }
+  .scrap-art figcaption { left: 12px; font-size: .8rem; }
+  .scrap-messages { columns: 1; }
+  .mirror-scrapbook .mirror-memory { width: 88%; margin-left: var(--note-left, 0); }
+  .scrap-interlude { min-height: 800px; }
+  .scrap-interlude > p { font-size: 4.1rem; }
+  .scrap-ending { min-height: 850px; padding-top: 180px; }
+  .scrap-ending h2 { font-size: 6.2rem; }
+  .scrap-ending__photo { top: 38%; right: 3%; width: 63vw; }
+  .scrap-ending__aside { right: auto; bottom: 17%; left: 7%; }
+  .scrap-ending > a { bottom: 7%; }
+}
