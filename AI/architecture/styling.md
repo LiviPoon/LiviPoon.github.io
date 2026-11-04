@@ -1,17 +1,18 @@
 # Styling
 
-- `quartz/styles/custom.scss` (~3200 lines) is the main custom sheet. **Never read it whole.**
-  Use `rtk grep`/grep for a selector, then read a narrow range.
-- Landmarks in custom.scss (approx. lines): `<page-break>` tag (~54), blog-only highlight (~74),
-  "Kero AI-style" home landing layout (~374), "Pilcrow-style" homepage layout (~946),
-  section entrance animations (~3155+). Line numbers drift; grep the comment text.
-- Other global files: `base.scss`, `variables.scss`, `callouts.scss`, `syntax.scss`.
-- Component styles: `quartz/components/styles/*.scss`, imported by the owning component.
-- Theme variables come from `quartz.config.ts` via `quartz/util/theme.ts` (CSS custom properties).
-- Light and dark mode both supported (`:root[saved-theme="dark"]`).
-- Fonts also live in `content/fonts/` (CMGeom, Garamondt).
+- Homepage: `site/styles.css` only.
+- Subpages: `site/assets/site.css` (~4900 lines, formatted). **Never read it whole.** grep for a
+  selector or a `data-slug` value, then read a narrow range.
+- Page-specific rules are scoped like `body:is([data-slug="cv"], [data-slug="cv/index"]) …`.
+  A page's `data-slug` lives on its `<body>`; keep it when editing.
+- Theme: `:root` vars (`--light`, `--dark`, `--gray`, …) with `:root[saved-theme="dark"]`
+  overrides. The theme is set before paint by `assets/js/theme-init.js` (default dark) and
+  toggled by `site-controls.js` (stored in `localStorage.theme`).
+- Fonts: Google Fonts, linked in each page `<head>` (Playfair Display, Figtree, IBM Plex Mono;
+  the homepage also uses Bricolage Grotesque, Cormorant Garamond, Anton).
+- `site.css` still has rules for features that are gone (search, graph, popovers, callouts).
+  They're harmless; delete them only after checking nothing visible changes.
 
-Rules: prefer scoping new rules to a page/feature class; test both themes; avoid growing
-custom.scss further—put new feature CSS in a component `.scss` file.
+Rules: scope new rules to a page or feature class, and test both themes.
 
-See also: [config-and-layout.md](config-and-layout.md)
+See also: [structure.md](structure.md)

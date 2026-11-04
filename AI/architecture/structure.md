@@ -2,31 +2,39 @@
 
 ```
 LiviPoon.github.io/
-  AGENTS.md, AI/            # agent docs (start at AI/CLAUDE.md)
+  AGENTS.md, AI/              # agent docs (start at AI/CLAUDE.md)
   .github/workflows/deploy.yml
-  livipoon-quartz4/
-    content/                # markdown + media (see ../content/conventions.md)
-    portfolio-src/          # static research-portfolio app (index.html, app.js, styles.css)
-    docs/                   # upstream Quartz documentation (ignore)
-    quartz.config.ts        # site config + plugin lists
-    quartz.layout.ts        # layout composition
-    quartz/
-      components/           # Preact TSX components
-        pages/              # page-type components (Content, Folder, Masonry, MirrorQuotes, Tag, 404)
-        scripts/            # *.inline.ts client scripts
-        styles/             # per-component SCSS
-      plugins/{transformers,filters,emitters}/
-      styles/               # base.scss, custom.scss (huge), variables, callouts, syntax
-      util/                 # theme.ts, path.ts, resources.ts ...
-      static/               # logo, icon, og-image, loader svg, giscus/, pdfjs/
+  site/                       # THE WEBSITE (published as-is)
+    index.html, app.js, styles.css     # homepage (self-contained design)
+    redwood.js, redwood/               # WebGL point-cloud background (homepage)
+    soundscape.js, soundscape/         # scroll-driven forest audio (homepage)
+    catalina.js, catalina-soundscape.js, catalina/   # island point cloud + audio (achievements)
+    research/ achievements/ publications/ art/ cv/ mirror/
+    powerlifting/ quote-journal/ tracked-habits/   # subpages: <dir>/index.html
+    easter-eggs.html, 404.html
+    assets/site.css                    # shared stylesheet for all subpages
+    assets/js/*.js                     # small per-feature scripts (see features/index.md)
+    data/site-data.js                  # GENERATED habit/quote data (tools/build-data.mjs)
+    images/ (art_photos/), cv/cv.pdf, art/index.images.json
+    static/                            # favicon, logo, og-image, pdfjs/ (CV viewer)
+  data/
+    habits/*.md                        # habit logs (source for site-data.js)
+    mirror-quotes.json                 # testimonials (source for homepage bold quotes)
+  tools/build-data.mjs                 # data/ → site/data/site-data.js (no dependencies)
+  tools/build-catalina.py              # Catalina OBJ + aerial texture → site/catalina/*.bin
+  archive/blog/                        # old blog posts, not published
 ```
 
-## content/ top-level
-`index.md` (home), `blog/`, `art/`, `cv/`, `habits/`, `tracked-habits/`, `mirror/`,
-`research/`, `powerlifting/`, `quote-journal/`, `publications/`, `achievements/`,
-`images/`, `fonts/`.
+## Two kinds of pages
+- **Homepage** (`site/index.html`): own CSS (`styles.css`) and JS (`app.js`, `redwood.js`,
+  `soundscape.js`) plus `assets/js/habit-timeline.js` + `roll-counter.js`.
+- **Achievements** (`site/achievements/index.html`) uses the homepage design too: `styles.css`,
+  `app.js`, `catalina.js`, `catalina-soundscape.js`, `roll-counter.js` (absolute `/` paths).
+- **Subpages**: share one skeleton (`#quartz-root > #quartz-body > .center …`) and
+  `assets/site.css`. Every subpage loads `theme-init.js` (head), `custom-cursor.js` and
+  `site-controls.js`, plus its feature script. `body[data-slug]` scopes page-specific CSS.
 
-## Untracked/generated (never edit, never commit)
-`node_modules/`, `public/`, `quartz/.quartz-cache/`
+The `quartz-*` ids/classes are leftovers from the old Quartz build. The CSS selects on them, so
+keep them unless you also update `assets/site.css`.
 
-See also: [build-pipeline.md](build-pipeline.md), [../content/conventions.md](../content/conventions.md)
+See also: [styling.md](styling.md), [../features/index.md](../features/index.md)

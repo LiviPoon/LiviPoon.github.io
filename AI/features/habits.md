@@ -1,11 +1,14 @@
 # Habit tracking
 
-- Data: one markdown file per habit in `content/habits/` (e.g. `exercise.md`, `floss.md`).
-  Frontmatter `entries:` is a YAML list of `YYYY-MM-DD` dates (completed days).
-  Legacy line formats still parsed: `YYYY-MM-DD, value`, `- YYYY-MM-DD`, bare `YYYY-MM-DD`.
-  Truthy values: numbers >0, `true/yes/y/x/done/complete/completed/checked`.
-- Aggregation: `Body.tsx` (`getHabitTrackingData`) builds `timeline` (date,count) and
-  `weeklySeries` (per habit, Monday-start UTC weeks, average per week). Duplicated in `portfolioRoot.ts`.
-- Rendering: D3 in `scripts/habitTimeline.inline.ts` (~800 lines; grep first).
-- Add a habit: create `content/habits/<name>.md` with `entries:`; rebuild.
-- `content/tracked-habits/` is a separate folder (index only).
+- Data: one markdown file per habit in `data/habits/` (e.g. `exercise.md`). Frontmatter
+  `entries:` is a list of `YYYY-MM-DD` completed days. Also parsed: `YYYY-MM-DD, value` rows
+  (truthy: numbers >0, `true/yes/y/x/done/complete/completed/checked`), `- YYYY-MM-DD`, bare dates.
+- `tools/build-data.mjs` aggregates them into `site/data/site-data.js`: a daily `timeline`
+  and a `weeklySeries` per habit (Monday-start UTC weeks, average per week). The script writes
+  them onto the hidden `#quartz-body` element's `data-*` attributes.
+- The deploy workflow re-runs the generator, so a pushed habit edit is always live. Run it
+  locally too, so the committed `site-data.js` and your preview stay current.
+- Consumers: `site/app.js` (homepage timeline), `assets/js/habit-timeline.js`
+  (`/tracked-habits/` chart), `assets/js/roll-counter.js` (`data-habit` counters, e.g. the
+  "side quests completed" number on achievements = total for "go outside of my comfort zone").
+- Add a habit: create `data/habits/<name>.md` with `entries:` and run the generator.
