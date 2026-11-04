@@ -20,7 +20,7 @@ const w = window as MyWindow
 (see `spa.inline.ts`, and existing scripts for the pattern) and clean up listeners on `prenav`.
 
 ## Scripts imported in Body.tsx
-clipboard, backgroundMusic, habitTimeline, customCursor, cvPdf, videoMuteSync,
+clipboard, siteControls, habitTimeline, customCursor, cvPdf, videoMuteSync,
 mirrorQuotesShuffle, homeMirrorQuotes, rollCounter, themeInit, sectionAnimations,
 researchPortfolio. Other scripts (search, graph, toc, explorer, etc.) belong to their own components.
 

@@ -45,14 +45,9 @@ function setHeartState(state: DotHeartCursorState, active: boolean) {
   state.root.classList.toggle("is-heart", active)
 }
 
-function schedulePositionUpdate(state: DotHeartCursorState) {
-  if (state.rafId !== null) return
-
-  state.rafId = window.requestAnimationFrame(() => {
-    state.root.style.left = `${state.x}px`
-    state.root.style.top = `${state.y}px`
-    state.rafId = null
-  })
+function updatePosition(state: DotHeartCursorState) {
+  // `translate` is compositor-only (no layout) and not transitioned, so the cursor tracks the pointer with no lag
+  state.root.style.translate = `${state.x}px ${state.y}px`
 }
 
 function initCustomCursor() {
@@ -97,20 +92,30 @@ function initCustomCursor() {
       state.visible = true
       state.root.classList.add("is-visible")
     }
-    schedulePositionUpdate(state)
+    updatePosition(state)
   }
 
-  document.addEventListener(
-    "pointermove",
-    (event) => {
-      if (event.pointerType && event.pointerType !== "mouse" && event.pointerType !== "pen") {
-        return
-      }
+  const onPointer = (event: PointerEvent) => {
+    if (event.pointerType && event.pointerType !== "mouse" && event.pointerType !== "pen") {
+      return
+    }
 
-      handleMove(event.clientX, event.clientY)
-    },
-    { passive: true },
-  )
+    // Use the browser's predicted position (when available) to compensate for the
+    // ~1 frame latency of a page-drawn cursor versus the OS pointer.
+    let x = event.clientX
+    let y = event.clientY
+    const predicted = event.getPredictedEvents?.()
+    if (predicted && predicted.length > 0) {
+      const last = predicted[0]
+      x = last.clientX
+      y = last.clientY
+    }
+    handleMove(x, y)
+  }
+
+  // pointerrawupdate fires unbatched (not frame-aligned) where supported
+  const moveEvent = "onpointerrawupdate" in window ? "pointerrawupdate" : "pointermove"
+  document.addEventListener(moveEvent, onPointer as EventListener, { passive: true })
 
   document.addEventListener("mouseover", (event) => {
     const hoverTarget = resolveHoverTarget(event.target)

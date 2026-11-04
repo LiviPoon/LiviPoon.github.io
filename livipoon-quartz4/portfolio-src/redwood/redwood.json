@@ -1,0 +1,171 @@
+{
+ "version": 1,
+ "source": "Coastal redwood TLS scan, Phil Wilkes (175_T0)",
+ "units": "m",
+ "up": "y",
+ "bboxMin": [
+  -10.6026,
+  -0.413,
+  -11.429
+ ],
+ "bboxMax": [
+  13.2645,
+  56.8634,
+  11.1228
+ ],
+ "totalHeight": 56.86,
+ "canopyBaseHeight": 24.5,
+ "crownRadius": 11.5,
+ "trunk": [
+  {
+   "y": 0.0,
+   "x": -0.033,
+   "z": -0.008,
+   "r": 1.362
+  },
+  {
+   "y": 2.0,
+   "x": 0.008,
+   "z": -0.037,
+   "r": 1.286
+  },
+  {
+   "y": 4.0,
+   "x": 0.092,
+   "z": -0.103,
+   "r": 1.17
+  },
+  {
+   "y": 6.0,
+   "x": 0.147,
+   "z": -0.197,
+   "r": 1.098
+  },
+  {
+   "y": 8.0,
+   "x": 0.168,
+   "z": -0.27,
+   "r": 1.051
+  },
+  {
+   "y": 10.0,
+   "x": 0.178,
+   "z": -0.337,
+   "r": 1.016
+  },
+  {
+   "y": 12.0,
+   "x": 0.196,
+   "z": -0.386,
+   "r": 0.994
+  },
+  {
+   "y": 14.0,
+   "x": 0.215,
+   "z": -0.434,
+   "r": 0.987
+  },
+  {
+   "y": 16.0,
+   "x": 0.235,
+   "z": -0.489,
+   "r": 0.957
+  },
+  {
+   "y": 18.0,
+   "x": 0.262,
+   "z": -0.567,
+   "r": 0.945
+  },
+  {
+   "y": 20.0,
+   "x": 0.301,
+   "z": -0.661,
+   "r": 0.956
+  },
+  {
+   "y": 22.0,
+   "x": 0.291,
+   "z": -0.726,
+   "r": 0.919
+  },
+  {
+   "y": 24.0,
+   "x": 0.277,
+   "z": -0.744,
+   "r": 0.864
+  },
+  {
+   "y": 26.0,
+   "x": 0.242,
+   "z": -0.767,
+   "r": 0.72
+  },
+  {
+   "y": 28.0,
+   "x": 0.225,
+   "z": -0.751,
+   "r": 0.662
+  },
+  {
+   "y": 30.0,
+   "x": 0.254,
+   "z": -0.721,
+   "r": 0.637
+  },
+  {
+   "y": 32.0,
+   "x": 0.286,
+   "z": -0.668,
+   "r": 0.629
+  },
+  {
+   "y": 34.0,
+   "x": 0.312,
+   "z": -0.593,
+   "r": 0.606
+  },
+  {
+   "y": 36.0,
+   "x": 0.336,
+   "z": -0.514,
+   "r": 0.587
+  },
+  {
+   "y": 38.0,
+   "x": 0.364,
+   "z": -0.456,
+   "r": 0.574
+  },
+  {
+   "y": 40.0,
+   "x": 0.381,
+   "z": -0.424,
+   "r": 0.564
+  },
+  {
+   "y": 42.0,
+   "x": 0.385,
+   "z": -0.413,
+   "r": 0.557
+  },
+  {
+   "y": 44.0,
+   "x": 0.356,
+   "z": -0.388,
+   "r": 0.579
+  }
+ ],
+ "files": {
+  "hi": {
+   "name": "redwood-hi.bin",
+   "count": 600000
+  },
+  "lo": {
+   "name": "redwood-lo.bin",
+   "count": 180000
+  }
+ },
+ "colorMode": "rgb",
+ "notes": "Y-up right-handed: x=east(src x), y=up(src z), z=-north(-src y); origin at trunk base centre. Pre-segmented single tree, no ground points; ~560 isolated noise points removed. Downsampled by voxel grid (1 random point per voxel; hi 11.2 cm, lo 21.9 cm), order shuffled so any prefix is a uniform subsample. Main stem forks into several reiterated stems at ~22-24 m; trunk[] follows the main leader to ~44 m. Lower trunk (1-22 m) is wrapped in epicormic sprout foliage. Top above ~50 m is sparsely sampled (occlusion). Colours are true RGB from the scanner camera, dark overall (median ~16-18), brown bark and green foliage; brighter toward the sky-lit top. s byte = uniform random 0-255."
+}

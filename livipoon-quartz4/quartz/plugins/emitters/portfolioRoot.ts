@@ -1,4 +1,4 @@
-import { FilePath, joinSegments, slugifyFilePath } from "../../util/path"
+import { FilePath, joinSegments } from "../../util/path"
 import { QuartzEmitterPlugin } from "../types"
 import fs from "fs"
 import path from "path"
@@ -11,27 +11,6 @@ import habitTimelineScript from "../../components/scripts/habitTimeline.inline"
 import rollCounterScript from "../../components/scripts/rollCounter.inline"
 
 const PORTFOLIO_SRC = "portfolio-src"
-
-const audioExtensions = new Set([".mp3", ".m4a", ".aac", ".wav", ".ogg", ".flac"])
-const preferredFirstTrack = "reality piano cover for lovers.mp3"
-
-function getBackgroundSongs(): string[] {
-  const songsDir = path.join(process.cwd(), "content", "songs")
-  if (!fs.existsSync(songsDir)) return []
-  const files = fs.readdirSync(songsDir, { withFileTypes: true })
-  return files
-    .filter((e) => e.isFile())
-    .map((e) => e.name)
-    .filter((n) => audioExtensions.has(path.extname(n).toLowerCase()))
-    .sort((a, b) => {
-      const aP = a.toLowerCase() === preferredFirstTrack
-      const bP = b.toLowerCase() === preferredFirstTrack
-      if (aP && !bP) return -1
-      if (!aP && bP) return 1
-      return a.localeCompare(b)
-    })
-    .map((n) => `/${slugifyFilePath(`songs/${n}` as FilePath)}`)
-}
 
 type HabitTimelinePoint = { date: string; count: number }
 type HabitWeeklyPoint = { weekStart: string; count: number }
@@ -202,15 +181,41 @@ export const PortfolioRoot: QuartzEmitterPlugin = () => ({
   name: "PortfolioRoot",
   async *emit({ argv }) {
     // Copy static files verbatim
-    for (const file of ["styles.css", "app.js"] as const) {
+    for (const file of ["styles.css", "app.js", "redwood.js", "soundscape.js"] as const) {
       const src = joinSegments(PORTFOLIO_SRC, file) as FilePath
+      if (!fs.existsSync(src)) continue
       const dest = joinSegments(argv.output, file) as FilePath
       await fs.promises.copyFile(src, dest)
       yield dest
     }
 
+    // Redwood point-cloud data (portfolio-src/redwood/*.bin + redwood.json)
+    const redwoodSrc = joinSegments(PORTFOLIO_SRC, "redwood")
+    if (fs.existsSync(redwoodSrc)) {
+      const redwoodDest = joinSegments(argv.output, "redwood")
+      await fs.promises.mkdir(redwoodDest, { recursive: true })
+      for (const entry of await fs.promises.readdir(redwoodSrc, { withFileTypes: true })) {
+        if (!entry.isFile() || !/\.(bin|json)$/.test(entry.name)) continue
+        const dest = joinSegments(redwoodDest, entry.name) as FilePath
+        await fs.promises.copyFile(joinSegments(redwoodSrc, entry.name), dest)
+        yield dest
+      }
+    }
+
+    // Redwood soundscape clips (portfolio-src/soundscape/*.m4a + credits.json)
+    const soundSrc = joinSegments(PORTFOLIO_SRC, "soundscape")
+    if (fs.existsSync(soundSrc)) {
+      const soundDest = joinSegments(argv.output, "soundscape")
+      await fs.promises.mkdir(soundDest, { recursive: true })
+      for (const entry of await fs.promises.readdir(soundSrc, { withFileTypes: true })) {
+        if (!entry.isFile() || !/\.(m4a|json)$/.test(entry.name)) continue
+        const dest = joinSegments(soundDest, entry.name) as FilePath
+        await fs.promises.copyFile(joinSegments(soundSrc, entry.name), dest)
+        yield dest
+      }
+    }
+
     // Bundle habit + counter scripts into portfolio-extensions.js
-    // (music is handled directly in app.js)
     const combined = [
       `(function(){try{\n${habitTimelineScript}\n}catch(e){console.error("portfolio-habit",e)}})();`,
       `(function(){try{\n${rollCounterScript}\n}catch(e){console.error("portfolio-counters",e)}})();`,
@@ -221,7 +226,6 @@ export const PortfolioRoot: QuartzEmitterPlugin = () => ({
     yield extDest
 
     // Compute data
-    const backgroundSongs = getBackgroundSongs()
     const { timeline, weeklySeries } = getHabitTrackingData()
     const mirrorBoldQuotes = getMirrorBoldQuotes()
 
@@ -230,7 +234,7 @@ export const PortfolioRoot: QuartzEmitterPlugin = () => ({
       joinSegments(PORTFOLIO_SRC, "index.html") as FilePath,
       "utf-8",
     )
-    const quartzBodyDiv = `<div id="quartz-body" hidden aria-hidden="true" data-background-songs='${JSON.stringify(backgroundSongs)}' data-habit-timeline='${JSON.stringify(timeline)}' data-habit-weekly-series='${JSON.stringify(weeklySeries)}' data-mirror-bold-quotes='${JSON.stringify(mirrorBoldQuotes)}'></div>`
+    const quartzBodyDiv = `<div id="quartz-body" hidden aria-hidden="true" data-habit-timeline='${JSON.stringify(timeline)}' data-habit-weekly-series='${JSON.stringify(weeklySeries)}' data-mirror-bold-quotes='${JSON.stringify(mirrorBoldQuotes)}'></div>`
     html = html.replace("</body>", `${quartzBodyDiv}\n</body>`)
 
     const htmlDest = joinSegments(argv.output, "index.html") as FilePath

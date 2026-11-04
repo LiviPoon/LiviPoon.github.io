@@ -24,7 +24,7 @@ LiviPoon.github.io/
 ## content/ top-level
 `index.md` (home), `blog/`, `art/`, `cv/`, `habits/`, `tracked-habits/`, `mirror/`,
 `research/`, `powerlifting/`, `quote-journal/`, `publications/`, `achievements/`,
-`songs/` (mp3), `images/`, `fonts/`.
+`images/`, `fonts/`.
 
 ## Untracked/generated (never edit, never commit)
 `node_modules/`, `public/`, `quartz/.quartz-cache/`

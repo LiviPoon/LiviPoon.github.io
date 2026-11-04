@@ -10,7 +10,6 @@ type TypewriterSpeechRuntime = {
   selectedVoice: SpeechSynthesisVoice | null
   speechRate: number
   activeUtteranceId: number
-  isMusicDucked: boolean
   refreshVoices: () => void
   dispose: () => void
 }
@@ -21,13 +20,6 @@ type QuoteSpeechPlayback = {
 }
 
 type QuoteSourceMode = "blog-posts" | "source-page"
-
-type BlogTypewriterWindow = Window &
-  typeof globalThis & {
-    __backgroundMusicDucked?: boolean
-  }
-
-const blogTypewriterWindow = window as BlogTypewriterWindow
 
 const parser = new DOMParser()
 const minChars = 24
@@ -80,9 +72,8 @@ const interestingTerms = [
 
 const sleep = (ms: number) => new Promise((resolve) => window.setTimeout(resolve, ms))
 const defaultSpeechRate = 0.86
-const musicMuteStorageKey = "backgroundMusicMuted"
+const audioMuteStorageKey = "siteAudioMuted"
 const muteEventName = "background-mute-changed"
-const musicDuckEventName = "background-music-duck-changed"
 const recentQuoteWindowSize = 24
 const fallbackQuotes = [
   "Curiosity often begins where comfort finally starts to end.",
@@ -93,15 +84,6 @@ const fallbackQuotes = [
 const minPostQuotePauseMs = 1000
 const maxPostQuotePauseMs = 3000
 const quoteSourcePostLimit = 3
-
-function emitMusicDuckChange(ducked: boolean) {
-  blogTypewriterWindow.__backgroundMusicDucked = ducked
-  document.dispatchEvent(
-    new CustomEvent(musicDuckEventName, {
-      detail: { ducked },
-    }),
-  )
-}
 
 function normalizeWhitespace(text: string): string {
   return text.replace(/\s+/g, " ").trim()
@@ -140,13 +122,7 @@ function isQuoteEligibleForSourceMode(text: string, sourceMode: QuoteSourceMode)
 }
 
 function isSpeechMuted(): boolean {
-  return localStorage.getItem(musicMuteStorageKey) === "true"
-}
-
-function setMusicDucked(runtime: TypewriterSpeechRuntime, ducked: boolean) {
-  if (runtime.isMusicDucked === ducked) return
-  runtime.isMusicDucked = ducked
-  emitMusicDuckChange(ducked)
+  return localStorage.getItem(audioMuteStorageKey) === "true"
 }
 
 function shuffle<T>(list: T[]): T[] {
@@ -474,7 +450,6 @@ function createSpeechRuntime(): TypewriterSpeechRuntime {
     selectedVoice: null,
     speechRate: defaultSpeechRate,
     activeUtteranceId: 0,
-    isMusicDucked: false,
     refreshVoices: () => {},
     dispose: () => {},
   }
@@ -491,14 +466,12 @@ function createSpeechRuntime(): TypewriterSpeechRuntime {
     const muted = (event as CustomEvent<{ muted?: boolean }>).detail?.muted
     if (muted) {
       synth.cancel()
-      setMusicDucked(runtime, false)
     }
   }
 
   const onStorageChanged = (event: StorageEvent) => {
-    if (event.key === musicMuteStorageKey && event.newValue === "true") {
+    if (event.key === audioMuteStorageKey && event.newValue === "true") {
       synth.cancel()
-      setMusicDucked(runtime, false)
     }
   }
 
@@ -507,7 +480,6 @@ function createSpeechRuntime(): TypewriterSpeechRuntime {
     selectedVoice: null,
     speechRate: defaultSpeechRate,
     activeUtteranceId: 0,
-    isMusicDucked: false,
     refreshVoices: () => {
       const allVoices = synth.getVoices()
       runtime.selectedVoice = selectHawkingLikeVoice(allVoices)
@@ -520,7 +492,6 @@ function createSpeechRuntime(): TypewriterSpeechRuntime {
   }
 
   runtime.dispose = () => {
-    setMusicDucked(runtime, false)
     synth.removeEventListener?.("voiceschanged", onVoicesChanged)
     document.removeEventListener(muteEventName, onMuteChanged as EventListener)
     window.removeEventListener("storage", onStorageChanged)
@@ -552,7 +523,6 @@ function speakQuote(
     document.visibilityState === "hidden" ||
     isSpeechMuted()
   ) {
-    setMusicDucked(runtime, false)
     return { expectedDurationMs, completion: Promise.resolve() }
   }
 
@@ -562,7 +532,6 @@ function speakQuote(
   }
   const utterance = new SpeechSynthesisUtterance(text)
   const utteranceId = ++runtime.activeUtteranceId
-  setMusicDucked(runtime, true)
   const voice = runtime.selectedVoice
 
   if (voice) {
@@ -579,13 +548,11 @@ function speakQuote(
     settleCompletion = resolve
     utterance.onend = () => {
       if (runtime.activeUtteranceId === utteranceId) {
-        setMusicDucked(runtime, false)
       }
       resolve()
     }
     utterance.onerror = () => {
       if (runtime.activeUtteranceId === utteranceId) {
-        setMusicDucked(runtime, false)
       }
       resolve()
     }
@@ -596,7 +563,6 @@ function speakQuote(
     synth.speak(utterance)
   } catch {
     if (runtime.activeUtteranceId === utteranceId) {
-      setMusicDucked(runtime, false)
     }
     settleCompletion()
   }

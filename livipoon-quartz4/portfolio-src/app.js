@@ -246,29 +246,19 @@
   }
 
   /* =========================================================
-     VIDEO CONTROLS + BACKGROUND MUSIC DUCKING
+     VIDEO CONTROLS + SOUNDSCAPE DUCKING
   ========================================================= */
   const videoCards = $$(".portfolio-video-card")
   const youtubePlayers = new Map()
   let ytReady = false
   const ytReadyCallbacks = []
 
-  function emitMusicDuck(ducked) {
-    document.dispatchEvent(
-      new CustomEvent("background-music-duck-changed", {
-        detail: { ducked, volume: ducked ? 0 : undefined },
-      }),
-    )
-  }
-
   function anyVideoAudible() {
     return videoCards.some((card) => card.dataset.videoMuted === "false")
   }
 
-  function syncMusicDuckToVideos() {
-    const ducked = anyVideoAudible()
-    emitMusicDuck(ducked)
-    bgMusic?.duck(ducked)
+  function syncSoundscapeDuckToVideos() {
+    window.__soundscape?.duck(anyVideoAudible())
   }
 
   function ensureYouTubeAPI() {
@@ -351,6 +341,10 @@
     setVideoIcon(card, true)
   }
 
+  function userWantsPlaying(card) {
+    return $(".portfolio-video-playpause", card)?.dataset.playing !== "false"
+  }
+
   function setupPortfolioVideos() {
     if (!videoCards.length) return
 
@@ -362,6 +356,13 @@
       setVideoIcon(card, true)
       setPlayPauseIcon(card, true)
 
+      // never leave the (redwood-mode) iframe invisible: reveal after 4s
+      // even if the player never reports PLAYING
+      setTimeout(() => card.classList.add("is-playing"), 4000)
+      $$(".portfolio-video-ctrl", card).forEach((btn) =>
+        btn.addEventListener("click", () => card.classList.add("is-playing")),
+      )
+
       whenYouTubeReady(() => {
         if (youtubePlayers.has(card)) return
         const player = new window.YT.Player(iframe, {
@@ -369,7 +370,11 @@
             onReady: (event) => {
               youtubePlayers.set(card, event.target)
               event.target.mute()
-              event.target.playVideo()
+              if (card.dataset.inView === "false") event.target.pauseVideo()
+              else event.target.playVideo()
+            },
+            onStateChange: (e) => {
+              if (e.data === 1) card.classList.add("is-playing")
             },
           },
         })
@@ -394,7 +399,7 @@
           muteVideoCard(card)
         }
 
-        syncMusicDuckToVideos()
+        syncSoundscapeDuckToVideos()
       })
 
       $(".portfolio-video-restart", card)?.addEventListener("click", () => {
@@ -414,10 +419,25 @@
         setPlayPauseIcon(card, !playing)
       })
     })
+
+    // pause off-screen videos; resume on return unless the user paused
+    const videoIO = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const card = entry.target
+          card.dataset.inView = String(entry.isIntersecting)
+          const player = youtubePlayers.get(card)
+          if (!player || typeof player.playVideo !== "function") return
+          if (!entry.isIntersecting) player.pauseVideo()
+          else if (userWantsPlaying(card)) player.playVideo()
+        })
+      },
+      { threshold: 0.1 },
+    )
+    videoCards.forEach((card) => videoIO.observe(card))
   }
 
   setupPortfolioVideos()
-  window.addEventListener("pagehide", () => emitMusicDuck(false))
 
   /* =========================================================
      MENU
@@ -449,168 +469,16 @@
   const btnTheme = $("#btn-theme")
   btnTheme?.addEventListener("click", () => window.__livi.toggleTheme())
 
-  /* ---- BACKGROUND MUSIC ---- */
-  const MUSIC_MUTED_KEY = "backgroundMusicMuted"
-  const MUSIC_STATE_KEY = "backgroundMusicPlaybackState"
-  let bgMusic = null
-
-  function initBgMusic() {
-    let playlist = []
-    try {
-      const host = document.getElementById("quartz-body")
-      const raw = host?.dataset?.backgroundSongs
-      if (raw) playlist = JSON.parse(raw)
-    } catch (e) {}
-    if (!playlist.length) return null
-
-    function shuffle(arr) {
-      const a = [...arr]
-      for (let i = a.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1))
-        ;[a[i], a[j]] = [a[j], a[i]]
-      }
-      return a
-    }
-
-    const audio = new Audio()
-    audio.preload = "auto"
-    audio.muted = localStorage.getItem(MUSIC_MUTED_KEY) === "true"
-    let queue = shuffle(playlist)
-    let lastSrc = null
-
-    // Web Audio reverb via synthetic impulse response
-    let audioCtx = null
-    try {
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)()
-      const source = audioCtx.createMediaElementSource(audio)
-      const convolver = audioCtx.createConvolver()
-      const dur = 3.0, decay = 2.4
-      const len = Math.floor(audioCtx.sampleRate * dur)
-      const buf = audioCtx.createBuffer(2, len, audioCtx.sampleRate)
-      for (let ch = 0; ch < 2; ch++) {
-        const d = buf.getChannelData(ch)
-        for (let i = 0; i < len; i++)
-          d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay)
-      }
-      convolver.buffer = buf
-      const dry = audioCtx.createGain()
-      const wet = audioCtx.createGain()
-      dry.gain.value = 0.70
-      wet.gain.value = 0.32
-      source.connect(dry); dry.connect(audioCtx.destination)
-      source.connect(convolver); convolver.connect(wet); wet.connect(audioCtx.destination)
-    } catch (e) {}
-    window.addEventListener("pointerdown", () => audioCtx?.resume(), { once: true })
-
-    function nextTrack() {
-      if (!queue.length) queue = shuffle(playlist.filter((s) => s !== lastSrc))
-      const src = queue.shift()
-      if (!src) return
-      lastSrc = src
-      audio.src = src
-      audio.load()
-    }
-
-    async function play() {
-      if (!audio.src) nextTrack()
-      if (audioCtx?.state === "suspended") audioCtx.resume()
-      try {
-        await audio.play()
-      } catch {
-        if (!audio.muted) {
-          audio.muted = true
-          try {
-            await audio.play()
-            audio.volume = 0
-            audio.muted = false
-            const ramp = () => {
-              audio.volume < 0.98 ? (audio.volume = Math.min(1, audio.volume + 0.04), setTimeout(ramp, 40)) : (audio.volume = 1)
-            }
-            ramp()
-          } catch {
-            window.addEventListener("pointerdown", () => void play(), { once: true })
-          }
-        }
-      }
-    }
-
-    audio.addEventListener("ended", () => { nextTrack(); void play() })
-    document.addEventListener("visibilitychange", () => {
-      document.visibilityState === "hidden" ? audio.pause() : void play()
-    })
-    function saveState() {
-      if (!lastSrc) return
-      try {
-        localStorage.setItem(MUSIC_STATE_KEY, JSON.stringify({
-          src: lastSrc, currentTime: audio.currentTime,
-          savedAt: Date.now(), muted: audio.muted, paused: false
-        }))
-      } catch {}
-    }
-
-    audio.addEventListener("timeupdate", saveState)
-    window.addEventListener("pagehide", saveState)
-    window.addEventListener("pageshow", (e) => { if (e.persisted) void play() })
-
-    // Restore saved position
-    try {
-      const stored = JSON.parse(localStorage.getItem(MUSIC_STATE_KEY) || "null")
-      if (stored?.src && playlist.includes(stored.src)) {
-        audio.src = stored.src
-        lastSrc = stored.src
-        audio.load()
-        audio.addEventListener("loadedmetadata", () => {
-          const elapsed = Math.max(0, (Date.now() - stored.savedAt) / 1000)
-          audio.currentTime = Math.min(stored.currentTime + elapsed, audio.duration - 0.2)
-        }, { once: true })
-      } else {
-        nextTrack()
-      }
-    } catch { nextTrack() }
-
-    if (document.visibilityState !== "hidden") void play()
-
-    let duckRaf = null
-    function rampToVolume(toVol) {
-      if (duckRaf) { cancelAnimationFrame(duckRaf); duckRaf = null }
-      const from = audio.volume
-      const start = performance.now()
-      const dur = 300
-      ;(function step(now) {
-        const t = Math.min(1, (now - start) / dur)
-        const eased = 1 - Math.pow(1 - t, 3)
-        audio.volume = from + (toVol - from) * eased
-        if (t < 1) duckRaf = requestAnimationFrame(step)
-        else { duckRaf = null; audio.volume = toVol }
-      })(start)
-    }
-
-    return {
-      setMuted(muted) {
-        audio.muted = muted
-        localStorage.setItem(MUSIC_MUTED_KEY, String(muted))
-        if (!muted) void play()
-      },
-      isMuted() { return audio.muted },
-      duck(ducked) { rampToVolume(ducked ? 0.08 : 1) },
-    }
-  }
-
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => { bgMusic = initBgMusic() }, { once: true })
-  } else {
-    bgMusic = initBgMusic()
-  }
-
   /* ---- MUTE BUTTON ---- */
   const btnMute = $("#btn-mute")
   const muteXPath = $("#mute-x")
   const muteLabel = $("#mute-label")
-  let globalMuted = localStorage.getItem(MUSIC_MUTED_KEY) === "true"
+  const AUDIO_MUTED_KEY = "siteAudioMuted"
+  let globalMuted = localStorage.getItem(AUDIO_MUTED_KEY) === "true"
 
   function syncMuteBtn(muted) {
     if (muteXPath) muteXPath.style.display = muted ? "" : "none"
-    if (muteLabel) muteLabel.textContent = muted ? "mute" : "unmute"
+    if (muteLabel) muteLabel.textContent = muted ? "unmute" : "mute"
   }
   syncMuteBtn(globalMuted)
 
@@ -623,8 +491,8 @@
         setVideoIcon(card, muted)
       }
     })
-    if (bgMusic) bgMusic.setMuted(muted)
-    else localStorage.setItem(MUSIC_MUTED_KEY, String(muted))
+    if (window.__soundscape) window.__soundscape.setMuted(muted)
+    else localStorage.setItem(AUDIO_MUTED_KEY, String(muted))
     syncMuteBtn(muted)
   }
 

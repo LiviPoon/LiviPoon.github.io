@@ -1,9 +1,5 @@
 type VideoMuteSyncWindow = Window &
   typeof globalThis & {
-    __backgroundMusicState?: {
-      audio: HTMLAudioElement
-      button: HTMLButtonElement
-    }
     YT?: {
       Player: new (
         el: string | HTMLIFrameElement,
@@ -27,7 +23,6 @@ interface YTPlayer {
   getPlayerState: () => number
 }
 
-const FORCE_MUTE_EVENT = "background-music-force-mute"
 const w = window as VideoMuteSyncWindow
 
 let ytPlayer: YTPlayer | null = null
@@ -79,6 +74,11 @@ function ensureIframeAPIParams(iframe: HTMLIFrameElement) {
     const url = new URL(src, window.location.href)
     let changed = false
 
+    if (url.searchParams.get("mute") !== "1") {
+      url.searchParams.set("mute", "1")
+      changed = true
+    }
+
     if (url.searchParams.get("enablejsapi") !== "1") {
       url.searchParams.set("enablejsapi", "1")
       changed = true
@@ -114,6 +114,7 @@ function initPlayerEarly(iframe: HTMLIFrameElement) {
       events: {
         onReady: (e) => {
           ytPlayer = e.target
+          e.target.mute()
         },
       },
     })
@@ -136,7 +137,6 @@ function setupVideoMuteSync() {
   initPlayerEarly(iframe)
 
   let videoMuted = true
-  let bgMusicWasMutedBeforeVideo = false
 
   const muteX1 = unmuteBtn.querySelector<SVGLineElement>(".pilcrow-video-mute-x1")
   const muteX2 = unmuteBtn.querySelector<SVGLineElement>(".pilcrow-video-mute-x2")
@@ -152,10 +152,6 @@ function setupVideoMuteSync() {
     unmuteBtn.setAttribute("aria-label", videoMuted ? "Unmute video" : "Mute video")
   }
 
-  function forceMuteBackgroundMusic(muted: boolean) {
-    document.dispatchEvent(new CustomEvent(FORCE_MUTE_EVENT, { detail: { muted } }))
-  }
-
   function toggleVideoMute() {
     if (!ytPlayer) return
 
@@ -164,16 +160,8 @@ function setupVideoMuteSync() {
 
     if (videoMuted) {
       ytPlayer.mute()
-      if (!bgMusicWasMutedBeforeVideo) {
-        forceMuteBackgroundMusic(false)
-      }
     } else {
       ytPlayer.unMute()
-      const state = w.__backgroundMusicState
-      bgMusicWasMutedBeforeVideo = state ? state.audio.muted : true
-      if (!bgMusicWasMutedBeforeVideo) {
-        forceMuteBackgroundMusic(true)
-      }
     }
   }
 

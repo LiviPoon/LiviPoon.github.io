@@ -21,7 +21,7 @@ AliasRedirects, FolderPage, Assets, Static, NotFoundPage, **PortfolioRoot**.
 - `mirrorQuotes.ts` — builds the mirror-quotes page from `content/mirror/mirror-quotes.json`.
   Page comp: `components/pages/MirrorQuotesPage.tsx`.
 - `portfolioRoot.ts` — emits the research portfolio from `portfolio-src/`; also bundles
-  `habitTimeline` and `rollCounter` inline scripts and reads songs/habits data.
+  `habitTimeline` and `rollCounter` inline scripts and copies soundscape clips, reads habits data.
 
 Note: song list and habit aggregation logic is duplicated in `components/Body.tsx` and
 `portfolioRoot.ts`; change both if you change either.

@@ -8,6 +8,6 @@
 | Type errors | `npm run check` (runs tsc and prettier) |
 | Prettier failures | `npm run format` |
 | Masonry page empty | Check `masonry:` folder paths in frontmatter, relative to `content/` |
-| Songs missing | File extension must be audio; located in `content/songs/` |
+| Soundscape silent | Needs a click/keypress first (autoplay policy); check `localStorage.siteAudioMuted`; clips in `portfolio-src/soundscape/` |
 | Habit missing from chart | `entries:` must be ISO `YYYY-MM-DD` |
 | Build hangs on huge assets | Check image sizes in `content/images/` (sharp) |
