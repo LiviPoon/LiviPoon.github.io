@@ -1,0 +1,65 @@
+{
+ "bboxMin": [
+  -22870.2,
+  0.0,
+  -19162.8
+ ],
+ "bboxMax": [
+  18169.2,
+  1440.7,
+  14884.9
+ ],
+ "landMin": [
+  -19188.9,
+  3.3,
+  -12967.0
+ ],
+ "landMax": [
+  14425.6,
+  1440.7,
+  10911.3
+ ],
+ "peak": [
+  1519.9,
+  1440.7,
+  718.3
+ ],
+ "axis": -2.4937,
+ "halfLength": 18270.0,
+ "halfWidth": 6105.5,
+ "landmarks": {
+  "avalon": [
+   11741.0,
+   0.0,
+   4564.9
+  ],
+  "isthmus": [
+   -7750.5,
+   0.0,
+   -8014.9
+  ],
+  "westEnd": [
+   -18917.4,
+   0.0,
+   -12884.4
+  ]
+ },
+ "version": 1,
+ "source": "Santa Catalina Island terrain mesh (Sketchfab download, Blender export) + Esri World Imagery texture",
+ "units": "m",
+ "up": "y",
+ "verticalExaggeration": 2.49,
+ "totalHeight": 1440.9,
+ "files": {
+  "hi": {
+   "name": "catalina-hi.bin",
+   "count": 680000
+  },
+  "lo": {
+   "name": "catalina-lo.bin",
+   "count": 200000
+  }
+ },
+ "colorMode": "rgb",
+ "notes": "x=east, y=up, z=south; origin at island centroid at sea level. Heights: 65x65 source grid, bicubic-smoothed, coastline refined from the aerial imagery land mask, faint canyon relief from high-passed imagery luminance. Sea points have y=0, density decaying ~3.6 km offshore. Colours: true aerial RGB. s byte = uniform random. Pre-shuffled."
+}

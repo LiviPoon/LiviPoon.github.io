@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Art — Livi Poon</title>
+    <meta name="description" content="Art gallery by Livi Poon." />
+    <meta property="og:description" content="Art gallery by Livi Poon." />
+    <meta property="og:site_name" content="Livi Poon" />
+    <meta property="og:title" content="Art" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.livipoon.com/art/" />
+    <meta property="og:image" content="https://www.livipoon.com/static/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/static/logo.svg" type="image/svg+xml" />
+    <link rel="icon" href="/static/icon.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,700&family=Anton&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body data-slug="art/index" class="page-art">
+    <!-- ====================== PAPER GRAIN OVERLAY ====================== -->
+    <svg id="grain" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <filter
+        id="paper-noise"
+        x="0%"
+        y="0%"
+        width="100%"
+        height="100%"
+        color-interpolation-filters="sRGB"
+      >
+        <feTurbulence
+          type="fractalNoise"
+          baseFrequency="0.65 0.62"
+          numOctaves="4"
+          seed="7"
+          stitchTiles="stitch"
+          result="noise"
+        />
+        <feColorMatrix type="saturate" values="0" in="noise" />
+      </filter>
+      <rect width="100%" height="100%" filter="url(#paper-noise)" fill="white" />
+    </svg>
+
+    <!-- ====================== CUSTOM CURSOR ====================== -->
+    <div id="cursor"></div>
+
+    <!-- ====================== TOP NAV ====================== -->
+    <nav class="nav" aria-label="Primary">
+      <a class="nav-brand" href="/">Livi Poon.</a>
+      <div class="nav-tools">
+        <button class="nav-btn" id="btn-theme" type="button" aria-label="Toggle theme">
+          <span class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="6" />
+              <path
+                d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6L19 19M5 19l1.4-1.4M17.6 6.4L19 5"
+              />
+            </svg>
+          </span>
+          <span>theme</span>
+        </button>
+        <a
+          class="nav-btn"
+          id="btn-cc"
+          href="https://creativecommons.org/licenses/by-nc-nd/4.0/"
+          target="_blank"
+          rel="noopener"
+          aria-label="Creative Commons license"
+        >
+          <span class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M9.5 10.5a2.5 2.5 0 1 1 0 3M14.5 10.5a2.5 2.5 0 1 1 0 3" />
+            </svg>
+          </span>
+          <span>CC BY-NC-ND</span>
+        </a>
+        <button class="nav-btn" id="btn-menu" type="button" aria-label="Open menu">Menu</button>
+      </div>
+    </nav>
+
+    <!-- ====================== MENU OVERLAY ====================== -->
+    <aside class="menu-panel" id="menu-panel" aria-hidden="true">
+      <div class="menu-col">
+        <p class="menu-label">( Index )</p>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/research/">Research</a></li>
+          <li><a href="/achievements/">Selected Achievements</a></li>
+          <li><a href="/art/">Art</a></li>
+          <li><a href="/mirror/">What People Say</a></li>
+          <li><a href="/cv/" target="_blank" rel="noopener">CV ↗</a></li>
+        </ul>
+      </div>
+      <div class="menu-col">
+        <p class="menu-label">( Reach out )</p>
+        <ul>
+          <li><a href="mailto:livipoonpublic@gmail.com">Email</a></li>
+          <li><a href="https://www.linkedin.com/in/livi-poon-9a93a8116/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li>
+            <a href="https://github.com/LiviPoon" target="_blank" rel="noopener"
+              >Gitlab</a
+            >
+          </li>
+          <li><a href="https://github.com/LiviPoon" target="_blank" rel="noopener">Github</a></li>
+        </ul>
+      </div>
+      <div class="menu-foot">
+        <span>( Menu )</span>
+        <span>By Livi Poon · est. 2004</span>
+      </div>
+      <div class="menu-wordmark" aria-hidden="true">livi.</div>
+    </aside>
+
+    <!-- ====================== HEADER ====================== -->
+    <header class="art-head" data-reveal>
+      <p class="art-label fade">Gallery</p>
+      <h1 class="art-title">
+        <span class="reveal-wrap"><span class="reveal-text">Art.</span></span>
+      </h1>
+      <p class="art-sub fade">
+        Paintings and drawings, shuffled fresh on every visit. Hover a piece for its title.
+      </p>
+    </header>
+
+    <!-- ====================== GALLERY (built by masonry.js) ====================== -->
+    <main class="art-wall" aria-label="Art gallery">
+      <div class="masonry-grid" id="masonry-grid" data-json-path="/art/index.images.json" data-images="[{&quot;src&quot;:&quot;/images/art_photos/ashely-alexander.jpg&quot;,&quot;alt&quot;:&quot;ashely alexander&quot;,&quot;width&quot;:3024,&quot;height&quot;:3111},{&quot;src&quot;:&quot;/images/art_photos/ashley-alexander-portrait.jpg&quot;,&quot;alt&quot;:&quot;ashley alexander portrait&quot;,&quot;width&quot;:3304,&quot;height&quot;:4096},{&quot;src&quot;:&quot;/images/art_photos/azuretit.jpg&quot;,&quot;alt&quot;:&quot;azuretit&quot;,&quot;width&quot;:4800,&quot;height&quot;:3200},{&quot;src&quot;:&quot;/images/art_photos/bluejeans!.jpg&quot;,&quot;alt&quot;:&quot;bluejeans!&quot;,&quot;width&quot;:1200,&quot;height&quot;:1800},{&quot;src&quot;:&quot;/images/art_photos/boy.jpg&quot;,&quot;alt&quot;:&quot;boy&quot;,&quot;width&quot;:1080,&quot;height&quot;:1080},{&quot;src&quot;:&quot;/images/art_photos/bunny-in-field.jpg&quot;,&quot;alt&quot;:&quot;bunny in field&quot;,&quot;width&quot;:1600,&quot;height&quot;:2400},{&quot;src&quot;:&quot;/images/art_photos/bunny-with-flower-hat.jpg&quot;,&quot;alt&quot;:&quot;bunny with flower hat&quot;,&quot;width&quot;:1600,&quot;height&quot;:2400},{&quot;src&quot;:&quot;/images/art_photos/bunny!.jpg&quot;,&quot;alt&quot;:&quot;bunny!&quot;,&quot;width&quot;:2550,&quot;height&quot;:3300},{&quot;src&quot;:&quot;/images/art_photos/chloe.jpg&quot;,&quot;alt&quot;:&quot;chloe&quot;,&quot;width&quot;:3879,&quot;height&quot;:4096},{&quot;src&quot;:&quot;/images/art_photos/color_study.jpg&quot;,&quot;alt&quot;:&quot;color_study&quot;,&quot;width&quot;:3400,&quot;height&quot;:5100},{&quot;src&quot;:&quot;/images/art_photos/coolgirl.jpg&quot;,&quot;alt&quot;:&quot;coolgirl&quot;,&quot;width&quot;:1600,&quot;height&quot;:2400},{&quot;src&quot;:&quot;/images/art_photos/coolgirl2.jpg&quot;,&quot;alt&quot;:&quot;coolgirl2&quot;,&quot;width&quot;:2400,&quot;height&quot;:1600},{&quot;src&quot;:&quot;/images/art_photos/coolgirl3.jpg&quot;,&quot;alt&quot;:&quot;coolgirl3&quot;,&quot;width&quot;:2400,&quot;height&quot;:1600},{&quot;src&quot;:&quot;/images/art_photos/crab-with-skate-board.jpg&quot;,&quot;alt&quot;:&quot;crab with skate board&quot;,&quot;width&quot;:2400,&quot;height&quot;:1600},{&quot;src&quot;:&quot;/images/art_photos/dad.jpg&quot;,&quot;alt&quot;:&quot;dad&quot;,&quot;width&quot;:4096,&quot;height&quot;:3057},{&quot;src&quot;:&quot;/images/art_photos/dream.jpg&quot;,&quot;alt&quot;:&quot;dream&quot;,&quot;width&quot;:3442,&quot;height&quot;:4096},{&quot;src&quot;:&quot;/images/art_photos/grumpy-bunny.jpg&quot;,&quot;alt&quot;:&quot;grumpy bunny&quot;,&quot;width&quot;:1600,&quot;height&quot;:2400},{&quot;src&quot;:&quot;/images/art_photos/hammerhead!.jpg&quot;,&quot;alt&quot;:&quot;hammerhead!&quot;,&quot;width&quot;:2400,&quot;height&quot;:1600},{&quot;src&quot;:&quot;/images/art_photos/hannah-2.jpg&quot;,&quot;alt&quot;:&quot;hannah 2&quot;,&quot;width&quot;:4581,&quot;height&quot;:3591},{&quot;src&quot;:&quot;/images/art_photos/hannah-3.jpg&quot;,&quot;alt&quot;:&quot;hannah 3&quot;,&quot;width&quot;:4757,&quot;height&quot;:6296},{&quot;src&quot;:&quot;/images/art_photos/hannah.jpg&quot;,&quot;alt&quot;:&quot;hannah&quot;,&quot;width&quot;:4764,&quot;height&quot;:6039},{&quot;src&quot;:&quot;/images/art_photos/home.jpg&quot;,&quot;alt&quot;:&quot;home&quot;,&quot;width&quot;:4096,&quot;height&quot;:3306},{&quot;src&quot;:&quot;/images/art_photos/lily-chee.jpg&quot;,&quot;alt&quot;:&quot;lily chee&quot;,&quot;width&quot;:3930,&quot;height&quot;:5047},{&quot;src&quot;:&quot;/images/art_photos/little-rodent.jpg&quot;,&quot;alt&quot;:&quot;little rodent&quot;,&quot;width&quot;:4800,&quot;height&quot;:3200},{&quot;src&quot;:&quot;/images/art_photos/octopus-2.jpg&quot;,&quot;alt&quot;:&quot;octopus 2&quot;,&quot;width&quot;:1600,&quot;height&quot;:2400},{&quot;src&quot;:&quot;/images/art_photos/osprey.jpg&quot;,&quot;alt&quot;:&quot;osprey&quot;,&quot;width&quot;:1800,&quot;height&quot;:1200},{&quot;src&quot;:&quot;/images/art_photos/runner.jpg&quot;,&quot;alt&quot;:&quot;runner&quot;,&quot;width&quot;:4096,&quot;height&quot;:3598},{&quot;src&quot;:&quot;/images/art_photos/sad-girl.jpg&quot;,&quot;alt&quot;:&quot;sad girl&quot;,&quot;width&quot;:2730,&quot;height&quot;:4096},{&quot;src&quot;:&quot;/images/art_photos/sophie!.png&quot;,&quot;alt&quot;:&quot;sophie!&quot;,&quot;width&quot;:1200,&quot;height&quot;:1800},{&quot;src&quot;:&quot;/images/art_photos/star.jpg&quot;,&quot;alt&quot;:&quot;star&quot;,&quot;width&quot;:1600,&quot;height&quot;:2400},{&quot;src&quot;:&quot;/images/art_photos/sunkissed!.jpg&quot;,&quot;alt&quot;:&quot;sunkissed!&quot;,&quot;width&quot;:2730,&quot;height&quot;:4096},{&quot;src&quot;:&quot;/images/art_photos/unknown.jpg&quot;,&quot;alt&quot;:&quot;unknown&quot;,&quot;width&quot;:4805,&quot;height&quot;:6343},{&quot;src&quot;:&quot;/images/art_photos/uvm-diving-swimmer.jpg&quot;,&quot;alt&quot;:&quot;uvm diving swimmer&quot;,&quot;width&quot;:1600,&quot;height&quot;:2400},{&quot;src&quot;:&quot;/images/art_photos/yellowstone-grand-canyon---plein-air.jpg&quot;,&quot;alt&quot;:&quot;yellowstone grand canyon - plein air&quot;,&quot;width&quot;:2730,&quot;height&quot;:4096},{&quot;src&quot;:&quot;/images/art_photos/zoey-eating-food!.jpg&quot;,&quot;alt&quot;:&quot;zoey eating food!&quot;,&quot;width&quot;:3200,&quot;height&quot;:4800}]"></div>
+      <div class="masonry-caption-modal" id="masonry-caption-modal"></div>
+    </main>
+
+    <!-- ====================== FOOTER ====================== -->
+    <footer class="footer">
+      <span>est. 2004 · Livi Poon · Artwork CC BY-NC-ND 4.0</span>
+      <a href="/">Home ↗</a>
+    </footer>
+
+    <script src="/app.js" defer></script>
+    <script src="/assets/js/masonry.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CV — Livi Poon</title>
+    <meta name="description" content="Curriculum vitae of Livi Poon: research in machine learning for medicine, papers, talks, experience and education. Climb Half Dome through it, or read the PDF." />
+    <meta property="og:description" content="Curriculum vitae of Livi Poon: research in machine learning for medicine, papers, talks, experience and education. Climb Half Dome through it, or read the PDF." />
+    <meta property="og:site_name" content="Livi Poon" />
+    <meta property="og:title" content="CV" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.livipoon.com/cv/" />
+    <meta property="og:image" content="https://www.livipoon.com/static/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/static/logo.svg" type="image/svg+xml" />
+    <link rel="icon" href="/static/icon.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,700&family=Anton&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <script>
+      // enter gate: once per session (audio needs a user gesture). Set before first paint.
+      try {
+        if (!sessionStorage.getItem("siteEntered")) document.documentElement.classList.add("gate")
+      } catch (e) {}
+      addEventListener("load", () =>
+        setTimeout(() => window.__gateReady || document.documentElement.classList.remove("gate"), 4000),
+      )
+    </script>
+  </head>
+  <body data-slug="cv/index" class="page-achievements page-cv">
+    <!-- ====================== ENTER GATE ====================== -->
+    <div class="enter-gate" id="enter-gate" role="dialog" aria-modal="true" aria-label="Enter site">
+      <p class="enter-gate-note">wear headphones for the best experience</p>
+      <button class="enter-gate-btn" id="enter-sound" type="button">enter</button>
+    </div>
+
+    <!-- ====================== PAPER GRAIN OVERLAY ====================== -->
+    <svg id="grain" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <filter id="paper-noise" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.65 0.62" numOctaves="4" seed="7" stitchTiles="stitch" result="noise" />
+        <feColorMatrix type="saturate" values="0" in="noise" />
+      </filter>
+      <rect width="100%" height="100%" filter="url(#paper-noise)" fill="white" />
+    </svg>
+
+    <div id="cursor"></div>
+
+    <!-- ====================== TOP NAV ====================== -->
+    <nav class="nav" aria-label="Primary">
+      <a class="nav-brand" href="/">Livi Poon.</a>
+      <div class="nav-tools">
+        <button class="nav-btn" id="btn-mute" type="button" aria-label="Toggle audio">
+          <span class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 9v6h4l5 4V5L8 9H4z" />
+              <path id="mute-x" d="M17 9l4 6M21 9l-4 6" />
+            </svg>
+          </span>
+          <span id="mute-label">mute</span>
+        </button>
+        <button class="nav-btn" id="btn-theme" type="button" aria-label="Toggle theme">
+          <span class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="6" />
+              <path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6L19 19M5 19l1.4-1.4M17.6 6.4L19 5" />
+            </svg>
+          </span>
+          <span>theme</span>
+        </button>
+        <a class="nav-btn" id="btn-cc" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener" aria-label="Creative Commons license">
+          <span class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M9.5 10.5a2.5 2.5 0 1 1 0 3M14.5 10.5a2.5 2.5 0 1 1 0 3" />
+            </svg>
+          </span>
+          <span>CC BY-NC</span>
+        </a>
+        <button class="nav-btn" id="btn-menu" type="button" aria-label="Open menu">Menu</button>
+      </div>
+    </nav>
+
+    <!-- ====================== MENU OVERLAY ====================== -->
+    <aside class="menu-panel" id="menu-panel" aria-hidden="true">
+      <div class="menu-col">
+        <p class="menu-label">( Index )</p>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/research/">Research</a></li>
+          <li><a href="/achievements/">Selected Achievements</a></li>
+          <li><a href="/art/">Art</a></li>
+          <li><a href="/#mirror">What People Say</a></li>
+          <li><a href="/cv/" data-menu-close>CV</a></li>
+        </ul>
+      </div>
+      <div class="menu-col">
+        <p class="menu-label">( Reach out )</p>
+        <ul>
+          <li><a href="mailto:livipoonpublic@gmail.com">Email</a></li>
+          <li><a href="https://www.linkedin.com/in/livi-poon-9a93a8116/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="https://github.com/LiviPoon" target="_blank" rel="noopener">Gitlab</a></li>
+          <li><a href="https://github.com/LiviPoon" target="_blank" rel="noopener">Github</a></li>
+        </ul>
+      </div>
+      <div class="menu-foot">
+        <span>( Menu )</span>
+        <span>By Livi Poon · est. 2004</span>
+      </div>
+      <div class="menu-wordmark" aria-hidden="true">livi.</div>
+    </aside>
+
+    <!-- ====================== HERO ====================== -->
+    <section class="hero ach-hero cv-hero" id="top" data-reveal data-screen-label="01 Hero" data-redwood-stop="0" data-redwood-side="right" data-redwood-dim="0.05">
+      <div class="hero-meta">
+        <h1 class="hero-name fade">Curriculum Vitae</h1>
+        <p class="hero-sub fade">From the valley floor to the summit. Scroll to <em>climb</em> through my CV, or read it the usual way.</p>
+        <div class="cv-actions fade">
+          <button class="cv-btn" type="button" data-cv-open>View CV</button>
+          <a class="cv-btn cv-btn--ghost" href="/cv/cv.pdf" download="Livi Poon CV.pdf">Download PDF</a>
+        </div>
+        <div class="hero-inline-links fade">
+          <a href="/">Home</a>
+          <a href="/achievements/">Selected Achievements</a>
+          <a href="/research/">Research</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================== I · OBJECTIVES ====================== -->
+    <section class="mirror-quotes ach-chapter cv-chapter" id="objectives" data-reveal data-screen-label="02 Objectives" data-redwood-stop="0.1" data-redwood-side="right" data-redwood-dim="0.3">
+      <div class="mirror-quotes-head">
+        <p class="label fade">I · Eyes on the Summit</p>
+        <h2>
+          <span class="reveal-wrap"><span class="reveal-text">Objectives.</span></span>
+        </h2>
+      </div>
+      <div class="mirror-quote-grid">
+        <article class="mirror-quote-card cv-entry fade">
+          <h3>Predictive, preventive, precision medicine</h3>
+          <p class="cv-note">Keep patients out of the doctor’s office by using artificial intelligence to discover and develop predictive, preventive and precision medicine.</p>
+          <span>Mission</span>
+        </article>
+        <article class="mirror-quote-card cv-entry fade">
+          <h3>Measure, then solve</h3>
+          <p class="cv-note">Uncover problems and develop solutions for measurable phenomena, like anthropogenic processes such as climate change, and their downstream outcomes in ecosystem biology.</p>
+          <span>Research</span>
+        </article>
+        <article class="mirror-quote-card cv-entry fade">
+          <h3>Outreach</h3>
+          <p class="cv-note">Engage in environmental and scientific outreach, inspire current generations, and make measurable impacts toward a resilient, connected and empathetic world.</p>
+          <span>Community</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- ====================== II · SKILLS ====================== -->
+    <section class="mirror-quotes ach-chapter cv-chapter" id="skills" data-reveal data-screen-label="03 Skills" data-redwood-stop="0.2" data-redwood-side="right" data-redwood-dim="0.3">
+      <div class="mirror-quotes-head">
+        <p class="label fade">II · Racked Up at Camp 4</p>
+        <h2>
+          <span class="reveal-wrap"><span class="reveal-text">Skills.</span></span>
+        </h2>
+      </div>
+      <div class="mirror-quote-grid">
+        <article class="mirror-quote-card cv-entry fade">
+          <h3>Programming languages</h3>
+          <p class="cv-org">Python</p>
+          <p class="cv-note">Coursework in Java, C++, R and Ruby; some JS, HTML, CSS, Vue.js and Node.js.</p>
+          <span>Languages</span>
+        </article>
+        <article class="mirror-quote-card cv-entry fade">
+          <h3>Packages</h3>
+          <p class="cv-org">TensorFlow · PyTorch · scikit-learn · Pandas · Matplotlib · Seaborn</p>
+          <span>Tools</span>
+        </article>
+        <article class="mirror-quote-card cv-entry fade">
+          <h3>Interests</h3>
+          <p class="cv-note">Machine learning, artificial intelligence, neuroscience, climate change, public health and magnetic resonance imaging.</p>
+          <span>Areas of research</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- ====================== III · RESEARCH EXPERIENCE ====================== -->
+    <section class="mirror-quotes ach-chapter cv-chapter cv-chapter--wide" id="research" data-reveal data-screen-label="04 Research" data-redwood-stop="0.3" data-redwood-side="right" data-redwood-dim="0.4">
+      <div class="mirror-quotes-head">
+        <p class="label fade">III · Northwest Face</p>
+        <h2>
+          <span class="reveal-wrap"><span class="reveal-text">Research</span></span>
+          <span class="reveal-wrap"><span class="reveal-text">Experience.</span></span>
+        </h2>
+      </div>
+      <div class="mirror-quote-grid">
+        <article class="mirror-quote-card cv-entry fade">
+          <h3>Paid Student Researcher</h3>
+          <p class="cv-org">Karolinska Institutet · Institute of Environmental Medicine, Integrative Epidemiology Lab</p>
+          <ul>
+            <li>Mapping disease progression pathways in GLP-1 receptor agonist users across Sweden’s National Patient Registry and National Diabetes Registry with a novel 3D disease network framework (PheWAS, comorbidity networks, temporal trajectories).</li>
+            <li>Leading a study to identify medicine biomarkers for ALS 1 and 15 years before diagnosis using XGBoost, Swedish registry data, SHAP and LIME, with the University of Helsinki and UNC Chapel Hill.</li>
+            <li>Consulting on and developing epidemiological machine learning studies with subject matter experts.</li>
+          </ul>
+          <span>May 2026 – present</span>
+        </article>
+        <article class="mirror-quote-card cv-entry fade">
+          <h3>Joint Research Scholar</h3>
+          <p class="cv-org">University of Vermont · Center for Complex Systems &amp; Data Science, Computational Story Lab, Neurobotics Lab</p>
+          <ul>
+            <li>Solo project: used machine learning on U.S. Census and HHS data to find statewide predictors of chronic disease mortality; presented at the 2025 American Public Health Association Annual Meeting.</li>
+            <li>Studied how body composition, self-compassion and social support change across seasons in college students; funded by a 2025 Summer Undergraduate Research Fellowship.</li>
+            <li>Used machine learning and Canonical Correlation Analysis to find digital phenotypes predicting preterm and term preeclampsia; presented at IEEE EMBC 2024.</li>
+            <li>Designed pathways for undergraduates to join graduate-level research, and brainstormed data-collection improvements with MassMutual’s data science team.</li>
+          </ul>
+          <span>Aug 2023 – present</span>
+        </article>
+        <article class="mirror-quote-card cv-entry fade">
+          <h3>Machine Learning &amp; Developmental Neuroscience Researcher</h3>
+          <p class="cv-org">Stanford School of Medicine · Center for Interdisciplinary Brain Sciences Research, Hong Lab</p>
+          <ul>
+            <li>Built scikit-learn and PyTorch models that find the brain regions predicting biological sex in structural MRI of pre- and post-adolescents; now refining with explainable AI (SHAP &amp; LIME).</li>
+            <li>Presented at the Stanford Maternal &amp; Child Health Research Institute 2022 Symposium.</li>
+            <li>Certified to operate the 3T MRI scanners at the Lucas Center for Imaging; corrected FreeSurfer segmentations and ran resting-state fMRI connectivity analysis for the PANDA study.</li>
+            <li>Built a Bash CLI linking FreeSurfer to Sherlock, Stanford’s computing cluster, and a Google Cloud VM for remote analysis.</li>
+          </ul>
+          <span>Jun 2021 – present</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- ====================== IV · PAPERS ====================== -->
+    <section class="mirror-quotes ach-chapter cv-chapter cv-chapter--wide" id="papers" data-reveal data-screen-label="05 Papers" data-redwood-stop="0.4" data-redwood-side="right" data-redwood-dim="0.4">
+      <div class="mirror-quotes-head">
+        <p class="label fade">IV · Anchors Set</p>
+        <h2>
+          <span class="reveal-wrap"><span class="reveal-text">Papers.</span></span>
+        </h2>
+      </div>
+      <div class="mirror-quote-grid">
+        <article class="mirror-quote-card cv-entry cv-cite fade">
+          <p><strong>Poon, E.</strong>, Honari, H., Ansarifar, J. S., &amp; Hong, D. S. Age stratification machine learning framework accurately captures neuroanatomical sex differences in adolescents. Preprint coming soon on bioRxiv.</p>
+          <span>Paper · 2026</span>
+        </article>
+        <article class="mirror-quote-card cv-entry cv-cite fade">
+          <p><strong>Poon, E.</strong>, Fudolig, M. I., Hidalgo, J. E., Loftness, B. C., Stanton, K., Tompkins, C. L., Bloomfield, L. S. P., Price, M., Dodds, P. S., Danforth, C. M., &amp; Cheney, N. Identifying body composition measures that correlate with self-compassion and social support. Accepted, <em>Journal of American College Health</em>. <a href="https://arxiv.org/abs/2602.18467" target="_blank" rel="noopener">arXiv ↗</a></p>
+          <span>Paper · 2026</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- ====================== V · CONFERENCE PRESENTATIONS ====================== -->
+    <section class="mirror-quotes ach-chapter cv-chapter cv-chapter--wide cv-talks" id="presentations" data-reveal data-screen-label="06 Presentations" data-redwood-stop="0.5" data-redwood-side="right" data-redwood-dim="0.4">
+      <div class="mirror-quotes-head">
+        <p class="label fade">V · Echoes off the Granite</p>
+        <h2>
+          <span class="reveal-wrap"><span class="reveal-text">Conference</span></span>
+          <span class="reveal-wrap"><span class="reveal-text">Presentations.</span></span>
+        </h2>
+      </div>
+      <div class="mirror-quote-grid">
+        <article class="mirror-quote-card cv-entry cv-cite fade">
+          <p>Identifying disease trajectories within Swedish Type 2 Diabetes patients who discontinue GLP-1 treatment. <em>IMM Research Symposium</em>, Stockholm.</p>
+          <span>Poster · Nov 2026</span>
+        </article>
+        <article class="mirror-quote-card cv-entry cv-cite fade">
+          <p>Nature experiences improve mood and sleep in a large longitudinal study of well-being using the Oura ring (co-author). <em>IC2S2, 12th Annual Conference on Computational Social Science</em>, Burlington.</p>
+          <span>Talk · Jul 2026</span>
+        </article>
+        <article class="mirror-quote-card cv-entry cv-cite fade">
+          <p>Preliminary Findings: Leveraging Machine Learning Models to Analyze Statewide Chronic Disease Measures that Predict Geographic Regions Across U.S. States. <em>UVM Student Research Conference</em>.</p>
+          <span>Poster · Apr 2026</span>
+        </article>
+        <details class="cv-more fade">
+          <summary><span class="cv-more-open">Show 4 earlier</span><span class="cv-more-close">Show fewer</span></summary>
+          <div class="cv-more-list">
+          <article class="mirror-quote-card cv-entry cv-cite fade">
+            <p>Leveraging eXtreme Gradient Boosting and Multiclass Stratification to Analyze the Impact of Sociodemographic Factors on Statewide Chronic Disease Deaths Across U.S. States. <em>American Public Health Association</em>, Washington, D.C.</p>
+            <span>Poster · Nov 2025</span>
+          </article>
+          <article class="mirror-quote-card cv-entry cv-cite fade">
+            <p>Body Composition Correlates with Self-Reported Social Support and Self-Compassion Among College Students: Insights From the LEMURS Study. <em>UVM Student Research Conference</em>.</p>
+            <span>Poster · Apr 2025</span>
+          </article>
+          <article class="mirror-quote-card cv-entry cv-cite fade">
+            <p>Selection Algorithms Identify Pre-Pregnancy Features Associated with Preeclampsia Onset and Birthweight Percentile. <em>IEEE Engineering in Medicine and Biology Conference</em>, Orlando.</p>
+            <span>Poster · Jul 2024</span>
+          </article>
+          <article class="mirror-quote-card cv-entry cv-cite fade">
+            <p>Deep Learning Identifies Sex-Specific Regions in Pre- and Post-adolescent Brains. <em>Stanford Maternal &amp; Child Health Research Institute Symposium</em>.</p>
+            <span>Poster · Oct 2022</span>
+          </article>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <!-- ====================== VI · PROFESSIONAL EXPERIENCE ====================== -->
+    <section class="mirror-quotes ach-chapter cv-chapter" id="professional" data-reveal data-screen-label="07 Professional" data-redwood-stop="0.6" data-redwood-side="right" data-redwood-dim="0.3">
+      <div class="mirror-quotes-head">
+        <p class="label fade">VI · The Approach</p>
+        <h2>
+          <span class="reveal-wrap"><span class="reveal-text">Professional</span></span>
+          <span class="reveal-wrap"><span class="reveal-text">Experience.</span></span>
+        </h2>
+      </div>
+      <div class="mirror-quote-grid">
+        <article class="mirror-quote-card cv-entry fade">
+          <h3>Machine Learning &amp; Data Science Intern</h3>
+          <p class="cv-org">BETA Technologies · Data Team</p>
+          <ul>
+            <li>Built a machine learning pipeline (scikit-learn, Pandas) to tag thermal runaway events in time-series pressure data, with GitLab CI for development, testing and deployment.</li>
+            <li>Sharpened software engineering: reusable code, docstrings, MyPy and linting, in a high-performance computing environment.</li>
+          </ul>
+          <span>May 2024 – Aug 2024</span>
+        </article>
+        <article class="mirror-quote-card cv-entry fade">
+          <h3>Outdoor Programs Intern</h3>
+          <p class="cv-org">University of Vermont</p>
+          <ul>
+            <li>Planned the trip, gear lists and group activities for a 23-person camping trip.</li>
+            <li>Cleaned and reorganized 150+ lbs of medical supplies.</li>
+          </ul>
+          <span>Jul 2023 – Aug 2023</span>
+        </article>
+        <article class="mirror-quote-card cv-entry fade">
+          <h3>Software Engineering Intern</h3>
+          <p class="cv-org">Loft Orbital</p>
+          <ul>
+            <li>Redesigned the 3D visualization in Loft’s satellite control software, showing satellites, orbits and ground stations in real time (Vite, Lit-Element, Vue.js).</li>
+            <li>Used Docker and GitLab CI for development, automated testing and deployment.</li>
+          </ul>
+          <span>Feb 2021 – Aug 2021</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- ====================== VII · AWARDS ====================== -->
+    <section class="mirror-quotes ach-chapter cv-chapter" id="awards" data-reveal data-screen-label="08 Awards" data-redwood-stop="0.7" data-redwood-side="right" data-redwood-dim="0.3">
+      <div class="mirror-quotes-head">
+        <p class="label fade">VII · Thank God Ledge</p>
+        <h2>
+          <span class="reveal-wrap"><span class="reveal-text">Awards.</span></span>
+        </h2>
+      </div>
+      <div class="mirror-quote-grid">
+        <article class="mirror-quote-card cv-entry fade">
+          <h3>Presidential Leadership Fellowship</h3>
+          <p class="cv-note">Worked with UVM President Marlene Tromp, Honors College Dean David Jenemann and industry leaders to study societal challenges across scales and weigh evidence-based solutions.</p>
+          <span>UVM · 2026</span>
+        </article>
+        <article class="mirror-quote-card cv-entry fade">
+          <h3>Summer Undergraduate Research Fellowship</h3>
+          <p class="cv-note">Funding to keep developing my psychosocial research on the Lived Experiences Measured Using Rings Study (LEMURS) over summer 2025.</p>
+          <span>UVM · 2025</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- ====================== VIII · PERSONAL PROJECTS ====================== -->
+    <section class="mirror-quotes ach-chapter cv-chapter" id="projects" data-reveal data-screen-label="09 Projects" data-redwood-stop="0.78" data-redwood-side="right" data-redwood-dim="0.3">
+      <div class="mirror-quotes-head">
+        <p class="label fade">VIII · Off Route</p>
+        <h2>
+          <span class="reveal-wrap"><span class="reveal-text">Personal</span></span>
+          <span class="reveal-wrap"><span class="reveal-text">Projects.</span></span>
+        </h2>
+      </div>
+      <div class="mirror-quote-grid">
+        <article class="mirror-quote-card cv-entry fade">
+          <h3>PovellestoFilms</h3>
+          <p class="cv-note">A creative project on capturing life authentically on camera, including the short film <em>A Letter To Our Future Selves</em>.</p>
+          <span>2020 – present</span>
+        </article>
+        <article class="mirror-quote-card cv-entry fade">
+          <h3>PovellestoDraws</h3>
+          <p class="cv-note">Started an art business that broke even and made 7× its initial investment in the first month; once earned $600 in 3 hours drawing portraits and selling originals.</p>
+          <span>2023 – 2024</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- ====================== IX · CERTIFICATIONS ====================== -->
+    <section class="mirror-quotes ach-chapter cv-chapter" id="certifications" data-reveal data-screen-label="10 Certifications" data-redwood-stop="0.85" data-redwood-side="right" data-redwood-dim="0.3">
+      <div class="mirror-quotes-head">
+        <p class="label fade">IX · Below Mirror Lake</p>
+        <h2>
+          <span class="reveal-wrap"><span class="reveal-text">Certifications.</span></span>
+        </h2>
+      </div>
+      <div class="mirror-quote-grid">
+        <article class="mirror-quote-card cv-entry fade">
+          <h3>Scuba diving</h3>
+          <p class="cv-org">SDI Open Water Scuba Diver · SDI Computer Nitrox Diver · PADI Reef Renewal Diver</p>
+          <span>May 2023</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- ====================== X · EDUCATION ====================== -->
+    <section class="mirror-quotes ach-chapter cv-chapter" id="education" data-reveal data-screen-label="11 Education" data-redwood-stop="0.92" data-redwood-side="right" data-redwood-dim="0.3">
+      <div class="mirror-quotes-head">
+        <p class="label fade">X · The Valley Floor</p>
+        <h2>
+          <span class="reveal-wrap"><span class="reveal-text">Education.</span></span>
+        </h2>
+      </div>
+      <div class="mirror-quote-grid">
+        <article class="mirror-quote-card cv-entry fade">
+          <h3>University of Vermont</h3>
+          <p class="cv-org">Neurobotics &amp; Artificial Intelligence (B.A.), Minor in Neuroscience</p>
+          <p class="cv-note">Intro to Machine Learning, Genetics, Molecular Bio, Psych Research Methods w/ lab, Exploring Neuroscience w/ lab, Learning, Cognition &amp; Behavior.</p>
+          <span>2023 – present · expected 2027</span>
+        </article>
+        <article class="mirror-quote-card cv-entry fade">
+          <h3>The Nueva School</h3>
+          <p class="cv-org">High school diploma</p>
+          <p class="cv-note">Advanced Machine Learning, Computer Vision, Software Engineering, Algorithms, Computer Internals, Entrepreneurship, and Data Science.</p>
+          <span>2018 – 2023</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- ====================== SUMMIT ====================== -->
+    <section class="about cv-summit" id="about" data-reveal data-screen-label="12 Summit" data-redwood-stop="1" data-redwood-side="center" data-redwood-dim="0.05">
+      <p class="about-cta">
+        <span class="about-cta-line">That’s the <em>summit</em>, for now.</span>
+      </p>
+      <div class="cv-actions cv-actions--center fade">
+        <button class="cv-btn" type="button" data-cv-open>View CV</button>
+        <a class="cv-btn cv-btn--ghost" href="/cv/cv.pdf" download="Livi Poon CV.pdf">Download PDF</a>
+      </div>
+      <a class="about-link" href="/">back home</a>
+    </section>
+
+    <!-- ====================== FOOTER ====================== -->
+    <footer class="footer" data-screen-label="08 Footer">
+      <span>est. 2004 · Livi Poon · Half Dome photogrammetry scan</span>
+      <a href="https://github.com/LiviPoon" target="_blank" rel="noopener">Github ↗</a>
+      <details class="sound-credits" id="sound-credits">
+        <summary>Sound credits</summary>
+        <ul id="sound-credits-list"></ul>
+      </details>
+    </footer>
+
+    <!-- ====================== CV OVERLAY (the PDF, rendered by pdf.js on first open) ====================== -->
+    <div class="cv-overlay" id="cv-overlay" role="dialog" aria-modal="true" aria-label="CV (PDF)" hidden>
+      <div class="cv-overlay-bar">
+        <span>Livi Poon · CV</span>
+        <a href="/cv/cv.pdf" target="_blank" rel="noopener">Open PDF ↗</a>
+        <button type="button" data-cv-close>Close</button>
+      </div>
+      <div class="cv-overlay-scroll">
+        <div class="cv-pdf-pages" data-pdf-src="/cv/cv.pdf" data-defer>
+          <p class="cv-pdf-loading">Loading CV…</p>
+        </div>
+      </div>
+    </div>
+
+    <script src="/app.js" defer></script>
+    <script src="/halfdome.js" defer></script>
+    <script src="/halfdome-soundscape.js" defer></script>
+    <script src="/assets/js/cv-pdf.js" defer></script>
+    <script src="/assets/js/cv-overlay.js" defer></script>
+  </body>
+</html>

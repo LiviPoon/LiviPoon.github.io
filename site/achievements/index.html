@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Selected Achievements — Livi Poon</title>
+    <meta name="description" content="Selected achievements, awards, and recognitions in research, medicine, and leadership." />
+    <meta property="og:description" content="Selected achievements, awards, and recognitions in research, medicine, and leadership." />
+    <meta property="og:site_name" content="Livi Poon" />
+    <meta property="og:title" content="Selected Achievements" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.livipoon.com/achievements/" />
+    <meta property="og:image" content="https://www.livipoon.com/static/og-image.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="icon" href="/static/logo.svg" type="image/svg+xml" />
+    <link rel="icon" href="/static/icon.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400;1,700&family=Anton&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+    <script>
+      // enter gate: once per session (audio needs a user gesture). Set before first paint.
+      try {
+        if (!sessionStorage.getItem("siteEntered")) document.documentElement.classList.add("gate")
+      } catch (e) {}
+      addEventListener("load", () =>
+        setTimeout(() => window.__gateReady || document.documentElement.classList.remove("gate"), 4000),
+      )
+    </script>
+  </head>
+  <body data-slug="achievements/index" class="page-achievements">
+    <!-- ====================== ENTER GATE ====================== -->
+    <div class="enter-gate" id="enter-gate" role="dialog" aria-modal="true" aria-label="Enter site">
+      <p class="enter-gate-note">wear headphones for the best experience</p>
+      <button class="enter-gate-btn" id="enter-sound" type="button">enter</button>
+    </div>
+
+    <!-- ====================== PAPER GRAIN OVERLAY ====================== -->
+    <svg id="grain" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <filter id="paper-noise" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.65 0.62" numOctaves="4" seed="7" stitchTiles="stitch" result="noise" />
+        <feColorMatrix type="saturate" values="0" in="noise" />
+      </filter>
+      <rect width="100%" height="100%" filter="url(#paper-noise)" fill="white" />
+    </svg>
+
+    <div id="cursor"></div>
+
+    <!-- ====================== TOP NAV ====================== -->
+    <nav class="nav" aria-label="Primary">
+      <a class="nav-brand" href="/">Livi Poon.</a>
+      <div class="nav-tools">
+        <button class="nav-btn" id="btn-mute" type="button" aria-label="Toggle audio">
+          <span class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 9v6h4l5 4V5L8 9H4z" />
+              <path id="mute-x" d="M17 9l4 6M21 9l-4 6" />
+            </svg>
+          </span>
+          <span id="mute-label">mute</span>
+        </button>
+        <button class="nav-btn" id="btn-theme" type="button" aria-label="Toggle theme">
+          <span class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="6" />
+              <path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.4 1.4M17.6 17.6L19 19M5 19l1.4-1.4M17.6 6.4L19 5" />
+            </svg>
+          </span>
+          <span>theme</span>
+        </button>
+        <a class="nav-btn" id="btn-cc" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener" aria-label="Creative Commons license">
+          <span class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="9" />
+              <path d="M9.5 10.5a2.5 2.5 0 1 1 0 3M14.5 10.5a2.5 2.5 0 1 1 0 3" />
+            </svg>
+          </span>
+          <span>CC BY-NC</span>
+        </a>
+        <button class="nav-btn" id="btn-menu" type="button" aria-label="Open menu">Menu</button>
+      </div>
+    </nav>
+
+    <!-- ====================== MENU OVERLAY ====================== -->
+    <aside class="menu-panel" id="menu-panel" aria-hidden="true">
+      <div class="menu-col">
+        <p class="menu-label">( Index )</p>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/research/">Research</a></li>
+          <li><a href="/achievements/" data-menu-close>Selected Achievements</a></li>
+          <li><a href="/art/">Art</a></li>
+          <li><a href="/#mirror">What People Say</a></li>
+          <li><a href="/cv/" target="_blank" rel="noopener">CV ↗</a></li>
+        </ul>
+      </div>
+      <div class="menu-col">
+        <p class="menu-label">( Reach out )</p>
+        <ul>
+          <li><a href="mailto:livipoonpublic@gmail.com">Email</a></li>
+          <li><a href="https://www.linkedin.com/in/livi-poon-9a93a8116/" target="_blank" rel="noopener">LinkedIn</a></li>
+          <li><a href="https://github.com/LiviPoon" target="_blank" rel="noopener">Gitlab</a></li>
+          <li><a href="https://github.com/LiviPoon" target="_blank" rel="noopener">Github</a></li>
+        </ul>
+      </div>
+      <div class="menu-foot">
+        <span>( Menu )</span>
+        <span>By Livi Poon · est. 2004</span>
+      </div>
+      <div class="menu-wordmark" aria-hidden="true">livi.</div>
+    </aside>
+
+    <!-- ====================== HERO ====================== -->
+    <section class="hero ach-hero" id="top" data-reveal data-screen-label="01 Hero" data-redwood-stop="0" data-redwood-side="center" data-redwood-dim="0.05">
+      <div class="hero-meta">
+        <h1 class="hero-name fade">Selected Achievements</h1>
+        <p class="hero-sub fade">Awards, firsts, and side quests, from the <em>most recent</em> down to where it all started.</p>
+        <div class="hero-inline-links fade">
+          <a href="/">Home</a>
+          <a href="/cv/">Curriculum Vitae</a>
+          <a href="/art/">Art</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================== COUNTERS ====================== -->
+    <section class="counters" id="counters" data-reveal data-screen-label="02 Counters" data-redwood-stop="0.18" data-redwood-side="right" data-redwood-dim="0.05" aria-label="Counters">
+      <div class="counters-head">
+        <p class="label fade">Still counting</p>
+        <h2>
+          <span class="reveal-wrap"><span class="reveal-text">Side</span></span>
+          <span class="reveal-wrap"><span class="reveal-text">Quests.</span></span>
+        </h2>
+      </div>
+      <div class="counter-grid">
+        <div class="pilcrow-roll-counter counter-card" data-roll-counter data-habit="go outside of my comfort zone">
+          <div class="pilcrow-roll-counter-number"><span class="roll-counter-int">0</span></div>
+          <p class="pilcrow-roll-counter-caption">side quests completed.</p>
+        </div>
+        <div class="pilcrow-roll-counter counter-card" data-roll-counter data-end="18">
+          <div class="pilcrow-roll-counter-number"><span class="roll-counter-int">0</span></div>
+          <p class="pilcrow-roll-counter-caption">dreams fulfilled</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================== CHAPTERS ====================== -->
+    <section class="mirror-quotes ach-chapter" id="too-soon-to-judge" data-reveal data-screen-label="03 Too Soon to Judge" data-redwood-stop="0.36" data-redwood-side="right" data-redwood-dim="0.22">
+      <div class="mirror-quotes-head">
+        <p class="label fade">I · 2023 – now</p>
+        <h2>
+          <span class="reveal-wrap"><span class="reveal-text">Too Soon</span></span>
+          <span class="reveal-wrap"><span class="reveal-text">to Judge.</span></span>
+        </h2>
+      </div>
+      <div class="mirror-quote-grid">
+        <article class="mirror-quote-card fade">
+          <p>Started a successful art business that brought in 7x initial investment by the first month.</p>
+          <span>2024</span>
+        </article>
+        <article class="mirror-quote-card fade">
+          <p>Entered the elusive <em>1000lbs club</em> at 19 years old 187lbs bodyweight.</p>
+          <span>2023</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="mirror-quotes ach-chapter" id="somewhere-in-the-murk" data-reveal data-screen-label="04 Somewhere in the Murk" data-redwood-stop="0.54" data-redwood-side="right" data-redwood-dim="0.22">
+      <div class="mirror-quotes-head">
+        <p class="label fade">II · 2017 – 2020</p>
+        <h2>
+          <span class="reveal-wrap"><span class="reveal-text">Somewhere</span></span>
+          <span class="reveal-wrap"><span class="reveal-text">in the Murk.</span></span>
+        </h2>
+      </div>
+      <div class="mirror-quote-grid">
+        <article class="mirror-quote-card fade">
+          <p>Was COO for a global youth hackathon company uniting 350 students across 8 countries to build innovative products in one week.</p>
+          <span>2018 – 2020</span>
+        </article>
+        <article class="mirror-quote-card fade">
+          <p>Hosted my first art show in Locke.</p>
+          <span>2018 – 2020</span>
+        </article>
+        <article class="mirror-quote-card fade">
+          <p>Won second place in the California State Fair Art Show.</p>
+          <span>2018</span>
+        </article>
+        <article class="mirror-quote-card fade">
+          <p>Won first place in California State Fair Art Show.</p>
+          <span>2017</span>
+        </article>
+      </div>
+    </section>
+
+    <section class="mirror-quotes ach-chapter" id="when-dinosaurs-roamed" data-reveal data-screen-label="05 When Dinosaurs Roamed" data-redwood-stop="0.72" data-redwood-side="right" data-redwood-dim="0.22">
+      <div class="mirror-quotes-head">
+        <p class="label fade">III · 2014 – 2018</p>
+        <h2>
+          <span class="reveal-wrap"><span class="reveal-text">When Dinosaurs</span></span>
+          <span class="reveal-wrap"><span class="reveal-text">Roamed.</span></span>
+        </h2>
+      </div>
+      <div class="mirror-quote-grid">
+        <article class="mirror-quote-card is-long fade">
+          <p>Developed alongside a group of students to innovate inexpensive geophysical fluid dynamics simulators for teaching fundamental concepts in Earth sciences at low-income schools. Fellowship with Stanford University and Ignite.</p>
+          <span>2016 – 2018</span>
+        </article>
+        <article class="mirror-quote-card fade">
+          <p>Lead a team of students to develop and send a thermodynamics experiment to the International Space Station.</p>
+          <span>2016</span>
+        </article>
+        <article class="mirror-quote-card is-long fade">
+          <p>Sole student teacher; designed a week-long Python/Turtle “Intensive” curriculum teaching functions, operators, and loops through art, while making the broader programming curriculum more approachable and cross-disciplinary.</p>
+          <span>2014</span>
+        </article>
+        <article class="mirror-quote-card fade">
+          <p>Spent a year as a Kindergarten assistant, stepping away from one of my own classes to support students with classroom jobs, play, and conflict resolution.</p>
+          <span>2014</span>
+        </article>
+      </div>
+    </section>
+
+    <!-- ====================== FULFILLED DREAMS ====================== -->
+    <section class="mirror-quotes ach-dreams" id="fulfilled-dreams" data-reveal data-screen-label="06 Fulfilled Dreams" data-redwood-stop="0.88" data-redwood-side="right" data-redwood-dim="0.22">
+      <div class="mirror-quotes-head">
+        <p class="label fade">IV · checked off</p>
+        <h2>
+          <span class="reveal-wrap"><span class="reveal-text">Fulfilled</span></span>
+          <span class="reveal-wrap"><span class="reveal-text">Dreams.</span></span>
+        </h2>
+      </div>
+      <ol class="dream-list fade">
+        <li>Send something to space</li>
+        <li>Run a 6:30 mile</li>
+        <li>Start a successful art business</li>
+        <li>Run a hackathon</li>
+        <li>Join the 1000lb club</li>
+        <li>Get a job in Sweden</li>
+        <li>Lead meaningful projects at Stanford</li>
+        <li>Create my own major</li>
+        <li>Present a solo project in a internationally recognized conference</li>
+        <li>Compete in Far Westerns</li>
+        <li>Teach Kindergarteners</li>
+        <li>Save and change lives</li>
+        <li>Go back to swimming my senior year of HS</li>
+        <li>See Florence</li>
+        <li>See Paris</li>
+        <li>Reconnect with old friends</li>
+        <li>Learn how to scuba dive and protect our planet</li>
+        <li>Talk to that girl</li>
+      </ol>
+    </section>
+
+    <!-- ====================== CLOSING ====================== -->
+    <section class="about" id="about" data-reveal data-screen-label="07 Closing" data-redwood-stop="1" data-redwood-side="center" data-redwood-dim="0.05">
+      <p class="about-cta">
+        <span class="about-cta-line">The next one is <em>already underway</em>.</span>
+      </p>
+      <a class="about-link" href="/">back home</a>
+    </section>
+
+    <!-- ====================== FOOTER ====================== -->
+    <footer class="footer" data-screen-label="08 Footer">
+      <span>est. 2004 · Livi Poon · Catalina terrain mesh with Esri World Imagery</span>
+      <a href="https://github.com/LiviPoon" target="_blank" rel="noopener">Github ↗</a>
+      <details class="sound-credits" id="sound-credits">
+        <summary>Sound credits</summary>
+        <ul id="sound-credits-list"></ul>
+      </details>
+    </footer>
+
+    <!-- Hidden data holder: filled by data/site-data.js (generated by tools/build-data.mjs) -->
+    <div id="quartz-body" hidden aria-hidden="true"></div>
+    <script src="/data/site-data.js"></script>
+
+    <script src="/app.js" defer></script>
+    <script src="/catalina.js" defer></script>
+    <script src="/catalina-soundscape.js" defer></script>
+    <script src="/assets/js/roll-counter.js" defer></script>
+  </body>
+</html>

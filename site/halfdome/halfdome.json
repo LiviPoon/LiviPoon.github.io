@@ -1,0 +1,33 @@
+{
+ "bboxMin": [
+  -2295.9,
+  7.2,
+  -1365.5
+ ],
+ "bboxMax": [
+  2063.1,
+  1430.6,
+  1327.8
+ ],
+ "version": 1,
+ "source": "Half Dome, Yosemite: photogrammetry mesh (Sketchfab-style FBX download) with its diffuse textures",
+ "units": "m (approx., scan scaled so the relief is ~1430 m)",
+ "up": "y",
+ "totalHeight": 1430.9,
+ "faceDir": [
+  -0.49,
+  -0.872
+ ],
+ "files": {
+  "hi": {
+   "name": "halfdome-hi.bin",
+   "count": 680000
+  },
+  "lo": {
+   "name": "halfdome-lo.bin",
+   "count": 200000
+  }
+ },
+ "colorMode": "rgb",
+ "notes": "x/z horizontal, y up; origin below the summit at the scan's lowest height. Area-weighted surface samples, true texture RGB, s byte = uniform random. Pre-shuffled. Density fades out over the last ~300 m of the scan footprint."
+}
