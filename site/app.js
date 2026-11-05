@@ -47,10 +47,12 @@
       .replace(/^[“”"']+|[“”"']+$/g, "")
   }
 
+  // Fills every [data-mirror-quote-grid] in document order from one shuffle, so no quote repeats
+  // across grids. data-count = quotes for that grid (default 6).
   function renderMirrorQuotes() {
-    const grid = $("[data-mirror-quote-grid]")
+    const grids = $$("[data-mirror-quote-grid]")
     const dataRoot = $("#quartz-body")
-    if (!grid || !dataRoot || !dataRoot.dataset.mirrorBoldQuotes) return
+    if (!grids.length || !dataRoot || !dataRoot.dataset.mirrorBoldQuotes) return
 
     let quotes = []
     try {
@@ -60,24 +62,28 @@
     }
     if (!Array.isArray(quotes) || quotes.length < 1) return
 
-    const selected = shuffleMirrorQuotes([...quotes]).slice(0, 6)
-    grid.replaceChildren(
-      ...selected.map((quote) => {
-        const text = normalizeQuoteText(quote.text)
-        const article = document.createElement("article")
-        article.className = "mirror-quote-card"
-        if (text.length > 220) article.classList.add("is-long")
+    const pool = shuffleMirrorQuotes([...quotes])
+    grids.forEach((grid) => {
+      const selected = pool.splice(0, parseInt(grid.dataset.count, 10) || 6)
+      if (selected.length) grid.replaceChildren(...selected.map(card))
+    })
+    document.dispatchEvent(new CustomEvent("mirror-quotes:rendered"))
 
-        const p = document.createElement("p")
-        p.textContent = `"${text}"`
+    function card(quote) {
+      const text = normalizeQuoteText(quote.text)
+      const article = document.createElement("article")
+      article.className = "mirror-quote-card"
+      if (text.length > 220) article.classList.add("is-long")
 
-        const span = document.createElement("span")
-        span.textContent = quote.role || quote.speaker || "Mirror"
+      const p = document.createElement("p")
+      p.textContent = `"${text}"`
 
-        article.append(p, span)
-        return article
-      }),
-    )
+      const span = document.createElement("span")
+      span.textContent = quote.role || quote.speaker || "Mirror"
+
+      article.append(p, span)
+      return article
+    }
   }
 
   if (document.readyState === "loading") {

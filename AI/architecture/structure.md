@@ -27,7 +27,7 @@ LiviPoon.github.io/
 
 ## Two kinds of pages
 - **Homepage** (`site/index.html`): own CSS (`styles.css`) and JS (`app.js`, `redwood.js`,
-  `soundscape.js`) plus `assets/js/habit-timeline.js` + `roll-counter.js`.
+  `redwood-text.js`, `soundscape.js`) plus `assets/js/habit-timeline.js` + `roll-counter.js`.
 - **Achievements** (`site/achievements/index.html`) uses the homepage design too: `styles.css`,
   `app.js`, `catalina.js`, `catalina-soundscape.js`, `roll-counter.js` (absolute `/` paths).
 - **Subpages**: share one skeleton (`#quartz-root > #quartz-body > .center …`) and

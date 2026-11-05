@@ -2277,3 +2277,454 @@ html.cv-open body {
     min-height: 760px;
   }
 }
+
+/* ===========================================================
+   HOMEPAGE STAGE (index.html + redwood-text.js)
+   Text: a column (--rw-col, ~38% of the viewport) on the block's data-side, vertically centred,
+   fixed and still. The redwood is full screen and unmasked; only its camera adapts: while a
+   block shows, redwood.js turns and backs off so the tree is on the other side (TEXT-AWARE
+   CAMERA), and between blocks it flies in close. < 768px: the tree stays full screen behind
+   the text, dimmed to 15%.
+=========================================================== */
+.rw-track {
+  position: relative;
+  height: 1800vh; /* set exactly by redwood-text.js */
+}
+.rw-stop {
+  position: absolute;
+  left: 0;
+  width: 1px;
+  height: 100vh;
+  pointer-events: none;
+}
+.rw-stop-first {
+  top: 0;
+}
+.rw-stop-last {
+  bottom: 0;
+}
+.rw-stage {
+  --rw-col: 38vw; /* text column: left edge of the viewport -> here */
+  --safe-t: clamp(88px, 13vh, 128px); /* clear of the nav */
+  --safe-b: clamp(28px, 6vh, 64px);
+  --edge: clamp(24px, 5vw, 80px);
+  --rw-base: clamp(13px, 0.5vw + 8px, 18px);
+}
+.rw-safe {
+  position: fixed;
+  top: var(--safe-t);
+  bottom: var(--safe-b);
+  left: var(--edge);
+  width: calc(var(--rw-col) - var(--edge));
+  visibility: hidden;
+  pointer-events: none;
+}
+.rw-block {
+  position: fixed;
+  z-index: 2;
+  display: none;
+  opacity: 0;
+  pointer-events: none;
+  left: var(--edge);
+  width: calc(var(--rw-col) - var(--edge));
+  top: var(--safe-t);
+  bottom: calc(var(--safe-b) + var(--rw-below, 0px));
+  height: fit-content;
+  margin-block: auto;
+  font-size: calc(var(--rw-base) * var(--rw-fit, 1));
+  color: var(--color-text-primary);
+}
+.rw-block.is-shown,
+.rw-measure .rw-block {
+  display: block;
+}
+.rw-measure .rw-block {
+  visibility: hidden;
+}
+.rw-block.is-live {
+  pointer-events: auto;
+}
+.rw-block[data-side="right"] {
+  left: auto;
+  right: var(--edge);
+}
+.rw-block[data-rw-with-prev] {
+  top: auto;
+  bottom: var(--safe-b);
+}
+
+/* ---- one-time entrance (redwood-text.js): children fade up from the background ---- */
+html.rw-pre .rw-block > * {
+  opacity: 0;
+}
+html.rw-enter .rw-block > * {
+  animation: rw-enter 600ms ease-out calc(var(--rw-i, 0) * 100ms) both;
+}
+@keyframes rw-enter {
+  from {
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html.rw-pre .rw-block > * {
+    opacity: 1;
+  }
+  html.rw-enter .rw-block > * {
+    animation: none;
+  }
+}
+
+/* ---- static text: no hover motion or effects inside the blocks ---- */
+.rw-block a,
+.rw-block a::after,
+.rw-block a span {
+  transition: none !important;
+}
+.rw-block .about-link:hover,
+.rw-block .mirror-link:hover,
+.rw-block .rw-links a:hover {
+  opacity: 1;
+  color: inherit;
+}
+.rw-block .about-link:hover::after {
+  background: var(--color-text-muted);
+}
+
+/* ---- type: the original homepage sizes (styles.css HERO / SCENES / COUNTERS / MIRROR /
+   ABOUT), each x --rw-fit so redwood-text.js can shrink a block that would not fit ---- */
+.rw-block {
+  --f: var(--rw-fit, 1);
+  width: min(var(--rw-w, 40vw), calc(100vw - 2 * var(--edge)));
+  /* redwood-text.js narrows columns to fit the space beside the tree: big type also scales
+     with the column (cqi) so a single word or number never overflows it */
+  container-type: inline-size;
+}
+/* fallback only: a block that had to share its spot with a few stray branches */
+.rw-block.rw-on-tree {
+  text-shadow:
+    0 0 18px var(--color-bg, #181818),
+    0 0 6px var(--color-bg, #181818);
+}
+.rw-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 calc(28px * var(--f));
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: calc(13px * var(--f));
+  letter-spacing: -0.005em;
+  color: var(--color-text-muted);
+}
+.rw-label::before {
+  content: "";
+  width: 24px;
+  height: 1px;
+  background: currentColor;
+}
+/* counters / mirror heads used a plain label in the original */
+.rw-counters .rw-label,
+.rw-quotes .rw-label {
+  display: block;
+  margin-bottom: calc(18px * var(--f));
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: calc(16px * var(--f));
+  letter-spacing: normal;
+  color: var(--color-text-primary);
+}
+.rw-counters .rw-label::before,
+.rw-quotes .rw-label::before {
+  content: none;
+}
+.rw-title {
+  margin: 0 0 calc(28px * var(--f));
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: min(calc(clamp(40px, 6vw, 96px) * var(--f)), 17cqi);
+  line-height: 0.94;
+  letter-spacing: -0.035em;
+}
+.rw-counters .rw-title {
+  font-size: min(calc(clamp(36px, 7vw, 96px) * var(--f)), 20cqi);
+  line-height: 0.84;
+  letter-spacing: -0.055em;
+}
+.rw-title-serif {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: min(calc(clamp(48px, 8vw, 118px) * var(--f)), 19cqi);
+  line-height: 0.88;
+  letter-spacing: 0;
+}
+.rw-desc {
+  max-width: 38ch;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: calc(clamp(17px, 1.4vw, 20px) * var(--f));
+  line-height: 1.55;
+}
+.rw-note {
+  margin-top: calc(22px * var(--f));
+  font-family: var(--font-label);
+  font-weight: 500;
+  font-size: calc(13px * var(--f));
+  letter-spacing: -0.005em;
+  color: var(--color-text-muted);
+}
+.rw-statement {
+  font-family: var(--font-serif);
+  font-weight: 400;
+  font-size: calc(clamp(32px, 5.4vw, 88px) * var(--f));
+  line-height: 1.1;
+  letter-spacing: -0.005em;
+}
+.rw-statement em {
+  font-style: italic;
+  font-weight: 700;
+}
+.rw-mission .rw-statement {
+  max-width: 26ch;
+  font-size: calc(clamp(30px, 4.6vw, 72px) * var(--f));
+}
+
+/* ---- hero ---- */
+.rw-hero {
+  --rw-w: min(40rem, 42vw);
+}
+.rw-portrait {
+  display: block;
+  width: calc(clamp(260px, min(32vw, 48vh), 560px) * var(--f));
+  max-width: 100%;
+  aspect-ratio: 1;
+  height: auto;
+  margin: 0 0 calc(clamp(16px, 3vh, 36px) * var(--f)) -3%;
+  object-fit: contain;
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 45%, transparent 100%);
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 45%, transparent 100%);
+}
+html[data-theme="light"] .rw-portrait {
+  mix-blend-mode: multiply;
+}
+.rw-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: min(calc(clamp(40px, 5.4vw, 96px) * var(--f)), 19cqi);
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+}
+.rw-sub {
+  max-width: 30ch;
+  margin-top: calc(clamp(14px, 2vh, 22px) * var(--f));
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: calc(clamp(20px, 1.9vw, 30px) * var(--f));
+  line-height: 1.4;
+  color: var(--color-text-muted);
+}
+.rw-sub em {
+  font-weight: 700;
+  letter-spacing: 0.005em;
+  color: var(--color-text-primary);
+}
+.rw-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 28px;
+  margin-top: calc(clamp(24px, 4vh, 40px) * var(--f));
+  font-family: var(--font-label);
+  font-size: calc(clamp(14px, 1.1vw, 17px) * var(--f));
+}
+.rw-links a {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  color: var(--color-text-primary);
+  text-decoration: none;
+  padding-bottom: 2px;
+}
+.rw-links a span {
+  font-size: 0.85em;
+  color: var(--color-text-dim);
+}
+
+/* ---- mission / closing ---- */
+.rw-mission {
+  --rw-w: min(46vw, 760px);
+}
+.rw-cta {
+  --rw-w: min(52vw, 860px);
+}
+.rw-cta .about-link {
+  margin-top: calc(clamp(36px, 5vh, 56px) * var(--f));
+  font-size: calc(14px * var(--f));
+}
+
+/* ---- photo scenes (the original put the photo beside the copy; here it sits above it) ---- */
+.rw-scene {
+  --rw-w: min(36rem, 42vw);
+}
+.rw-photo {
+  margin: 0 0 calc(28px * var(--f));
+  aspect-ratio: 16 / 11;
+  max-height: 34vh;
+  overflow: hidden;
+  border-radius: 20px;
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+    linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+    linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
+  mask-composite: intersect;
+}
+.rw-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ---- videos (reuse the .portfolio-video-card markup and its original type) ---- */
+.rw-block.rw-video {
+  --rw-w: min(50vw, 880px);
+  min-height: 0;
+  padding: 0;
+}
+
+/* ---- counters ---- */
+.rw-counters {
+  --rw-w: min(48vw, 760px);
+  margin-left: clamp(24px, 5vw, 96px);
+}
+@media (max-width: 900px) {
+  .rw-counters {
+    margin-left: 0;
+  }
+}
+html.rw-stack .rw-counters {
+  margin-left: 0;
+}
+.rw-counters .counter-grid {
+  grid-template-columns: 1fr;
+  gap: calc(18px * var(--f));
+}
+.rw-counters .counter-card {
+  min-height: 0;
+  padding: 0;
+  gap: calc(8px * var(--f));
+  background: transparent;
+}
+.rw-counters .roll-counter-int {
+  /* "195,998,696" is ~6em wide: keep it inside the column */
+  font-size: min(calc(clamp(44px, 8vw, 116px) * var(--f)), 15cqi);
+}
+.rw-counters .pilcrow-roll-counter-caption {
+  font-size: calc(12px * var(--f));
+}
+
+/* ---- quotes (original card type) ---- */
+.rw-quotes {
+  --rw-w: min(44rem, 46vw);
+}
+.rw-quotes .mirror-quote-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(18px, 2.4vw, 34px);
+}
+.rw-quotes .mirror-quote-card {
+  padding-top: 18px;
+}
+/* narrow column (beside the trunk): one quote per row */
+@container (max-width: 460px) {
+  .rw-quotes .mirror-quote-grid {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+}
+.rw-quotes .mirror-quote-card p {
+  max-width: none;
+  font-size: calc(clamp(14px, 1.18vw, 19px) * var(--f));
+}
+.rw-quotes .mirror-link {
+  display: inline-block;
+  margin-top: calc(clamp(26px, 5vw, 72px) * var(--f));
+}
+
+/* ---- closing strip: habit chart + footer ---- */
+.rw-bottom {
+  --rw-w: min(52vw, 860px);
+}
+.rw-bottom .portfolio-habit {
+  width: auto;
+  margin: 0 0 1em;
+  padding: 0;
+}
+.rw-bottom .portfolio-habit-chart-container {
+  height: clamp(40px, 4.5vw, 72px);
+}
+.rw-bottom .footer {
+  padding: 0;
+}
+.rw-bottom .sound-credits ul {
+  max-height: 30vh;
+  overflow: auto;
+}
+
+/* ---- stack mode (redwood-text.js found no room beside the tree, e.g. portrait tablets):
+   same treatment as phones, the tree dimmed behind the text ---- */
+html.rw-stack[data-redwood="on"] body[data-slug="index"] #redwood-canvas {
+  opacity: 0.15 !important;
+}
+
+/* ---- < 768px: tree full screen behind the text, dimmed so the text stays readable ---- */
+@media (max-width: 767px) {
+  .rw-stage {
+    --safe-t: 76px;
+    --safe-b: 20px;
+    --edge: 20px;
+  }
+  html[data-redwood="on"] body[data-slug="index"] #redwood-canvas {
+    opacity: 0.15 !important;
+  }
+  .rw-block,
+  .rw-block[data-side="right"],
+  .rw-mission,
+  .rw-safe {
+    left: var(--edge);
+    right: var(--edge);
+    width: auto;
+    max-width: none;
+  }
+  /* the original's phone sizes */
+  .rw-name {
+    font-size: calc(clamp(40px, 12vw, 64px) * var(--f));
+  }
+  .rw-portrait {
+    width: calc(min(64vw, 38vh) * var(--f));
+  }
+  .rw-statement,
+  .rw-mission .rw-statement {
+    max-width: 22ch;
+    font-size: calc(clamp(28px, 8vw, 48px) * var(--f));
+  }
+  .rw-quotes .mirror-quote-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+}
+
+/* mission centered horizontally; "Numbers." matches the "Let's quantify my life" size, bold */
+.rw-mission,
+.rw-mission .rw-statement {
+  text-align: center;
+  margin-inline: auto;
+}
+.rw-counters h2.rw-label {
+  margin-top: 0;
+}
+.rw-counters .rw-label b {
+  font-weight: 700;
+}
