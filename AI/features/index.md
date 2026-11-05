@@ -4,6 +4,7 @@
 |---|---|---|
 | Redwood soundscape (scroll-driven animal sounds) | [soundscape.md](soundscape.md) | `soundscape.js`, `soundscape/` |
 | Redwood point-cloud background (homepage) | [pages.md](pages.md) | `redwood.js`, `redwood/` |
+| Homepage text column + timing | [pages.md](pages.md) | `redwood-text.js`, `index.html` |
 | Catalina Island point cloud + soundscape (achievements) | [catalina.md](catalina.md) | `catalina.js`, `catalina-soundscape.js`, `catalina/` |
 | Half Dome point cloud + soundscape (CV page) | [halfdome.md](halfdome.md) | `halfdome.js`, `halfdome-soundscape.js`, `halfdome/`, `cv/` |
 | Habit tracking (charts + counters) | [habits.md](habits.md) | `assets/js/habit-timeline.js`, `assets/js/roll-counter.js`, `../data/habits/` |

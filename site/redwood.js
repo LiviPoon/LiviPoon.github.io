@@ -18,6 +18,8 @@
      viewport centre, descent t equals that value (piecewise linear between).
      Optional data-redwood-side="left|right|center", data-redwood-dim="0..1".
    - window.Redwood = { setOffset(x), setStops(), refresh(), setDim(d) }
+   - window.RedwoodLayers = [{ init(gl, api), draw(gl, frame) }]: extra point sets drawn after the
+     tree with the same camera. init runs once per GL context.
    - html[data-redwood="on"|"off"] is set for CSS.
    - URL: ?redwood=synthetic | hi | lo | off | debug
 =========================================================== */
@@ -28,13 +30,16 @@
   // Camera keyframes over descent t. camY / lookY are fractions of totalHeight;
   // distance from trunk axis = a*crownRadius + b*trunkRadius(camY) + c*totalHeight.
   //        t     camY   lookY    a     b     c
+  // The homepage keeps the camera OUTSIDE the crown the whole way down (~28-33 m out through the
+  // canopy), so the tree fills ~60% of the width and, with the lens offset, leaves the other
+  // side empty for text (redwood-text.js mirrors these keys: keep both in sync).
   const KEYS = [
     [0.0, 1.1, 0.66, 1.0, 0, 0.5], // above the crown, whole crown framed (closer = bigger tree)
-    [0.16, 0.97, 0.8, 1.1, 0, 0.06], // skimming the crown top
-    [0.36, 0.78, 0.74, 0.85, 2, 0], // inside the canopy: branches pass by
-    [0.56, 0.5, 0.47, 0.3, 4, 0], // through the forks / crown base
-    [0.8, 0.22, 0.21, 0, 2, 0.16], // mid trunk; stay outside epicormic sprouts (~9-12 m)
-    [1.0, 0.03, 0.04, 0, 2, 0.15], // at the base
+    [0.16, 0.95, 0.78, 1.0, 0, 0.36], // level with the crown top, standing off
+    [0.36, 0.76, 0.68, 1.0, 0, 0.34], // tracking down beside the canopy
+    [0.56, 0.5, 0.46, 1.0, 0, 0.28], // the forks / crown base
+    [0.8, 0.22, 0.21, 0.4, 2, 0.2], // mid trunk; outside the epicormic sprouts (~9-12 m)
+    [1.0, 0.07, 0.08, 0, 2, 0.15], // at the base
   ]
   const ORBIT_START = -0.35 // radians, camera azimuth at t=0
   const ORBIT_TOTAL = (120 * Math.PI) / 180 // total orbit over the descent
@@ -97,6 +102,7 @@
     drawn: false,
   }
   let gl, canvas, prog, U, vao, vbo, meta, bin, tier
+  const layers = (window.RedwoodLayers = window.RedwoodLayers || [])
 
   if (flag === "off") return off()
 
@@ -607,6 +613,8 @@
     gl.viewport(0, 0, W, Ht)
     gl.clearColor(0, 0, 0, 0)
     gl.clear(gl.COLOR_BUFFER_BIT)
+    gl.useProgram(prog)
+    gl.bindVertexArray(vao)
     const pl = PALETTES.light,
       pd = PALETTES.dark,
       k = state.theme
@@ -626,11 +634,49 @@
     gl.uniform1f(U.uTime, state.time)
     gl.uniform1f(U.uTwinkle, mqReduce.matches ? 0 : TWINKLE)
     gl.drawArrays(gl.POINTS, 0, bin.count)
+    if (layers.length) drawLayers(P, cam, fov)
     if (!state.drawn) {
       state.drawn = true
       requestAnimationFrame(() => {
         canvas.style.opacity = "1"
       })
+    }
+  }
+
+  // extra point sets share the camera, palette, fog and point style
+  function drawLayers(P, cam, fov) {
+    const k = state.theme,
+      pl = PALETTES.light,
+      pd = PALETTES.dark
+    const f = {
+      VP: mul(P, lookAt(cam.eye, cam.target)),
+      eye: cam.eye,
+      t: state.t,
+      time: state.time,
+      reduced: mqReduce.matches,
+      theme: k,
+      bg: lerp3(hex(pl.bg), hex(pd.bg), k),
+      bark: lerp3(hex(pl.bark), hex(pd.bark), k),
+      gain: lerp(pl.gain, pd.gain, k),
+      fog: [cam.focus * 0.9, cam.focus + Math.max(meta.crownRadius * 3, meta.totalHeight * 0.5)],
+      near: NEAR_FADE,
+      size: [1.4 * state.dpr, Math.min(state.maxPt, MAX_POINT_PX * state.dpr)],
+      px: canvas.height / (2 * Math.tan(fov / 2)),
+      offset: state.offset,
+      dim: state.dim,
+      tier,
+    }
+    for (const l of layers) {
+      try {
+        if (l._gl !== gl) {
+          l._gl = gl
+          l.init(gl, { meta, trunkAt, orbit: [ORBIT_START, ORBIT_TOTAL], log })
+        }
+        l.draw(gl, f)
+      } catch (e) {
+        log("layer", e && e.message)
+        layers.splice(layers.indexOf(l), 1)
+      }
     }
   }
 
