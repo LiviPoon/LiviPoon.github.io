@@ -25,7 +25,7 @@ Replaces the old background-music player (removed everywhere).
   (e.g. American Dipper — always over a loud creek).
 - Enter gate (`#enter-gate` in index.html, logic in app.js "ENTER GATE"): once per session
   (`sessionStorage.siteEntered`); its click is the user gesture that unlocks audio. An inline
-  `<head>` script sets `html.gate` before paint; hero reveals wait for it; auto-removes after 4 s
+  `<head>` script sets `html.gate` before paint; hero reveals and the text entrance run behind it (translucent) so nothing changes when it lifts; auto-removes after 4 s
   if app.js never sets `window.__gateReady`.
 - API: `window.__soundscape.setMuted/isMuted/duck`. Nav `#btn-mute` (app.js) toggles it; unmuted
   YouTube cards duck it. Mute pref key: `localStorage.siteAudioMuted` (also read by `assets/js/quote-typewriter.js` speech).

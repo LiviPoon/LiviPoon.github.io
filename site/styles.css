@@ -1657,6 +1657,11 @@ html[data-redwood="on"] .portfolio-video-stack {
 html.gate {
   overflow: hidden;
 }
+/* keep the scrollbar gutter fixed so lifting the gate never changes the viewport width
+   (which would re-layout and resize every canvas = a visible flicker) */
+html {
+  scrollbar-gutter: stable;
+}
 html.gate .enter-gate {
   position: fixed;
   inset: 0;

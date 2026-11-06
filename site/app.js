@@ -198,8 +198,8 @@
   )
 
   const startReveals = () => $$("[data-reveal]").forEach((el) => io.observe(el))
-  // hold the hero reveal until the enter gate lifts (see ENTER GATE below)
-  if (!document.documentElement.classList.contains("gate")) startReveals()
+  // reveals run behind the enter gate so the page is fully drawn when it lifts
+  startReveals()
 
   /* =========================================================
      PARALLAX (background ambient + images)
@@ -532,7 +532,6 @@
       const done = () => {
         document.documentElement.classList.remove("gate")
         gate.remove()
-        startReveals()
       }
       prefersReduced ? done() : setTimeout(done, 700)
     }

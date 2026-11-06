@@ -19,8 +19,8 @@ All paths are under `site/`. Subpages share the skeleton described in
   coarse ink-coverage grid for 251 values of t and records, per screen row, how far the empty
   background reaches in from the text edge. The planner measures each block at several widths /
   type scales (`--rw-w`, `--rw-fit`; big type also capped with `cqi`). The descent speed is
-  fixed: the track is `data-rw-screens` (35) viewport heights. The planner bisects the longest
-  equal window per block (~2.7 screens at 1440x900) such that every block, in order, gets an
+  fixed: the track is `data-rw-screens` (50) viewport heights. The planner bisects the longest
+  equal window per block (~3.9 screens at 1440x900, est.) such that every block, in order, gets an
   edge-anchored spot free for its whole window. Gaps: 0.12 screens when the next block stays on
   the same side (tree stays put, preferred), 0.4 when the tree has to slide across. Fades 0.2.
   `data-rw-with-prev` gets its own spot below, same side. The closing group ends at t = 1 (trunk base

@@ -71,7 +71,7 @@
   const OCC = 0.035 // blurred ink coverage above which a cell is "tree"
   const OCC_LOOSE = 0.09 // fallback when nothing fits strictly (a few stray branches allowed)
   const MARGIN = 1 // cells kept clear between text and tree
-  const SCREENS = 35 // descent speed: the whole descent takes this many screens of scroll
+  const SCREENS = 50 // descent speed: the whole descent takes this many screens of scroll
   // (.rw-track[data-rw-screens] overrides). Fixed: blocks share this budget, see plan().
   const FADE_VH = 0.2 // fade in / out, viewport heights of scroll (inside the window)
   const SAME_GAP_VH = 0.12 // between blocks on the same side (tree stays put)
@@ -765,16 +765,9 @@
       root.classList.add("rw-enter")
       setTimeout(() => root.classList.remove("rw-enter"), 1800)
     }
-    // wait for the enter gate, if it is up
-    if (root.classList.contains("gate")) {
-      const mo = new MutationObserver(() => {
-        if (!root.classList.contains("gate")) {
-          mo.disconnect()
-          go()
-        }
-      })
-      mo.observe(root, { attributes: true, attributeFilter: ["class"] })
-    } else go()
+    // plays right away, behind the translucent enter gate, so the page is already settled
+    // (nothing hidden, nothing fading in) when the gate lifts
+    go()
   }
 
   /* ---------------- DEBUG OVERLAY (?rw-debug) ---------------- */

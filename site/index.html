@@ -18,9 +18,7 @@
     <script>
       // enter gate: once per session (audio needs a user gesture). Set before first paint.
       try {
-        // skipped for visitors whose last choice was silence (nothing to unlock; the nav shows "unmute")
-        if (!sessionStorage.getItem("siteEntered") && localStorage.getItem("siteAudioMuted") !== "true")
-          document.documentElement.classList.add("gate")
+        if (!sessionStorage.getItem("siteEntered")) document.documentElement.classList.add("gate")
       } catch (e) {}
       // homepage text: hidden until its one-time entrance (redwood-text.js); none for reduced motion
       if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("rw-pre")
@@ -134,7 +132,7 @@
          tree (lens offset) away from the current block, and gives every block (in order) the
          longest equal scroll window that fits, on a still spot of empty background.
          data-side = side for the first block. data-rw-with-prev = shown with the previous block. -->
-    <main class="rw-track" id="top" data-rw-screens="35">
+    <main class="rw-track" id="top" data-rw-screens="50">
       <i class="rw-stop rw-stop-first" data-redwood-stop="0" data-redwood-dim="0.05"></i>
       <i class="rw-stop rw-stop-last" data-redwood-stop="1" data-redwood-dim="0.05"></i>
     </main>
