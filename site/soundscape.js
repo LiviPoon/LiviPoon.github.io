@@ -14,6 +14,8 @@ HRTF point sources around the listener: wind sources gust independently and gust
 sweep across the head; the creek is anchored in one world direction (and below you when
 high up); occasional twigs/needles patter down past you.
 
+A radio at the foot of the trunk plays a looping song through an AM-radio filter; it is placed
+relative to the orbiting camera, so it swells toward the base and fades far away up the crown.
 Exposes window.__soundscape = { setMuted(bool), isMuted(), duck(bool) }.
 Clips: soundscape/*.m4a, trimmed/levelled from xeno-canto (CC BY-NC-SA 4.0) and
 US National Park Service (public domain) recordings; credits rendered into #sound-credits.
@@ -32,6 +34,32 @@ US National Park Service (public domain) recordings; credits rendered into #soun
     [0.8, 0.22],
     [1.0, 0.03],
   ]
+
+  // Camera distance from the trunk axis, mirror of KEYS columns [t, a, b, c] in redwood.js
+  // (dist = max(1.8*r+0.5, a*crownRadius + b*trunkRadius + c*H)); used to place the radio.
+  const CAM_DIST = [
+    [0.0, 1.0, 0, 0.5],
+    [0.16, 1.0, 0, 0.36],
+    [0.36, 1.0, 0, 0.34],
+    [0.56, 1.0, 0, 0.28],
+    [0.8, 0.4, 2, 0.2],
+    [1.0, 0, 2, 0.15],
+  ]
+  const CROWN_R = 11.5
+  const ORBIT_START = -0.35
+  const ORBIT_TOTAL = (120 * Math.PI) / 180
+
+  // The radio sits at the foot of the trunk and plays a looping song through a "radio" filter.
+  // Drop the recording at site/soundscape/good-vibrations.m4a (it is not bundled: copyrighted).
+  const RADIO = {
+    src: BASE + "good-vibrations.m4a",
+    az: 0.85, // world azimuth (rad) of the radio around the trunk; camera orbit spans -0.35…1.75
+    off: 5, // m from the trunk axis
+    height: 0.4, // m above the ground
+    level: 0.42, // loudness at the reference distance (radio bypasses the 3.2x make-up gain)
+    refDist: 7, // m: closest the camera gets ends up about here
+    rolloff: 1.25, // how fast it fades with distance
+  }
 
   // Forest layers: centre height (m) and the animals living there.
   const ZONES = {
@@ -138,6 +166,15 @@ US National Park Service (public domain) recordings; credits rendered into #soun
       }
     return CAM_Y[CAM_Y.length - 1][1] * H
   }
+  function camDist(t) {
+    let i = 1
+    while (i < CAM_DIST.length - 1 && t > CAM_DIST[i][0]) i++
+    const a = CAM_DIST[i - 1],
+      b = CAM_DIST[i]
+    const u = clamp((t - a[0]) / (b[0] - a[0]), 0, 1)
+    const v = (k) => lerp(a[k], b[k], u)
+    return Math.max(1.8 * 1.3 + 0.5, v(1) * CROWN_R + v(2) * 1.3 + v(3) * H)
+  }
   const zoneWeight = (zone, ly) => Math.exp(-(((ly - ZONES[zone].y) / 12) ** 2))
 
   /* ---------------- synthesis helpers ---------------- */
@@ -215,6 +252,105 @@ US National Park Service (public domain) recordings; credits rendered into #soun
   let tickTimer = 0
   let gustPhase = Math.random() * 100
   let started = false
+  let radio = null // { el, filter nodes, gain, panner, send }
+
+  function buildRadio() {
+    const el = new Audio()
+    el.src = RADIO.src
+    el.loop = true
+    el.preload = "auto"
+    el.crossOrigin = "anonymous"
+    const src = ctx.createMediaElementSource(el)
+    const node = (type, f, q, g) => {
+      const n = ctx.createBiquadFilter()
+      n.type = type
+      n.frequency.value = f
+      n.Q.value = q
+      if (g !== undefined) n.gain.value = g
+      return n
+    }
+    // AM-radio band: thin lows, narrow top, a nasal midrange bump
+    const hp = node("highpass", 320, 0.8)
+    const lp = node("lowpass", 3200, 0.9)
+    const mid = node("peaking", 1500, 1.1, 2.5)
+    const trim = ctx.createGain() // headroom ahead of the filters: no clipping on loud peaks
+    trim.gain.value = 0.55
+    // soft clipping = small-speaker grit
+    const shaper = ctx.createWaveShaper()
+    const curve = new Float32Array(1024)
+    for (let i = 0; i < curve.length; i++) {
+      const x = (i / (curve.length - 1)) * 2 - 1
+      curve[i] = Math.tanh(1.1 * x) / Math.tanh(1.1) // very soft: grit without crackle
+    }
+    shaper.curve = curve
+    // slow signal wander: level wobbles like a station drifting in and out
+    const fade = ctx.createGain()
+    const lfo = ctx.createOscillator()
+    const lfoAmt = ctx.createGain()
+    lfo.frequency.value = 0.11
+    lfoAmt.gain.value = 0.05
+    fade.gain.value = 0.95
+    lfo.connect(lfoAmt).connect(fade.gain)
+    lfo.start()
+    // faint static, always present, so it reads as a transmission
+    const hiss = ctx.createBufferSource()
+    hiss.buffer = pinkNoiseBuffer(ctx, 4, 1)
+    hiss.loop = true
+    const hissBp = node("bandpass", 2600, 0.5)
+    const hissGain = ctx.createGain()
+    hissGain.gain.value = 0.004
+    hiss.connect(hissBp).connect(hissGain)
+    hiss.start()
+
+    const radioOut = ctx.createGain()
+    radioOut.gain.value = 1
+    radioOut.connect(master)
+    const gain = ctx.createGain()
+    gain.gain.value = 0
+    const dist = node("lowpass", 3200, 0.7) // air absorption: darker when far
+    const panner = ctx.createPanner()
+    Object.assign(panner, { panningModel: "HRTF", distanceModel: "linear", rolloffFactor: 0 })
+    const send = ctx.createGain()
+    send.gain.value = 0.05
+
+    // peak limiter right after the filters catches any remaining transients
+    const lim = ctx.createDynamicsCompressor()
+    lim.threshold.value = -10
+    lim.knee.value = 6
+    lim.ratio.value = 12
+    lim.attack.value = 0.003
+    lim.release.value = 0.15
+    src.connect(trim).connect(hp).connect(mid).connect(lp).connect(shaper).connect(lim).connect(fade)
+    fade.connect(gain)
+    hissGain.connect(gain)
+    gain.connect(dist).connect(panner).connect(radioOut)
+    dist.connect(send).connect(reverb)
+    radio = { el, gain, dist, panner, send, ok: true }
+    el.addEventListener("error", () => (radio.ok = false))
+    el.addEventListener("loadeddata", () => (radio.ok = true))
+  }
+
+  function updateRadio(t, now, yaw) {
+    if (!radio || !radio.ok) return
+    // camera eye = trunk base + (sin az, camY, cos az) * dist  →  radio relative to the listener
+    const az = ORBIT_START + ORBIT_TOTAL * t
+    const d = camDist(t)
+    // The camera always faces the trunk, so a radio exactly on the axis would sit dead ahead and
+    // never seem to move. It stands beside the trunk instead, so it swings across the view as
+    // the camera orbits (and passes right in front of you mid-orbit).
+    const rx = Math.sin(RADIO.az) * RADIO.off - Math.sin(az) * d,
+      rz = Math.cos(RADIO.az) * RADIO.off - Math.cos(az) * d,
+      ry = RADIO.height - listenerY
+    const range = Math.hypot(rx, ry, rz)
+    setPos(radio.panner, rx, ry, rz, now, 0.3) // same time constant as the listener turn: no direction lag
+    // gain falls with distance: loud at the foot, a faint far-off station at the crown
+    const g = RADIO.level * Math.pow(clamp(RADIO.refDist / range, 0, 1.5), RADIO.rolloff)
+    radio.gain.gain.setTargetAtTime(g, now, 0.25)
+    // farther = duller and wetter
+    const far = clamp((range - RADIO.refDist) / 60, 0, 1)
+    radio.dist.frequency.setTargetAtTime(lerp(3400, 2200, far), now, 0.3)
+    radio.send.gain.setTargetAtTime(lerp(0.03, 0.14, far), now, 0.3) // mostly dry: reverb smears direction
+  }
 
   function buildGraph() {
     const AC = window.AudioContext || window.webkitAudioContext
@@ -469,6 +605,8 @@ US National Park Service (public domain) recordings; credits rendered into #soun
       L.forwardZ.setTargetAtTime(-Math.cos(yaw), now, 0.3)
     } else if (L.setOrientation) L.setOrientation(-Math.sin(yaw), 0, -Math.cos(yaw), 0, 1, 0)
 
+    updateRadio(t, now, yaw)
+
     // ambience bed
     const dt = lastTick ? clamp(now - lastTick, 0, 0.5) : TICK_MS / 1000
     lastTick = now
@@ -560,6 +698,8 @@ US National Park Service (public domain) recordings; credits rendered into #soun
     if (muted || document.visibilityState === "hidden") return
     if (!ctx && !buildGraph()) return
     if (ctx.state === "suspended") ctx.resume()
+    if (!radio) buildRadio()
+    if (radio.ok && radio.el.paused) radio.el.play().catch(() => {})
     if (!started) {
       started = true
       measureStops()
@@ -574,7 +714,10 @@ US National Park Service (public domain) recordings; credits rendered into #soun
     if (!ctx) return
     applyLevel(0.4)
     setTimeout(() => {
-      if ((muted || document.visibilityState === "hidden") && ctx.state === "running") ctx.suspend()
+      if ((muted || document.visibilityState === "hidden") && ctx.state === "running") {
+        ctx.suspend()
+        if (radio) radio.el.pause()
+      }
     }, 500)
   }
 
@@ -592,7 +735,10 @@ US National Park Service (public domain) recordings; credits rendered into #soun
   document.addEventListener("visibilitychange", () =>
     document.visibilityState === "hidden" ? suspendSoon() : start(),
   )
-  addEventListener("pagehide", () => ctx && ctx.suspend())
+  addEventListener("pagehide", () => {
+    if (ctx) ctx.suspend()
+    if (radio) radio.el.pause()
+  })
 
   window.__soundscape = {
     setMuted(m) {

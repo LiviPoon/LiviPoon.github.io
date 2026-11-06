@@ -35,3 +35,13 @@ Replaces the old background-music player (removed everywhere).
 - Adding a clip: put `<id>.m4a` in `site/soundscape/`, add an entry to `CLIPS`.
   Avoid CC *-ND* sources (we trim). Sensitive species (e.g. Spotted Owl) are download-restricted on xeno-canto.
 - Subpages have no soundscape; they use `assets/js/site-controls.js` (theme toggle + license link).
+
+## Trunk-base radio
+- `RADIO` in `soundscape.js` plays `site/soundscape/good-vibrations.m4a` (looped `<audio>` via
+  `MediaElementSource`) through an AM-radio chain (band-limit, mid bump, tanh grit, slow level
+  drift, hiss). **The recording is not in the repo (copyrighted) — add the file yourself.**
+  Missing file → radio silently stays off.
+- Position = a spot `RADIO.off` (5 m) beside the trunk base at world azimuth `RADIO.az` (the camera always faces the trunk, so an on-axis radio would never move), relative to the camera: `CAM_DIST` mirrors the distance columns of `KEYS`
+  and the orbit constants in redwood.js (keep in sync). It pans with the orbit, gets louder and
+  brighter toward the base, and faint/dull/wetter at the crown (`rolloff`, `refDist`, `level`).
+- Public hosting of the song needs a licence; consider keeping it private/local.
