@@ -1668,8 +1668,11 @@ html.gate .enter-gate {
   gap: 14px;
   padding: 24px;
   text-align: center;
-  background: var(--color-bg);
+  background: color-mix(in oklab, var(--color-bg) 86%, transparent);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
   color: var(--color-text-primary);
+  cursor: pointer; /* the whole screen is the "enter" target */
   transition:
     opacity 0.7s ease,
     visibility 0.7s;
@@ -1682,11 +1685,42 @@ html.gate .enter-gate {
   margin: 0;
   font-family: var(--font-serif);
   font-style: italic;
-  font-size: clamp(20px, 2vw, 28px);
+  font-size: clamp(24px, 3vw, 38px);
   color: var(--color-text-primary);
 }
+.enter-gate-sub {
+  margin: -6px 0 10px;
+  font-family: var(--font-label);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  color: var(--color-text-muted);
+}
+/* live-looking sound bars: the one cue that says "audio" without a word */
+.enter-gate-wave {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 28px;
+  margin-bottom: 6px;
+}
+.enter-gate-wave i {
+  width: 2px;
+  height: 100%;
+  background: var(--color-text-primary);
+  border-radius: 1px;
+  transform-origin: center;
+  animation: gate-wave 1.4s ease-in-out infinite;
+}
+.enter-gate-wave i:nth-child(2) { animation-delay: -0.3s; }
+.enter-gate-wave i:nth-child(3) { animation-delay: -0.7s; }
+.enter-gate-wave i:nth-child(4) { animation-delay: -0.5s; }
+.enter-gate-wave i:nth-child(5) { animation-delay: -0.1s; }
+@keyframes gate-wave {
+  0%, 100% { transform: scaleY(0.2); }
+  50% { transform: scaleY(1); }
+}
 .enter-gate-btn {
-  padding: 4px 8px;
+  padding: 8px 14px;
   font-family: var(--font-label);
   font-weight: 500;
   font-size: 12px;
@@ -1696,6 +1730,18 @@ html.gate .enter-gate {
   border: 0;
   cursor: pointer;
   transition: color 0.25s;
+}
+/* primary: the obvious, default path; a quiet underline marks it as the thing to press */
+#enter-sound {
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  color: var(--color-text-primary);
+  border-bottom: 1px solid currentColor;
+}
+/* opt-out sits right under the primary: easy to find, so it never feels like a trap */
+.enter-gate-silent {
+  font-weight: 400;
 }
 .enter-gate-btn:hover,
 .enter-gate-btn:focus-visible {
@@ -1708,6 +1754,10 @@ html.gate .enter-gate {
 @media (prefers-reduced-motion: reduce) {
   html.gate .enter-gate {
     transition: none;
+  }
+  .enter-gate-wave i {
+    animation: none;
+    transform: scaleY(0.6);
   }
 }
 

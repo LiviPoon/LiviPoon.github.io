@@ -596,7 +596,9 @@
         // centered, nudged left, and a little lower than the planned spot
         el.style.left = Math.round(Math.max(((innerWidth - sp.c.w) / 2 - innerWidth * 0.2) / 2, 24)) + "px"
         el.style.right = "auto"
-        el.style.top = Math.round(sp.y + innerHeight * 0.08) + "px"
+        el.style.top = el.hasAttribute("data-center-y")
+          ? Math.round((innerHeight - sp.c.h) / 2) + "px" // also centred vertically on the screen
+          : Math.round(sp.y + innerHeight * 0.08) + "px"
       } else if (el.hasAttribute("data-center-y")) {
         // vertically centred on the screen, side margin as for every other block
         el.style.top = Math.round((innerHeight - sp.c.h) / 2) + "px"

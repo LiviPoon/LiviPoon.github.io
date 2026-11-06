@@ -18,7 +18,9 @@
     <script>
       // enter gate: once per session (audio needs a user gesture). Set before first paint.
       try {
-        if (!sessionStorage.getItem("siteEntered")) document.documentElement.classList.add("gate")
+        // skipped for visitors whose last choice was silence (nothing to unlock; the nav shows "unmute")
+        if (!sessionStorage.getItem("siteEntered") && localStorage.getItem("siteAudioMuted") !== "true")
+          document.documentElement.classList.add("gate")
       } catch (e) {}
       // homepage text: hidden until its one-time entrance (redwood-text.js); none for reduced motion
       if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("rw-pre")
@@ -32,8 +34,11 @@
   <body data-slug="index">
     <!-- ====================== ENTER GATE ====================== -->
     <div class="enter-gate" id="enter-gate" role="dialog" aria-modal="true" aria-label="Enter site">
-      <p class="enter-gate-note">wear headphones for the best experience</p>
+      <span class="enter-gate-wave" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span>
+      <p class="enter-gate-note">this place has a soundtrack</p>
+      <p class="enter-gate-sub">headphones recommended</p>
       <button class="enter-gate-btn" id="enter-sound" type="button">enter</button>
+      <button class="enter-gate-btn enter-gate-silent" id="enter-silent" type="button">or without sound</button>
     </div>
 
     <!-- ====================== PAPER GRAIN OVERLAY ====================== -->
@@ -86,22 +91,6 @@
           </span>
           <span>theme</span>
         </button>
-        <a
-          class="nav-btn"
-          id="btn-cc"
-          href="https://creativecommons.org/licenses/by-nc/4.0/"
-          target="_blank"
-          rel="noopener"
-          aria-label="Creative Commons license"
-        >
-          <span class="ico" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <circle cx="12" cy="12" r="9" />
-              <path d="M9.5 10.5a2.5 2.5 0 1 1 0 3M14.5 10.5a2.5 2.5 0 1 1 0 3" />
-            </svg>
-          </span>
-          <span>CC BY-NC</span>
-        </a>
         <button class="nav-btn" id="btn-menu" type="button" aria-label="Open menu">Menu</button>
       </div>
     </nav>
@@ -133,7 +122,7 @@
       </div>
       <div class="menu-foot">
         <span>( Menu )</span>
-        <span>By Livi Poon · est. 2004</span>
+        <span>© 2026 Livi Poon</span>
       </div>
       <div class="menu-wordmark" aria-hidden="true">livi.</div>
     </aside>
@@ -166,31 +155,12 @@
       </section>
 
       <!-- MISSION -->
-      <section data-side="right" class="rw-block rw-mission" data-center aria-label="Mission">
+      <section data-side="right" class="rw-block rw-mission" data-center data-center-y aria-label="Mission">
         <p class="rw-statement">
           My mission is to keep patients out of the doctor's office by discovering and developing
           <em>predictive, preventative, and precision medicine</em> through
           <b>artificial intelligence</b> techniques.
         </p>
-      </section>
-
-      <!-- COUNTERS -->
-      <section data-side="left" class="rw-block rw-counters" data-center-y aria-label="In numbers">
-        <h2 class="rw-label">Let's quantify my life <b>In Numbers.</b></h2>
-        <div class="counter-grid">
-          <div class="pilcrow-roll-counter counter-card" data-roll-counter data-end="18">
-            <div class="pilcrow-roll-counter-number"><span class="roll-counter-int">0</span></div>
-            <p class="pilcrow-roll-counter-caption">dreams fulfilled</p>
-          </div>
-          <div class="pilcrow-roll-counter counter-card" data-roll-counter data-base-value="195998696" data-base-date="2026-04-25" data-daily-rate="10752.6166666667">
-            <div class="pilcrow-roll-counter-number"><span class="roll-counter-int">0</span></div>
-            <p class="pilcrow-roll-counter-caption">butterfly effects set in motion</p>
-          </div>
-          <div class="pilcrow-roll-counter counter-card" data-roll-counter data-base-value="3600" data-base-date="2026-04-25" data-daily-rate="1.971294669595394">
-            <div class="pilcrow-roll-counter-number"><span class="roll-counter-int">0</span></div>
-            <p class="pilcrow-roll-counter-caption">hours approx. dedicated to research</p>
-          </div>
-        </div>
       </section>
 
       <!-- SKILL SET -->
@@ -475,13 +445,32 @@
         </article>
       </section>
 
+      <!-- COUNTERS -->
+      <section data-side="left" class="rw-block rw-counters" data-center-y aria-label="In numbers">
+        <h2 class="rw-label">Let's quantify my life <b>In Numbers.</b></h2>
+        <div class="counter-grid">
+          <div class="pilcrow-roll-counter counter-card" data-roll-counter data-end="18">
+            <div class="pilcrow-roll-counter-number"><span class="roll-counter-int">0</span></div>
+            <p class="pilcrow-roll-counter-caption">dreams fulfilled</p>
+          </div>
+          <div class="pilcrow-roll-counter counter-card" data-roll-counter data-base-value="195998696" data-base-date="2026-04-25" data-daily-rate="10752.6166666667">
+            <div class="pilcrow-roll-counter-number"><span class="roll-counter-int">0</span></div>
+            <p class="pilcrow-roll-counter-caption">butterfly effects set in motion</p>
+          </div>
+          <div class="pilcrow-roll-counter counter-card" data-roll-counter data-base-value="3600" data-base-date="2026-04-25" data-daily-rate="1.971294669595394">
+            <div class="pilcrow-roll-counter-number"><span class="roll-counter-int">0</span></div>
+            <p class="pilcrow-roll-counter-caption">hours approx. dedicated to research</p>
+          </div>
+        </div>
+      </section>
+
       <!-- CLOSING: call to action, then habit chart + footer along the bottom edge -->
       <section data-side="right" class="rw-block rw-cta" id="about" aria-label="Get in touch">
         <p class="rw-statement">Let us work together to uncover the unknown.</p>
         <a class="about-link" href="https://www.linkedin.com/in/livi-poon-9a93a8116/" target="_blank" rel="noopener">Don't be shy, contact me now</a>
       <div class="rw-foot" aria-label="Habits and credits">
         <footer class="footer">
-          <span>est. 2004 · Livi Poon</span>
+          <span>© 2026 Livi Poon</span>
           <a href="https://github.com/LiviPoon" target="_blank" rel="noopener">Github ↗</a>
           <details class="sound-credits" id="sound-credits">
             <summary>Sound credits</summary>

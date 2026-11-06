@@ -745,19 +745,27 @@ US National Park Service (public domain) recordings; credits rendered into #soun
     }, 500)
   }
 
+  // the enter gate (html.gate) is up until the visitor picks "enter" or "enter silently":
+  // nothing may start on its own until then, whatever they click or press.
+  // Only setMuted(false), called from the gate's "enter" button, may start audio.
+  const gated = () => document.documentElement.classList.contains("gate")
+  const startIfOpen = () => {
+    if (!gated()) start()
+  }
+
   // browsers need a user gesture before audio may start
   const unlock = () => {
-    start()
+    startIfOpen()
     if (ctx && ctx.state === "running")
       ["pointerdown", "keydown", "touchend"].forEach((e) => removeEventListener(e, unlock, true))
   }
   ;["pointerdown", "keydown", "touchend"].forEach((e) => addEventListener(e, unlock, true))
-  start() // works immediately if the page already has user activation
+  startIfOpen() // works immediately if the page already has user activation
 
   addEventListener("resize", measureStops, { passive: true })
   addEventListener("load", measureStops)
   document.addEventListener("visibilitychange", () =>
-    document.visibilityState === "hidden" ? suspendSoon() : start(),
+    document.visibilityState === "hidden" ? suspendSoon() : startIfOpen(),
   )
   addEventListener("pagehide", () => {
     if (ctx) ctx.suspend()

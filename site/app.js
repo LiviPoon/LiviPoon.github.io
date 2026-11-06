@@ -536,7 +536,20 @@
       }
       prefersReduced ? done() : setTimeout(done, 700)
     }
-    $("#enter-sound")?.addEventListener("click", () => enter(true))
+    let entering = false
+    const go = (withSound) => {
+      if (entering) return
+      entering = true
+      enter(withSound)
+    }
+    // sound is the default: a click anywhere on the gate enters with it, one gesture total.
+    // The quiet option is a visible second choice, not a hidden one.
+    gate.addEventListener("click", () => go(true))
+    $("#enter-silent")?.addEventListener("click", (e) => {
+      e.stopPropagation()
+      go(false)
+    })
+    $("#enter-sound")?.focus({ preventScroll: true }) // Enter/Space also works
   } else gate?.remove()
 
   document.addEventListener("keydown", (e) => {
