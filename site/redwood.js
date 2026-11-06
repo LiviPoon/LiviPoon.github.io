@@ -1,7 +1,7 @@
 /* ===========================================================
    redwood.js — scroll-driven WebGL2 point cloud of a coastal redwood,
    fixed behind the homepage. Dependency-free classic script (IIFE).
-   Scan: Phil Wilkes (terrestrial LiDAR of a coast redwood).
+   Scan: terrestrial LiDAR of a coast redwood.
 
    DATA (redwood/ next to this script)
    - redwood.json: { totalHeight, canopyBaseHeight, crownRadius,
@@ -19,7 +19,7 @@
      Optional data-redwood-side="left|right|center", data-redwood-dim="0..1".
    - window.Redwood = { setOffset(x), setStops(), refresh(), setDim(d) }
    - window.RedwoodLayers = [{ init(gl, api), draw(gl, frame) }]: extra point sets drawn after the
-     tree with the same camera. init runs once per GL context.
+     tree with the same camera. init runs once per GL context. (weather.js draws the ground mist here.)
    - html[data-redwood="on"|"off"] is set for CSS.
    - URL: ?redwood=synthetic | hi | lo | off | debug
 =========================================================== */
@@ -651,6 +651,9 @@
     const f = {
       VP: mul(P, lookAt(cam.eye, cam.target)),
       eye: cam.eye,
+      target: cam.target,
+      dpr: state.dpr,
+      maxPt: state.maxPt,
       t: state.t,
       time: state.time,
       reduced: mqReduce.matches,
@@ -670,7 +673,7 @@
       try {
         if (l._gl !== gl) {
           l._gl = gl
-          l.init(gl, { meta, trunkAt, orbit: [ORBIT_START, ORBIT_TOTAL], log })
+          l.init(gl, { meta, trunkAt, orbit: [ORBIT_START, ORBIT_TOTAL], tier, log })
         }
         l.draw(gl, f)
       } catch (e) {

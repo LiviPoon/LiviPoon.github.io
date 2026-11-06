@@ -33,7 +33,7 @@ All paths are under `site/`. Subpages share the skeleton described in
 - **Redwood background** (homepage): `redwood.js` is a dependency-free WebGL2 point renderer
   (fixed full-viewport canvas, z-index -1). Data: `redwood/` (`redwood-{hi,lo}.bin`,
   `redwood.json`; 48-byte "RDWD" header + uint16 xyz + rgbs bytes; format at the top of
-  redwood.js). Scan by Phil Wilkes. Scroll -> descent t via two `data-redwood-stop` markers
+  redwood.js). Scroll -> descent t via two `data-redwood-stop` markers
   (top 0, bottom 1; no `data-redwood-side`, so the offset from `setOffset` applies). Sets
   `html[data-redwood="on|off"]`. Debug: `?redwood=off|lo|hi|debug|synthetic`.
   Extra point sets register in `window.RedwoodLayers` (`init(gl, api)`, `draw(gl, frame)`) and are
@@ -47,9 +47,10 @@ All paths are under `site/`. Subpages share the skeleton described in
   image in `images/art_photos/` (no spaces in filenames) and add an entry to **both** lists.
   The page uses the homepage shell (`/styles.css`, `app.js` nav/menu/theme, no audio); its styles
   are the `.page-art` block at the end of `styles.css`. Artwork license: CC BY-NC-ND 4.0.
-- **Mirror** (`mirror/index.html`): testimonial cards are static HTML (`article.pilcrow-quote`,
-  plus `pilcrow-quote--highlight` for bold ones), shuffled on load. The homepage's bold quotes come
-  from `data/mirror-quotes.json` (`make-bold: true`), so edit both when adding a quote.
+- **Mirror** (`mirror/index.html`): achievements-style page (`page-achievements page-mirror`, no audio,
+  no 3D background). Quotes are static `article.mirror-quote-card` in four `.mirror-chapter` grids,
+  shuffled across them on load by `assets/js/mirror-quotes.js`. The homepage's bold quotes come from
+  `data/mirror-quotes.json` (`make-bold: true`), so edit both when adding a quote.
 - **CV** (`cv/index.html`): homepage-style page over the Half Dome point cloud; the CV is laid
   out as a climb (chapters in HTML). "View CV" opens the PDF in an overlay, see [halfdome.md](halfdome.md).
   To update: replace `cv/cv.pdf` **and** edit the chapter text in `cv/index.html`.
@@ -57,3 +58,12 @@ All paths are under `site/`. Subpages share the skeleton described in
   `quote-journal/quote.html` and types random `<li>` quotes from its `<article>`. Add quotes there.
 - **Tracked habits** (`tracked-habits/index.html`): per-habit weekly chart, see [habits.md](habits.md).
 - **404** (`404.html`): served by GitHub Pages for unknown paths (including old `/blog/` URLs).
+
+## Art page radio (`site/art-soundscape.js`)
+- Plays `art/sounds/california-girls.m4a` (stereo AAC 96 kbps, from the supplied mp3) through the same
+  AM-radio chain as the other radios, then splits L/R into two HRTF panners at ±42° in front, plus the
+  side signal (L−R) at ±128° behind and a synthesized hall send, so it sounds like a band around you.
+- No distance roll-off: level is constant (0.4 × master 0.9, like the other radios). The stage sways
+  slowly, turns up to ±25° with the pointer and lifts ±0.8 m with scroll.
+- Page has the enter gate + nav mute button like the CV page; same `window.__soundscape` API.
+- The recording is copyrighted; hosting it publicly needs a licence.

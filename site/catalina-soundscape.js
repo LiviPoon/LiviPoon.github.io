@@ -27,6 +27,16 @@ Clips: catalina/sounds/*.m4a, trimmed, denoised and levelled; credits render int
     sea: { y: 30, label: "Sea level" },
   }
 
+  // A beach radio on the water off Avalon (where the flight ends) plays a looping song through
+  // an AM-radio filter. Placed in world metres; same chain as the redwood radio in soundscape.js.
+  const RADIO = {
+    src: BASE + "surfer-girl.m4a",
+    pos: [16300, 2, 8750], // x, y, z (m): just ahead of the final camera position
+    level: 0.42,
+    refDist: 2000, // m: distance at full level; larger = carries farther
+    rolloff: 0.75,
+  }
+
   const XC = "xeno-canto"
   // gain: level trim; dist: [min,max] metres from the listener
   const CLIPS = [
@@ -185,6 +195,7 @@ Clips: catalina/sounds/*.m4a, trimmed, denoised and levelled; credits render int
   let tickTimer = 0
   let gustPhase = Math.random() * 100
   let started = false
+  let radio = null
 
   function buildGraph() {
     const AC = window.AudioContext || window.webkitAudioContext
@@ -255,7 +266,133 @@ Clips: catalina/sounds/*.m4a, trimmed, denoised and levelled; credits render int
       L.upY.value = 1
       L.upZ.value = 0
     }
+    buildRadio()
     return true
+  }
+
+  // Play the song once per session; remember position across page navigations
+  function persistOnce(el, src) {
+    const k = "radioPos:" + src
+    const saved = sessionStorage.getItem(k)
+    el.loop = false
+    if (saved === "done") {
+      el.dataset.done = "1"
+    } else if (saved) {
+      const t = parseFloat(saved)
+      if (t > 0) el.addEventListener("loadedmetadata", () => { try { el.currentTime = t } catch (e) {} }, { once: true })
+    }
+    const save = () => {
+      if (el.dataset.done) return
+      if (el.currentTime > 0) sessionStorage.setItem(k, String(el.currentTime))
+    }
+    el.addEventListener("timeupdate", save)
+    window.addEventListener("pagehide", save)
+    el.addEventListener("ended", () => {
+      el.dataset.done = "1"
+      sessionStorage.setItem(k, "done")
+    })
+  }
+
+  function buildRadio() {
+    const el = new Audio()
+    el.src = RADIO.src
+    el.loop = false
+    el.preload = "auto"
+    el.crossOrigin = "anonymous"
+    persistOnce(el, RADIO.src)
+    const src = ctx.createMediaElementSource(el)
+    const node = (type, f, q, g) => {
+      const n = ctx.createBiquadFilter()
+      n.type = type
+      n.frequency.value = f
+      n.Q.value = q
+      if (g !== undefined) n.gain.value = g
+      return n
+    }
+    // AM-radio band: thin lows, narrow top, a nasal midrange bump
+    const hp = node("highpass", 320, 0.8)
+    const lp = node("lowpass", 3200, 0.9)
+    const mid = node("peaking", 1500, 1.1, 2.5)
+    const trim = ctx.createGain() // headroom ahead of the filters: no clipping on loud peaks
+    trim.gain.value = 0.55
+    // soft clipping = small-speaker grit
+    const shaper = ctx.createWaveShaper()
+    const curve = new Float32Array(1024)
+    for (let i = 0; i < curve.length; i++) {
+      const x = (i / (curve.length - 1)) * 2 - 1
+      curve[i] = Math.tanh(1.1 * x) / Math.tanh(1.1) // very soft: grit without crackle
+    }
+    shaper.curve = curve
+    // slow signal wander: level wobbles like a station drifting in and out
+    const fade = ctx.createGain()
+    const lfo = ctx.createOscillator()
+    const lfoAmt = ctx.createGain()
+    lfo.frequency.value = 0.11
+    lfoAmt.gain.value = 0.05
+    fade.gain.value = 0.95
+    lfo.connect(lfoAmt).connect(fade.gain)
+    lfo.start()
+    // faint static, always present, so it reads as a transmission
+    const hiss = ctx.createBufferSource()
+    hiss.buffer = pinkNoiseBuffer(ctx, 4, 1)
+    hiss.loop = true
+    const hissBp = node("bandpass", 2600, 0.5)
+    const hissGain = ctx.createGain()
+    hissGain.gain.value = 0.004
+    hiss.connect(hissBp).connect(hissGain)
+    hiss.start()
+
+    const radioOut = ctx.createGain()
+    radioOut.gain.value = 1
+    radioOut.connect(master)
+    const gain = ctx.createGain()
+    gain.gain.value = 0
+    const dist = node("lowpass", 3200, 0.7) // air absorption: darker when far
+    const panner = ctx.createPanner()
+    Object.assign(panner, { panningModel: "HRTF", distanceModel: "linear", rolloffFactor: 0 })
+    const send = ctx.createGain()
+    send.gain.value = 0.05
+
+    // peak limiter right after the filters catches any remaining transients
+    const lim = ctx.createDynamicsCompressor()
+    lim.threshold.value = -10
+    lim.knee.value = 6
+    lim.ratio.value = 12
+    lim.attack.value = 0.003
+    lim.release.value = 0.15
+    src.connect(trim).connect(hp).connect(mid).connect(lp).connect(shaper).connect(lim).connect(fade)
+    fade.connect(gain)
+    hissGain.connect(gain)
+    gain.connect(dist).connect(panner).connect(radioOut)
+    dist.connect(send).connect(reverb)
+    radio = { el, gain, dist, panner, send, ok: true }
+    el.addEventListener("error", () => (radio.ok = false))
+    el.addEventListener("loadeddata", () => (radio.ok = true))
+  }
+
+  function updateRadio(now) {
+    if (!radio || !radio.ok) return
+    // listener sits at the origin facing its heading, so place the radio relative to the eye
+    const e = window.Catalina ? window.Catalina.eyeAt(descent()) : [RADIO.pos[0], listener.y, RADIO.pos[2]]
+    const rx = RADIO.pos[0] - e[0],
+      ry = RADIO.pos[1] - listener.y,
+      rz = RADIO.pos[2] - e[2]
+    const range = Math.hypot(rx, ry, rz)
+    setPos(radio.panner, rx, ry, rz, now, 0.3)
+    // loud once the flight arrives off Avalon; a faint far-off station before that
+    const g = RADIO.level * Math.pow(clamp(RADIO.refDist / range, 0, 1.5), RADIO.rolloff)
+    radio.gain.gain.setTargetAtTime(g, now, 0.25)
+    const far = clamp((range - RADIO.refDist) / 20000, 0, 1)
+    radio.dist.frequency.setTargetAtTime(lerp(3400, 2200, far), now, 0.3)
+    radio.send.gain.setTargetAtTime(lerp(0.03, 0.14, far), now, 0.3)
+  }
+
+  function setPos(p, x, y, z, now, smooth) {
+    if (p.positionX) {
+      p.positionX.setTargetAtTime(x, now, smooth)
+      p.positionY.setTargetAtTime(y, now, smooth)
+      p.positionZ.setTargetAtTime(z, now, smooth)
+    } else p.setPosition(x, y, z)
   }
 
   function loadClip(id) {
@@ -375,6 +512,8 @@ Clips: catalina/sounds/*.m4a, trimmed, denoised and levelled; credits render int
     waves.gain.setTargetAtTime(wavesLvl, now, 1.2)
     reverbReturn.gain.setTargetAtTime(lerp(0.15, 0.45, 1 - high), now, 1)
 
+    updateRadio(now)
+
     voices.forEach((v) => updateVoiceSpatial(v, now, 0.15))
 
     if (voices.size >= MAX_VOICES) return
@@ -408,6 +547,7 @@ Clips: catalina/sounds/*.m4a, trimmed, denoised and levelled; credits render int
     if (muted || document.visibilityState === "hidden") return
     if (!ctx && !buildGraph()) return
     if (ctx.state === "suspended") ctx.resume()
+    if (radio && radio.el.paused && !radio.el.dataset.done) radio.el.play().catch(() => {})
     if (!started) {
       started = true
       measureStops()
@@ -475,27 +615,56 @@ Clips: catalina/sounds/*.m4a, trimmed, denoised and levelled; credits render int
       return a
     }
     for (const zone of Object.keys(ZONES)) {
-      const list = CLIPS.filter((c) => c.zone === zone)
-      if (!list.length) continue
-      const li = document.createElement("li")
-      const head = document.createElement("strong")
-      head.textContent = ZONES[zone].label + ": "
-      li.append(head)
-      list.forEach((c, i) => li.append(link(c), document.createTextNode(i < list.length - 1 ? ", " : "")))
-      credits.append(li)
+      CLIPS.filter((c) => c.zone === zone).forEach((c) => {
+        const li = document.createElement("li")
+        li.append(`${ZONES[zone].label}: `, link(c))
+        credits.append(li)
+      })
     }
-    const beds = Object.values(BEDS).filter((b) => b.credit)
-    if (beds.length) {
-      const li = document.createElement("li")
-      const head = document.createElement("strong")
-      head.textContent = "Ocean: "
-      li.append(head)
-      beds.forEach((b, i) => li.append(link(b.credit), document.createTextNode(i < beds.length - 1 ? ", " : "")))
-      credits.append(li)
-    }
+    Object.values(BEDS)
+      .filter((b) => b.credit)
+      .forEach((b) => {
+        const li = document.createElement("li")
+        li.append("Ocean: ", link(b.credit))
+        credits.append(li)
+      })
     const note = document.createElement("li")
     note.textContent =
       "Bird recordings via xeno-canto (CC BY-NC-SA 3.0/4.0); bison, elephant & harbor seal: US National Park Service (public domain); sea lions & waves: Freesound (CC BY 4.0 / CC0). Clips trimmed, noise-reduced and levelled; the edited clips are shared under CC BY-NC-SA 4.0."
     credits.append(note)
+
+    // Non-interactive ticker: while open, hold a line, then glide one line up (eased, per frame).
+    const box = document.getElementById("sound-credits")
+    let raf = 0
+    let timer = 0
+    let total = 0 // real lines; the first line is repeated at the end so the loop is seamless
+    const lineH = () => credits.firstElementChild.offsetHeight || 1
+    const glide = () => {
+      const from = credits.scrollTop
+      const to = from + lineH()
+      const t0 = performance.now()
+      const dur = 700
+      const frame = (now) => {
+        const k = Math.min(1, (now - t0) / dur)
+        credits.scrollTop = from + (to - from) * (k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2)
+        if (k < 1) raf = requestAnimationFrame(frame)
+        else if (credits.scrollTop >= total * lineH() - 1) credits.scrollTop = 0
+      }
+      raf = requestAnimationFrame(frame)
+    }
+    if (box) {
+      box.addEventListener("toggle", () => {
+        clearInterval(timer)
+        cancelAnimationFrame(raf)
+        if (!box.open) return
+        credits.scrollTop = 0
+        if (!credits.dataset.looped) {
+          total = credits.children.length
+          ;[...credits.children].slice(0, 1).forEach((li) => credits.append(li.cloneNode(true)))
+          credits.dataset.looped = "1"
+        }
+        timer = setInterval(glide, 2200)
+      })
+    }
   }
 })()

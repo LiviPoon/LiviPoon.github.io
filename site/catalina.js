@@ -117,6 +117,7 @@
     drawn: false,
   }
   let gl, canvas, prog, U, vao, vbo, meta, bin, tier
+  const layers = (window.CatalinaLayers = window.CatalinaLayers || [])
 
   // exposed even when rendering is off: the soundscape follows the same flight
   window.Catalina = {
@@ -492,6 +493,8 @@
     gl.viewport(0, 0, W, Ht)
     gl.clearColor(0, 0, 0, 0)
     gl.clear(gl.COLOR_BUFFER_BIT)
+    gl.useProgram(prog) // layers (weather.js) leave their own program/VAO bound
+    gl.bindVertexArray(vao)
     const pl = PALETTES.light,
       pd = PALETTES.dark,
       k = state.theme
@@ -514,11 +517,49 @@
     gl.uniform1f(U.uTwinkle, mqReduce.matches ? 0 : TWINKLE)
     gl.uniform1f(U.uSwell, mqReduce.matches ? 0 : 1)
     gl.drawArrays(gl.POINTS, 0, bin.count)
+    if (layers.length) drawLayers(P, cam, fov)
     if (!state.drawn) {
       state.drawn = true
       requestAnimationFrame(() => {
         canvas.style.opacity = "1"
       })
+    }
+  }
+
+  // extra point sets (weather.js) share the camera, palette and lens shift
+  function drawLayers(P, cam, fov) {
+    const k = state.theme,
+      pl = PALETTES.light,
+      pd = PALETTES.dark
+    const f = {
+      VP: mul(P, lookAt(cam.eye, cam.target)),
+      eye: cam.eye,
+      target: cam.target,
+      t: state.t,
+      time: state.time,
+      reduced: mqReduce.matches,
+      theme: k,
+      bg: lerp3(hex(pl.bg), hex(pd.bg), k),
+      gain: lerp(pl.gain, pd.gain, k),
+      fog: [cam.focus * 1.1, cam.focus * 1.1 + 22000],
+      px: canvas.height / (2 * Math.tan(fov / 2)),
+      dpr: state.dpr,
+      maxPt: state.maxPt,
+      offset: state.offset,
+      dim: state.dim,
+      tier,
+    }
+    for (const l of layers) {
+      try {
+        if (l._gl !== gl) {
+          l._gl = gl
+          l.init(gl, { meta, bin, tier, log })
+        }
+        l.draw(gl, f)
+      } catch (e) {
+        log("layer", e && e.message)
+        layers.splice(layers.indexOf(l), 1)
+      }
     }
   }
 

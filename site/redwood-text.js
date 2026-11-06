@@ -361,9 +361,8 @@
   /* ---------------- MEASURE ---------------- */
   function frame() {
     const r = stage.querySelector(".rw-safe").getBoundingClientRect()
-    // text may come closer to the screen edge than the CSS column does: the space beside the
-    // tree is what limits it
-    return { W: innerWidth, H: innerHeight, top: r.top, bottom: r.bottom, edge: Math.min(r.left, Math.max(20, innerWidth * 0.018)) }
+    // one shared side margin (the CSS --edge) for every block
+    return { W: innerWidth, H: innerHeight, top: r.top, bottom: r.bottom, edge: r.left }
   }
 
   function clearInline(el) {
@@ -456,11 +455,8 @@
           if (y < F.top - 1 || y + c.h > F.bottom + 1) continue
           const dist = below == null ? Math.abs(y + c.h / 2 - mid) : y >= below ? y - below : 2 * F.H + below - y
           if (pick && dist >= pick.dist) continue
-          // centre the column in the free span between the screen edge and the tree
-          let free = GX
-          for (let k = s; k < s + nh; k++) if (k >= 0 && k < GY) free = Math.min(free, d[k])
-          const span = Math.min(F.W / 2, (free - MARGIN) * cw)
-          const x = Math.max(F.edge, F.edge + (span - F.edge - c.w) / 2)
+          // every column sits at the same distance from the screen edge
+          const x = F.edge
           const left = side === "L" ? x : F.W - x - c.w
           const rect = { l: left, t: y, r: left + c.w, b: y + c.h }
           if (avoid.some((o) => rect.l < o.r + pad && rect.r > o.l - pad && rect.t < o.b + pad && rect.b > o.t - pad)) continue
@@ -601,6 +597,11 @@
         el.style.left = Math.round(Math.max(((innerWidth - sp.c.w) / 2 - innerWidth * 0.2) / 2, 24)) + "px"
         el.style.right = "auto"
         el.style.top = Math.round(sp.y + innerHeight * 0.08) + "px"
+      } else if (el.hasAttribute("data-center-y")) {
+        // vertically centred on the screen, side margin as for every other block
+        el.style.top = Math.round((innerHeight - sp.c.h) / 2) + "px"
+        el.style.left = sp.side === "L" ? Math.round(sp.x) + "px" : "auto"
+        el.style.right = sp.side === "R" ? Math.round(sp.x) + "px" : "auto"
       } else {
         el.style.left = sp.side === "L" ? Math.round(sp.x) + "px" : "auto"
         el.style.right = sp.side === "R" ? Math.round(sp.x) + "px" : "auto"
@@ -611,7 +612,8 @@
       const g = groups[i]
       g.a = pk.a
       g.b = pk.b
-      g.at = pk.sp.side
+      // data-center blocks are always drawn on the left, so the tree must steer right
+      g.at = g.members[0].hasAttribute("data-center") ? "L" : pk.sp.side
       put(g.members[0], pk.sp)
       if (g.partner) put(g.partner, pk.sp.partner)
     })

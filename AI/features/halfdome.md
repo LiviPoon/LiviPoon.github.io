@@ -35,6 +35,11 @@ a single column. CSS lives in the "CV PAGE" block of `styles.css`.
   `soundscape/` and `catalina/sounds/` (each clip has a `dir`). The river and wind are synthesized,
   and the reverb models granite-wall echoes.
 
+## Radio
+- `RADIO` in `halfdome-soundscape.js` plays `catalina/sounds/fun-fun-fun.m4a` through the same AM-radio
+  chain as the other radios, at a fixed point on the summit (`RADIO.pos`); it swells in as the climb
+  reaches the top. The recording is copyrighted; hosting it publicly needs a licence.
+
 ## Credits to keep
 Half Dome photogrammetry scan (the Sketchfab-style "half-dome-yosemite" download). Check its licence
 before re-use or if it changes.

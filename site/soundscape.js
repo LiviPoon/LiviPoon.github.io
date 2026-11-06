@@ -254,12 +254,36 @@ US National Park Service (public domain) recordings; credits rendered into #soun
   let started = false
   let radio = null // { el, filter nodes, gain, panner, send }
 
+  // Play the song once per session; remember position across page navigations
+  function persistOnce(el, src) {
+    const k = "radioPos:" + src
+    const saved = sessionStorage.getItem(k)
+    el.loop = false
+    if (saved === "done") {
+      el.dataset.done = "1"
+    } else if (saved) {
+      const t = parseFloat(saved)
+      if (t > 0) el.addEventListener("loadedmetadata", () => { try { el.currentTime = t } catch (e) {} }, { once: true })
+    }
+    const save = () => {
+      if (el.dataset.done) return
+      if (el.currentTime > 0) sessionStorage.setItem(k, String(el.currentTime))
+    }
+    el.addEventListener("timeupdate", save)
+    window.addEventListener("pagehide", save)
+    el.addEventListener("ended", () => {
+      el.dataset.done = "1"
+      sessionStorage.setItem(k, "done")
+    })
+  }
+
   function buildRadio() {
     const el = new Audio()
     el.src = RADIO.src
-    el.loop = true
+    el.loop = false
     el.preload = "auto"
     el.crossOrigin = "anonymous"
+    persistOnce(el, RADIO.src)
     const src = ctx.createMediaElementSource(el)
     const node = (type, f, q, g) => {
       const n = ctx.createBiquadFilter()
@@ -699,7 +723,7 @@ US National Park Service (public domain) recordings; credits rendered into #soun
     if (!ctx && !buildGraph()) return
     if (ctx.state === "suspended") ctx.resume()
     if (!radio) buildRadio()
-    if (radio.ok && radio.el.paused) radio.el.play().catch(() => {})
+    if (radio.ok && radio.el.paused && !radio.el.dataset.done) radio.el.play().catch(() => {})
     if (!started) {
       started = true
       measureStops()
@@ -770,22 +794,48 @@ US National Park Service (public domain) recordings; credits rendered into #soun
   const credits = document.getElementById("sound-credits-list")
   if (credits) {
     for (const zone of Object.keys(ZONES)) {
-      const li = document.createElement("li")
-      const head = document.createElement("strong")
-      head.textContent = ZONES[zone].label + ": "
-      li.append(head)
-      CLIPS.filter((c) => c.zone === zone).forEach((c, i, arr) => {
-        const a = document.createElement("a")
-        a.href = c.xc ? `https://xeno-canto.org/${c.xc}` : c.url
-        a.target = "_blank"
-        a.rel = "noopener"
-        a.textContent = `${c.name} (${c.by}${c.xc ? `, XC${c.xc}` : ""})`
-        li.append(a, document.createTextNode(i < arr.length - 1 ? ", " : ""))
+      CLIPS.filter((c) => c.zone === zone).forEach((c) => {
+        const li = document.createElement("li")
+        li.textContent = `${ZONES[zone].label}: ${c.name} (${c.by}${c.xc ? `, XC${c.xc}` : ""})`
+        credits.append(li)
       })
-      credits.append(li)
     }
     const note = document.createElement("li")
     note.textContent = `Recordings via ${XC}; elk & coyote: US National Park Service (public domain). Clips trimmed, noise-reduced and levelled; the trimmed clips are shared under CC BY-NC-SA 4.0.`
     credits.append(note)
+
+    // Non-interactive ticker: while open, hold a line, then glide one line up (eased, per frame).
+    const box = document.getElementById("sound-credits")
+    let raf = 0
+    let timer = 0
+    let total = 0 // real lines; the first line is repeated at the end so the loop is seamless
+    const lineH = () => credits.firstElementChild.offsetHeight || 1
+    const glide = () => {
+      const from = credits.scrollTop
+      const to = from + lineH()
+      const t0 = performance.now()
+      const dur = 700
+      const frame = (now) => {
+        const k = Math.min(1, (now - t0) / dur)
+        credits.scrollTop = from + (to - from) * (k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2)
+        if (k < 1) raf = requestAnimationFrame(frame)
+        else if (credits.scrollTop >= total * lineH() - 1) credits.scrollTop = 0
+      }
+      raf = requestAnimationFrame(frame)
+    }
+    if (box) {
+      box.addEventListener("toggle", () => {
+        clearInterval(timer)
+        cancelAnimationFrame(raf)
+        if (!box.open) return
+        credits.scrollTop = 0
+        if (!credits.dataset.looped) {
+          total = credits.children.length
+          ;[...credits.children].slice(0, 1).forEach((li) => credits.append(li.cloneNode(true)))
+          credits.dataset.looped = "1"
+        }
+        timer = setInterval(glide, 2200)
+      })
+    }
   }
 })()

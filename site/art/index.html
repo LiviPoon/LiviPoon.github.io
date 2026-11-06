@@ -21,8 +21,23 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="/styles.css" />
+    <script>
+      // enter gate: once per session (audio needs a user gesture). Set before first paint.
+      try {
+        if (!sessionStorage.getItem("siteEntered")) document.documentElement.classList.add("gate")
+      } catch (e) {}
+      addEventListener("load", () =>
+        setTimeout(() => window.__gateReady || document.documentElement.classList.remove("gate"), 4000),
+      )
+    </script>
   </head>
   <body data-slug="art/index" class="page-art">
+    <!-- ====================== ENTER GATE ====================== -->
+    <div class="enter-gate" id="enter-gate" role="dialog" aria-modal="true" aria-label="Enter site">
+      <p class="enter-gate-note">wear headphones for the best experience</p>
+      <button class="enter-gate-btn" id="enter-sound" type="button">enter</button>
+    </div>
+
     <!-- ====================== PAPER GRAIN OVERLAY ====================== -->
     <svg id="grain" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <filter
@@ -53,6 +68,15 @@
     <nav class="nav" aria-label="Primary">
       <a class="nav-brand" href="/">Livi Poon.</a>
       <div class="nav-tools">
+        <button class="nav-btn" id="btn-mute" type="button" aria-label="Toggle audio">
+          <span class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 9v6h4l5 4V5L8 9H4z" />
+              <path id="mute-x" d="M17 9l4 6M21 9l-4 6" />
+            </svg>
+          </span>
+          <span id="mute-label">mute</span>
+        </button>
         <button class="nav-btn" id="btn-theme" type="button" aria-label="Toggle theme">
           <span class="ico" aria-hidden="true">
             <svg viewBox="0 0 24 24">
@@ -142,5 +166,6 @@
 
     <script src="/app.js" defer></script>
     <script src="/assets/js/masonry.js" defer></script>
+    <script src="/art-soundscape.js" defer></script>
   </body>
 </html>

@@ -2307,7 +2307,7 @@ html.cv-open body {
   --rw-col: 38vw; /* text column: left edge of the viewport -> here */
   --safe-t: clamp(88px, 13vh, 128px); /* clear of the nav */
   --safe-b: clamp(28px, 6vh, 64px);
-  --edge: clamp(24px, 5vw, 80px);
+  --edge: calc(clamp(24px, 5vw, 80px) + 0.5cm);
   --rw-base: clamp(13px, 0.5vw + 8px, 18px);
 }
 .rw-safe {
@@ -2558,7 +2558,7 @@ html[data-theme="light"] .rw-portrait {
   --rw-w: min(52vw, 860px);
 }
 .rw-cta .about-link {
-  margin-top: calc(clamp(36px, 5vh, 56px) * var(--f));
+  margin-top: calc(14px * var(--f));
   font-size: calc(14px * var(--f));
 }
 
@@ -2598,15 +2598,6 @@ html[data-theme="light"] .rw-portrait {
 /* ---- counters ---- */
 .rw-counters {
   --rw-w: min(48vw, 760px);
-  margin-left: clamp(24px, 5vw, 96px);
-}
-@media (max-width: 900px) {
-  .rw-counters {
-    margin-left: 0;
-  }
-}
-html.rw-stack .rw-counters {
-  margin-left: 0;
 }
 .rw-counters .counter-grid {
   grid-template-columns: 1fr;
@@ -2653,24 +2644,53 @@ html.rw-stack .rw-counters {
   margin-top: calc(clamp(26px, 5vw, 72px) * var(--f));
 }
 
-/* ---- closing strip: habit chart + footer ---- */
-.rw-bottom {
-  --rw-w: min(52vw, 860px);
+/* ---- footer (est. / Github / sound credits) ---- */
+.rw-foot {
+  /* bottom-right corner of the viewport, 1cm in from the bottom and right edges */
+  position: fixed;
+  right: 1cm;
+  bottom: 1cm;
+  top: auto;
+  left: auto;
+  width: max-content;
+  max-width: calc(100vw - 2cm);
 }
-.rw-bottom .portfolio-habit {
+.rw-foot .portfolio-habit {
   width: auto;
-  margin: 0 0 1em;
+  max-width: 860px;
+  margin: 0 0 0.5em;
   padding: 0;
 }
-.rw-bottom .portfolio-habit-chart-container {
+.rw-foot .portfolio-habit-chart-container {
   height: clamp(40px, 4.5vw, 72px);
 }
-.rw-bottom .footer {
+.rw-foot .footer {
   padding: 0;
+  justify-content: flex-end;
+  column-gap: 20px;
+  row-gap: 4px;
 }
-.rw-bottom .sound-credits ul {
-  max-height: 30vh;
-  overflow: auto;
+/* sound credits: a 1-line window that advances one line at a time, not user-scrollable */
+.rw-foot .sound-credits {
+  --credit-lh: 1.8em;
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.rw-foot .sound-credits ul {
+  width: min(560px, calc(100vw - 2cm));
+  height: var(--credit-lh);
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+.rw-foot .sound-credits li {
+  height: var(--credit-lh);
+  line-height: var(--credit-lh);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ---- stack mode (redwood-text.js found no room beside the tree, e.g. portrait tablets):
@@ -2684,7 +2704,7 @@ html.rw-stack[data-redwood="on"] body[data-slug="index"] #redwood-canvas {
   .rw-stage {
     --safe-t: 76px;
     --safe-b: 20px;
-    --edge: 20px;
+    --edge: 20px; /* the desktop +0.5cm would eat ~40px of a phone's width */
   }
   html[data-redwood="on"] body[data-slug="index"] #redwood-canvas {
     opacity: 0.15 !important;
@@ -2727,4 +2747,112 @@ html.rw-stack[data-redwood="on"] body[data-slug="index"] #redwood-canvas {
 }
 .rw-counters .rw-label b {
   font-weight: 700;
+}
+
+.rw-foot .sound-credits summary {
+  margin-left: auto;
+}
+
+/* ---- no text shadows, halos or faded text colour ---- */
+*,
+*::before,
+*::after {
+  text-shadow: none !important;
+}
+html[data-redwood="on"] :is(.hero-title, .scene-title, .counters-head h2, .mirror-quotes h2, .roll-counter-int, .label, .hero-name, .hero-inline-links a, .scene-note, .pilcrow-roll-counter-caption, .mirror-quote-card span, .portfolio-video-caption, .about-link, .footer, .rw-statement)::before {
+  display: none !important;
+}
+.rw-foot,
+.rw-foot * {
+  color: var(--color-text-primary) !important;
+  opacity: 1 !important;
+}
+
+/* quotes: no scrim/halo behind the cards */
+html[data-redwood="on"] body:not(.page-achievements) .mirror-quote-grid::before {
+  display: none !important;
+}
+/* closing line breaks earlier */
+.rw-cta .rw-statement {
+  max-width: 14ch;
+}
+
+/* homepage text: no blurred scrim/haze behind any text block (achievements + cv keep theirs) */
+html[data-redwood="on"] body:not(.page-achievements) :is(.hero-meta, .scene-copy, .counter-grid, .mirror-quote-grid, .mission .about-cta, .about > .about-cta, .about-link, .portfolio-video-caption)::before,
+html[data-redwood="on"] body:not(.page-achievements) .dream-list::after,
+.rw-block::before,
+.rw-block::after {
+  display: none !important;
+}
+.rw-block {
+  text-shadow: none !important;
+  backdrop-filter: none !important;
+}
+
+/* sound credits on every page: the same one-line ticker as the front page */
+.footer .sound-credits {
+  --credit-lh: 1.8em;
+}
+.footer .sound-credits ul {
+  width: min(560px, calc(100vw - 2cm));
+  height: var(--credit-lh);
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+.footer .sound-credits li {
+  height: var(--credit-lh);
+  line-height: var(--credit-lh);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ---- mirror page (mirror/index.html): achievements-style chapters, no 3D background ---- */
+.page-mirror .mirror-chapter {
+  grid-template-columns: minmax(0, 1fr);
+  min-height: 0;
+  max-width: 1100px;
+  padding-top: clamp(60px, 10vh, 110px);
+  padding-bottom: clamp(60px, 10vh, 110px);
+}
+.page-mirror .mirror-chapter .mirror-quote-grid {
+  row-gap: clamp(32px, 5vh, 60px);
+}
+.page-mirror .mirror-chapter .mirror-quote-card p {
+  font-size: clamp(16px, 1.35vw, 21px);
+  line-height: 1.24;
+}
+
+/* ---- phones: footer, credits ticker and tap targets ---- */
+@media (max-width: 767px) {
+  .rw-foot {
+    right: 14px;
+    bottom: max(14px, env(safe-area-inset-bottom));
+    max-width: calc(100vw - 28px);
+  }
+  .rw-foot .footer {
+    justify-content: flex-end;
+    font-size: 11px;
+  }
+  .rw-foot .sound-credits ul,
+  .footer .sound-credits ul {
+    width: calc(100vw - 40px);
+    max-width: 100%;
+  }
+  .rw-foot .portfolio-habit-chart-container {
+    height: 32px;
+  }
+}
+@media (pointer: coarse) {
+  .sound-credits summary {
+    padding-block: 10px; /* ~44px tap target */
+  }
+  .footer a {
+    padding-block: 8px;
+  }
+  .nav-btn,
+  .enter-gate-btn {
+    min-height: 40px;
+  }
 }

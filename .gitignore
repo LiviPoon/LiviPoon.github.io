@@ -1,8 +1,6 @@
-.DS_Store
 **/.DS_Store
 .vscode
 CLAUDE.md
-.vscode
 .claude
 .env
 garmin_session.json

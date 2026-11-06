@@ -27,6 +27,13 @@
   auditioned for SNR, trimmed to 16–30 s, high-passed, spectral-gate denoised, levelled, mono AAC
   64 kbps. Credits render into `#sound-credits` from `CLIPS`/`BEDS`. Add `by` + `xc` or `src` + `url`.
 
+## Radio
+- `RADIO` in `catalina-soundscape.js` plays `catalina/sounds/surfer-girl.m4a` (looped `<audio>`) through
+  the same AM-radio chain as the redwood radio ([soundscape.md](soundscape.md)). It sits at a fixed
+  world point on the water just ahead of the final camera position (`RADIO.pos`), so it is inaudible
+  during the high flight and swells in, panning with the heading, as the flight arrives off Avalon.
+  Missing file → radio silently stays off. ("Fun Fun Fun" moved to the CV page, see [halfdome.md](halfdome.md).) The recording is copyrighted; hosting it publicly needs a licence.
+
 ## Credits to keep
 Terrain mesh: Sketchfab download "catalina-island-california-pacific-ocean" (check its licence
 before re-use). Imagery: Esri World Imagery (attribution in the footer).
